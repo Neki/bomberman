@@ -1,0 +1,5 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+script: cmake . -Dbuild_tests=ON && make && make test
