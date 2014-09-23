@@ -1,18 +1,22 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.11)
 project(bomberman)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Required for fetching and installing GTest
 include(ExternalProject)
 find_package(Threads REQUIRED)
+
+# Qt
+find_package(Qt5Widgets REQUIRED)
 
 # Build options
 option(build_tests "Build tests" OFF)
 
 # Compiler options
 set(CMAKE_CXX_FLAGS "-g -Wall -Werror")
-
-# Variables
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Tests
 if(build_tests)
@@ -57,3 +61,4 @@ if(build_tests)
 endif(build_tests)
 
 add_executable(bomberman src/main.cpp)
+target_link_libraries(bomberman Qt5::Widgets)
