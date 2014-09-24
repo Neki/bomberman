@@ -6,34 +6,40 @@ bomberman
 
 Yet another bomberman clone (student project - written in C++)
 
+## Project structure
+
+This project is composed of
+* a Bomberman client that connects to a server
+* a Bomberman server that runs the game
+* a library containing code shared by both the client and the server
+
 ## Build
 
 The project can be built using CMake. You need to have the Qt5 libraries installed on your system. Detailed instructions by operating system follows.
 
 ### Ubuntu
 
-*Install basic tools*
+#### Install tools and dependencies
 
 ```
 sudo apt-get update
 sudo apt-get install cmake build-essential
-```
-
-*Install Qt5*
-
-```
 sudo apt-get install qt5-default
 ```
 
-*Build the project with CMake*
+#### Build the project with CMake
 
 ```
 mkdir build && cd build
-cmake .. -Dbuild_tests=ON
+cmake .. -DCMAKE_BUILD_TYPE=Release
 make
 ```
 
-*Run the tests*
+You can also use the `Debug` buid type (includes debug symbols information, lower optimization settings...)
 
-If (as described above) you called CMake with the `-Dbuild_tests=ON` flag, then you can run the test suite with `make test`.
+By default, this will also download the Google Test framework and compile the project test suite. Pass `-Denable_tests=OFF` to `cmake` to skip this step.
+
+#### Run the tests
+
+If you called CMake with the `-Denable_tests=ON` flag (set by default), then you can run the test suite with `make test`.
 
