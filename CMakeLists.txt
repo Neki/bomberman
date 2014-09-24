@@ -5,27 +5,38 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Required for fetching and installing GTest
-include(ExternalProject)
-find_package(Threads REQUIRED)
-
 # Qt
 find_package(Qt5Widgets REQUIRED)
 
 # Build options
-option(build_tests "Build tests" OFF)
+option(enable_tests "Build tests" ON)
 
 # Compiler options
-set(CMAKE_CXX_FLAGS "-g -Wall -Werror")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic")
+  set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic")
+endif()
+
+# Gather source files
+file(GLOB_RECURSE SERVER_SRCS "src/server/*.cc")
+file(GLOB_RECURSE CLIENT_SRCS "src/client/*.cc")
+file(GLOB_RECURSE COMMON_SRCS "src/common/*.cc")
+file(GLOB_RECURSE SERVER_TESTS_SRCS "tests/server/*.cc")
+file(GLOB_RECURSE CLIENT_TESTS_SRCS "tests/client/*.cc")
+file(GLOB_RECURSE COMMON_TESTS_SRCS "tests/common/*.cc")
 
 # Tests
-if(build_tests)
+if(enable_tests)
   enable_testing()
+
+  # Required for fetching and installing GTest
+  include(ExternalProject)
+  find_package(Threads REQUIRED)
 
 	set(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/gtest")
 	ExternalProject_Add(googletest
 	    SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk
-	    SVN_REVISION -r HEAD
+	    SVN_REVISION -r692
 	    TIMEOUT 10
 	    PREFIX "${GTEST_PREFIX}"
 	    INSTALL_COMMAND ""
@@ -55,10 +66,28 @@ if(build_tests)
   ExternalProject_Get_Property(googletest source_dir)
   include_directories(${source_dir}/include)
 
-  add_executable(runTests tests/main_test.cpp)
-  target_link_libraries(runTests GTestMain)
-  add_test(runTests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/runTests)
-endif(build_tests)
+  # Client tests
+  add_executable(runClientTests ${CLIENT_TESTS_SRCS})
+  target_link_libraries(runClientTests GTestMain)
+  add_test(runClientTests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/runClientTests)
 
-add_executable(bomberman src/main.cpp)
+  # Server tests
+  add_executable(runServerTests ${SERVER_TESTS_SRCS})
+  target_link_libraries(runServerTests GTestMain)
+  add_test(runServerTests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/runServerTests)
+
+  # Common library tests
+  add_executable(runLibraryTests ${COMMON_TESTS_SRCS})
+  target_link_libraries(runLibraryTests GTestMain)
+  add_test(runLibraryTests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/runLibraryTests)
+
+endif(enable_tests)
+
+add_library(common ${COMMON_SRCS})
+
+add_executable(bomberman ${CLIENT_SRCS})
 target_link_libraries(bomberman Qt5::Widgets)
+target_link_libraries(bomberman common)
+
+add_executable(bombServer ${SERVER_SRCS})
+target_link_libraries(bomberman common)
