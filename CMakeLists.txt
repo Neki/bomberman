@@ -66,6 +66,12 @@ if(enable_tests)
   ExternalProject_Get_Property(googletest source_dir)
   include_directories(${source_dir}/include)
 
+  # Ignore warnings from Google Test
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS_DEBUG "-isystem ${source_dir}/include -isystem ${source_dir}/src ${CMAKE_CXX_FLAGS_DEBUG}")
+    set(CMAKE_CXX_FLAGS_RELEASE "-isystem ${source_dir}/include -isystem ${source_dir}/src ${CMAKE_CXX_FLAGS_RELEASE}")
+  endif()
+
   # Client tests
   add_executable(runClientTests ${CLIENT_TESTS_SRCS})
   target_link_libraries(runClientTests GTestMain)
