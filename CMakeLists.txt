@@ -31,7 +31,10 @@ if(enable_tests)
 
   # Required for fetching and installing GTest
   include(ExternalProject)
-  find_package(Threads REQUIRED)
+  find_package(Threads)
+  if(NOT ${Threads_FOUND})
+    message(WARNING "Your platform does not provide a thread library supported by GTest. GTest will not be thread safe.")
+  endif()
 
 	set(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/gtest")
 	ExternalProject_Add(googletest
