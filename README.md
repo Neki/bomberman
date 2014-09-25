@@ -17,6 +17,31 @@ This project is composed of
 
 The project can be built using CMake. You need to have the Qt5 libraries installed on your system. Detailed instructions by operating system follow.
 
+### Windows 8
+
+#### Install tools and dependencies
+
+* Install Microsoft Visual Studio
+* Install CMake 2.8 http://www.cmake.org/download/
+* Install Qt http://www.qt.io/download/
+
+#### Build the project with CMake
+
+Lancer C:\Program Files (x86)\CMake 2.8\bin\cmake-gui.exe
+Type in the source code path
+Type in the target directory path
+Add the following entries:
+* CMAKE_PREFIX_PATH (path) C:/Qt/5.3/msvc2013_64/lib/cmake
+* enable_tests (bool) 0
+
+Click on 'Configure'
+Click on 'Generate'
+
+#### Run the tests
+
+Not solved yet for windows.
+
+
 ### Ubuntu
 
 #### Install tools and dependencies
