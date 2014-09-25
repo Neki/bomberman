@@ -99,4 +99,5 @@ target_link_libraries(bomberman Qt5::Widgets)
 target_link_libraries(bomberman common)
 
 add_executable(bombServer ${SERVER_SRCS})
+target_link_libraries(bombServer Qt5::Core)
 target_link_libraries(bomberman common)
