@@ -15,7 +15,7 @@ This project is composed of
 
 ## Build
 
-The project can be built using CMake. You need to have the Qt5 libraries installed on your system. Detailed instructions by operating system follows.
+The project can be built using CMake. You need to have the Qt5 libraries installed on your system. Detailed instructions by operating system follow.
 
 ### Ubuntu
 
@@ -35,7 +35,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 make
 ```
 
-You can also use the `Debug` buid type (includes debug symbols information, lower optimization settings...)
+You can also use the `Debug` build type (includes debug symbols information, lower optimization settings...)
 
 By default, this will also download the Google Test framework and compile the project test suite. Pass `-Denable_tests=OFF` to `cmake` to skip this step.
 
