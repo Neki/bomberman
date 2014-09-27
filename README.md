@@ -15,19 +15,19 @@ This project is composed of
 
 ## Build
 
-The project can be built using CMake. You need to have the Qt5 libraries installed on your system. Detailed instructions by operating system follow.
+The project can be built using CMake (version 3.0.2 minimum). You need to have the Qt5 libraries installed on your system. Detailed instructions by operating system follow.
 
 ### Windows 8
 
 #### Install tools and dependencies
 
 * Install Microsoft Visual Studio
-* Install CMake 2.8 http://www.cmake.org/download/
+* Install CMake (version 3.0.2 or superior) http://www.cmake.org/download/
 * Install Qt http://www.qt.io/download/
 
-#### Build the project with CMake
+#### Generate the Visual Studio project with CMake
 
-Lancer C:\Program Files (x86)\CMake 2.8\bin\cmake-gui.exe
+Launch C:\Program Files (x86)\CMake 3.0\bin\cmake-gui.exe
 Type in the source code path
 Type in the target directory path
 Add the following entries:
@@ -37,9 +37,11 @@ Add the following entries:
 Click on 'Configure'
 Click on 'Generate'
 
+You now have a `.sln` file that can be used in Visual Studio. Use Visual Studio to build the project (no further configuration *should* be needed).
+
 #### Run the tests
 
-Not solved yet for windows.
+Not solved yet for Windows.
 
 
 ### Ubuntu
@@ -48,11 +50,13 @@ Not solved yet for windows.
 
 ```
 sudo apt-get update
-sudo apt-get install cmake build-essential
+sudo apt-get install build-essential
 sudo apt-get install qt5-default
 ```
 
-#### Build the project with CMake
+Install CMake (minimum version 3.0.2) following the instructions at http://www.cmake.org/download/.
+
+#### Build the project with CMake and make
 
 ```
 mkdir build && cd build
