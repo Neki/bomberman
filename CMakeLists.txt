@@ -6,7 +6,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Qt
+find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Network REQUIRED)
 
 # Build options
 option(enable_tests "Build tests" ON)
@@ -93,11 +95,14 @@ if(enable_tests)
 endif(enable_tests)
 
 add_library(common ${COMMON_SRCS})
+target_link_libraries(common Qt5::Core)
 
 add_executable(bomberman ${CLIENT_SRCS})
 target_link_libraries(bomberman Qt5::Widgets)
+target_link_libraries(bomberman Qt5::Network)
 target_link_libraries(bomberman common)
 
 add_executable(bombServer ${SERVER_SRCS})
 target_link_libraries(bombServer Qt5::Core)
+target_link_libraries(bombServer Qt5::Network)
 target_link_libraries(bomberman common)
