@@ -15,8 +15,8 @@ option(enable_tests "Build tests" ON)
 
 # Compiler options
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic")
-  set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic")
+  set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic -fPIE")
+  set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic -fPIE")
 endif()
 
 # Gather source files
