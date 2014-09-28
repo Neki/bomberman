@@ -27,5 +27,16 @@
 *.out
 *.app
 
+# Visual Studio project files
+*.opensdf
+*.sdf
+*.sln
+*.suo
+*.vcxproj
+*.vcxproj.filters
+   
 # Build files
 build/*
+
+# Debug files
+Debug/*
