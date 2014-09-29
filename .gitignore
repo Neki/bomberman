@@ -33,6 +33,7 @@
 *.sln
 *.suo
 *.vcxproj
+*.vcxproj.user
 *.vcxproj.filters
    
 # Build files
