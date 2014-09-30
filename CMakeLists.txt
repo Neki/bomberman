@@ -91,6 +91,8 @@ if(enable_tests)
   # Common library tests
   add_executable(runLibraryTests ${COMMON_TESTS_SRCS})
   target_link_libraries(runLibraryTests GTestMain)
+  target_link_libraries(runLibraryTests Qt5::Network)
+  target_link_libraries(runLibraryTests common)
   add_test(runLibraryTests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/runLibraryTests)
 
 endif(enable_tests)
