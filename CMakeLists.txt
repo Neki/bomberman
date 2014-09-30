@@ -12,6 +12,7 @@ find_package(Qt5Network REQUIRED)
 
 # Build options
 option(enable_tests "Build tests" ON)
+set(CMAKE_BUILD_TYPE Debug)
 
 # Compiler options
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
