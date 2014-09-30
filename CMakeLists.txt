@@ -16,8 +16,8 @@ set(CMAKE_BUILD_TYPE Debug)
 
 # Compiler options
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic -fPIE")
-  set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic -fPIE")
+  set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic -fPIE -std=c++11")
+  set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic -fPIE -std=c++11")
 endif()
 
 # Gather source files
