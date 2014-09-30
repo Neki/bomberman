@@ -1,9 +1,9 @@
 #include <iostream>
 #include <QApplication>
 #include <QPushButton>
+#include "../../src/common/Game.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     std::cout << "Welcome to the client interface of Bomberman :)" << std::endl;
 
     // This part should be moved to another class, that's just for test
@@ -11,13 +11,19 @@ int main(int argc, char *argv[])
     QWidget mainWindow;
     mainWindow.setFixedSize(300, 300);
 
-    QPushButton button("Create game", &mainWindow);
-    button.setCursor(Qt::PointingHandCursor);
-    button.move(100, 100);
+    QPushButton createGameButton("Create game", &mainWindow);
+    createGameButton.setCursor(Qt::PointingHandCursor);
+    createGameButton.move(100, 75);
 
-    QPushButton button2("Join game", &mainWindow);
-    button2.setCursor(Qt::PointingHandCursor);
-    button2.move(100, 200);
+    QPushButton joinGameButton("Join game", &mainWindow);
+    joinGameButton.setCursor(Qt::PointingHandCursor);
+    joinGameButton.move(100, 150);
+
+    QPushButton quitWindowButton("Quit Bomberman", &mainWindow);
+    quitWindowButton.setCursor(Qt::PointingHandCursor);
+    quitWindowButton.move(100, 225);
+
+    QObject::connect(&quitWindowButton, SIGNAL(clicked()), &app, SLOT(quit()));
 
     mainWindow.show();
 

@@ -5,14 +5,17 @@
 #include <vector>
 #include "Player.h"
 
-namespace common
-{
-    class Game : public QObject
-    {
+namespace common {
+    class Game : public QObject {
     public:
-        std::vector<Player*> Game::getPlayers();
+        std::map<int, Player*> Game::GetPlayers();
+        Player* GetPlayer(int id);
+        int GetPlayersCount();
+        int AddPlayer(Player& player);
+        void Start();
+        void End();
     protected:
-        std::vector<Player*> players_;
+        std::map<int, Player*> players_;
     };
 }
 #endif

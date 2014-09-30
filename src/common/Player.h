@@ -3,14 +3,16 @@
 
 #include <QObject>
 
-namespace common
-{
-    class Player : public QObject
-    {
+namespace common {
+    class Player : public QObject {
     public:
-        int Player::getId();
-        QString Player::getName();
-        int Player::getScore();
+        Player(int id);
+        Player(QString name);
+        int id();
+        QString name();
+        int score();
+        int AddScore(int score_to_add);
+        int SubstractScore(int score_to_substract);
 
     protected:
         int id_;
