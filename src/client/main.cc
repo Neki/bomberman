@@ -2,11 +2,9 @@
 #include <QApplication>
 #include <QPushButton>
 
-using namespace std;
-
 int main(int argc, char *argv[])
 {
-    cout << "Welcome in the client interface of Bomberman :)" << endl;
+    std::cout << "Welcome to the client interface of Bomberman :)" << std::endl;
 
     // This part should be moved to another class, that's just for test
     QApplication app(argc, argv);

@@ -1,5 +1,5 @@
-#ifndef COMMON_PLAYER_H_
-#define COMMON_PLAYER_H_
+#ifndef SRC_COMMON_PLAYER_H_
+#define SRC_COMMON_PLAYER_H_
 
 #include <QObject>
 
