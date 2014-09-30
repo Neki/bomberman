@@ -4,8 +4,15 @@ compiler:
   - clang
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+  - if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
+  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
   - sudo apt-get update -qq
   - sudo apt-get install qt5-default -y
+install:
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
+  - if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
 before_script:
   - wget http://www.cmake.org/files/v3.0/cmake-3.0.2.tar.gz -O /tmp/cmake.tar.gz
   - pushd .
@@ -15,4 +22,7 @@ before_script:
   - ./bootstrap && make && sudo make install
   - popd
   - export CPLUS_INCLUDE_PATH=/usr/include/qt5/QtConcurrent:/usr/include/qt5/QtCore:/usr/include/qt5/QtDBus:/usr/include/qt5/QtGui:/usr/include/qt5/QtLocation:/usr/include/qt5/QtNetwork:/usr/include/qt5/QtOpenGL:/usr/include/qt5/QtPlatformSupport:/usr/include/qt5/QtPrintSupport:/usr/include/qt5/QtQml:/usr/include/qt5/QtQmlDevTools:/usr/include/qt5/QtQuick:/usr/include/qt5/QtQuickParticles:/usr/include/qt5/QtQuickTest:/usr/include/qt5/QtSensors:/usr/include/qt5/QtSql:/usr/include/qt5/QtTest:/usr/include/qt5/QtWebKit:/usr/include/qt5/QtWebKitWidgets:/usr/include/qt5/QtWidgets:/usr/include/qt5/QtXml:/usr/include/qt5
-script:  cmake . -Denable_tests=ON -DCMAKE_BUILD_TYPE=Debug && make && make test
+script:
+ - $CXX --version
+ - qmake -v
+ - cmake . -Denable_tests=ON -DCMAKE_BUILD_TYPE=Debug && make && make test
