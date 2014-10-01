@@ -21,7 +21,7 @@ before_script:
   - cd cmake-3.0.2
   - ./bootstrap && make && sudo make install
   - popd
+  - $CXX --version
+  - qmake -v
 script:
- - $CXX --version
- - qmake -v
- - cmake . -Denable_tests=ON -DCMAKE_BUILD_TYPE=Debug && make && make test
+  - cmake . -Denable_tests=ON -DCMAKE_BUILD_TYPE=Debug && make && make test
