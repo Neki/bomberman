@@ -21,7 +21,6 @@ before_script:
   - cd cmake-3.0.2
   - ./bootstrap && make && sudo make install
   - popd
-  - export CPLUS_INCLUDE_PATH=/usr/include/qt5/QtConcurrent:/usr/include/qt5/QtCore:/usr/include/qt5/QtDBus:/usr/include/qt5/QtGui:/usr/include/qt5/QtLocation:/usr/include/qt5/QtNetwork:/usr/include/qt5/QtOpenGL:/usr/include/qt5/QtPlatformSupport:/usr/include/qt5/QtPrintSupport:/usr/include/qt5/QtQml:/usr/include/qt5/QtQmlDevTools:/usr/include/qt5/QtQuick:/usr/include/qt5/QtQuickParticles:/usr/include/qt5/QtQuickTest:/usr/include/qt5/QtSensors:/usr/include/qt5/QtSql:/usr/include/qt5/QtTest:/usr/include/qt5/QtWebKit:/usr/include/qt5/QtWebKitWidgets:/usr/include/qt5/QtWidgets:/usr/include/qt5/QtXml:/usr/include/qt5
 script:
  - $CXX --version
  - qmake -v
