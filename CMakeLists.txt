@@ -6,15 +6,18 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Qt
+find_package(Qt5Core 5.2 REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Network REQUIRED)
 
 # Build options
 option(enable_tests "Build tests" ON)
+set(CMAKE_BUILD_TYPE Debug)
 
 # Compiler options
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic")
-  set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic")
+  set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic -fPIE -std=c++11")
+  set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic -fPIE -std=c++11")
 endif()
 
 # Gather source files
@@ -88,16 +91,21 @@ if(enable_tests)
   # Common library tests
   add_executable(runLibraryTests ${COMMON_TESTS_SRCS})
   target_link_libraries(runLibraryTests GTestMain)
+  target_link_libraries(runLibraryTests Qt5::Network)
+  target_link_libraries(runLibraryTests common)
   add_test(runLibraryTests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/runLibraryTests)
 
 endif(enable_tests)
 
 add_library(common ${COMMON_SRCS})
+target_link_libraries(common Qt5::Core)
 
 add_executable(bomberman ${CLIENT_SRCS})
 target_link_libraries(bomberman Qt5::Widgets)
+target_link_libraries(bomberman Qt5::Network)
 target_link_libraries(bomberman common)
 
 add_executable(bombServer ${SERVER_SRCS})
 target_link_libraries(bombServer Qt5::Core)
-target_link_libraries(bomberman common)
+target_link_libraries(bombServer Qt5::Network)
+target_link_libraries(bombServer common)
