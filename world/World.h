@@ -29,10 +29,9 @@ namespace common {
         std::Vector<Entity::entity> getEntityVector() {return p_world[length][height];}
 
         bool isEmpty(int x, int y);
-        bool hasItem(int x, int y);
-        void addItem(int x, int y);
-        void destroyItem(int x, int y);
-
+        bool hasItem(int x, int y, Entity entity);
+        void addItem(int x, int y, Entity entity);
+        void destroyItem(int x, int y, Entity entity);
   };
 
 
