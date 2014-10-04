@@ -12,14 +12,9 @@ install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
   - if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
-  - wget http://www.cmake.org/files/v3.0/cmake-3.0.2.tar.gz -O /tmp/cmake.tar.gz
-  - pushd .
-  - cd /tmp
-  - tar xzf cmake.tar.gz
-  - cd cmake-3.0.2
-  - ./bootstrap && make && sudo make install
-  - popd
-  - sudo apt-get install -y qt52-meta-minimal qt52tools qt52svg
+  - sudo apt-get install -y qt52-meta-minimal qt52tools qt52svg libc6-i386
+  - wget http://www.cmake.org/files/v3.0/cmake-3.0.2-Linux-i386.sh
+  - sudo sh cmake-3.0.2-Linux-i386.sh --prefix=/usr/local --exclude-subdir
 before_script:
   - export QT_BASE_DIR=/opt/qt52
   - export QTDIR=$QT_BASE_DIR
