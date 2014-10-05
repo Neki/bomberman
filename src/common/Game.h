@@ -8,7 +8,7 @@
 namespace common {
     class Game {
     public:
-        std::map<int, Player*> Game::GetPlayers();
+        std::map<int, Player*> GetPlayers();
         Player* GetPlayer(int id);
         int GetPlayersCount();
         int AddPlayer(Player& player);

@@ -10,7 +10,7 @@ namespace common {
 
     Player* Game::GetPlayer(int id) {
         if (!players_.count(id)) {
-            throw std::exception("Unknown player id: " + id);
+            throw std::exception("Unknown player id");
         }
 
         return players_[id];
