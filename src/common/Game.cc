@@ -1,4 +1,6 @@
 #include "Game.h"
+#include <QObject>
+#include <vector>
 
 namespace common {
     int Game::AddPlayer(Player& player) {
@@ -10,7 +12,7 @@ namespace common {
 
     Player* Game::GetPlayer(int id) {
         if (!players_.count(id)) {
-            throw std::exception("Unknown player id");
+            throw std::out_of_range("Unknown player id: " + id);
         }
 
         return players_[id];
