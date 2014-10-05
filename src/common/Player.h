@@ -4,7 +4,7 @@
 #include <QObject>
 
 namespace common {
-    class Player : public QObject {
+    class Player {
     public:
         Player(int id);
         Player(QString name);

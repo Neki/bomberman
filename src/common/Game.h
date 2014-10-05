@@ -1,12 +1,12 @@
 #ifndef SRC_COMMON_GAME_H_
 #define SRC_COMMON_GAME_H_
 
-#include <QObject>
 #include <vector>
+#include <map>
 #include "Player.h"
 
 namespace common {
-    class Game : public QObject {
+    class Game {
     public:
         std::map<int, Player*> Game::GetPlayers();
         Player* GetPlayer(int id);

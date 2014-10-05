@@ -1,6 +1,4 @@
 #include "Game.h"
-#include <QObject>
-#include <vector>
 
 namespace common {
     int Game::AddPlayer(Player& player) {

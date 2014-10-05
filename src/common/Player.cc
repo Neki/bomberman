@@ -1,5 +1,4 @@
 #include "Player.h"
-#include <QObject>
 
 namespace common {
     Player::Player(int id) : id_(id), score_(0) {

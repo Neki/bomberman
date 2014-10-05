@@ -1,7 +1,7 @@
 #include <iostream>
 #include <QApplication>
 #include <QPushButton>
-#include "../../src/common/Game.h"
+#include "src/common/Game.h"
 
 int main(int argc, char *argv[]) {
     std::cout << "Welcome to the client interface of Bomberman :)" << std::endl;

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../../src/common/Player.h"
+#include "src/common/Player.h"
 
 TEST(Player, SubstractScore) {
     common::Player player("SpiderMan");

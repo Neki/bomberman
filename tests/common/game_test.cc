@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../../src/common/Game.h"
+#include "src/common/Game.h"
 
 TEST(Game, AddPlayer) {
     common::Game game;
