@@ -1,3 +1,4 @@
+#include "World.h"
 #include "GameEngine.h"
 #include "Entity.h"
 #include "Character.h"
@@ -10,16 +11,24 @@
 
 using namespace std;
 
-typedef struct World{
-    QInt width;
-    QInt height;
-} World;
-
-
-void main(){
-
+void GameEngine::startGame(void){
+    world = new World();
 }
 
-void Game::Start(void){
+void GameEngine::updateGame(void){
+}
 
+void GameEngine::validateActions(void){
+}
+
+void GameEngine::applyActions(void){
+}
+
+void GameEngine::simulateActions(void){
+}
+
+void GameEngine::sendGameState(void){
+}
+
+void GameEngine::moveCharacter(void){
 }

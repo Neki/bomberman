@@ -5,6 +5,7 @@
 #include "Event.h"
 #include "MoveEvent.h"
 #include "BombEvent.h"
+#include "World.h"
 
 namespace common {
 
@@ -14,18 +15,19 @@ namespace common {
 
     public:
 		GameEngine(Vector<Player> players, QTime maxDuration, QTime suddenDeathModeDuration);
-        int start();
-        int move();
-        // For fire, bomb, bonus, bloc, wall
-        bool isEmpty(int x, int y);
-        bool hasItem(int x, int y);
-        void addItem(int x, int y);
-        void destroyItem(int x, int y);
+        void startGame();
+        void updateGame();
+        void validateActions();
+        void applyActions();
+        void simulateActions();
+        void sendGameState();
+        void moveCharacter();
 
     private:
 		QTime maxDuration;
 		Characters;
 		Players;
+        World world;
 		
 		void update(int t); // t in ms
 
