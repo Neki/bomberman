@@ -14,7 +14,7 @@ namespace common {
     Q_OBJECT
 
     public:
-		GameEngine(Vector<Player> players, QTime maxDuration, QTime suddenDeathModeDuration);
+		GameEngine(Vector<Player> players, QTime max_Duration_, QTime sudden_Death_Mode_Duration_);
         void startGame();
         void updateGame();
         void validateActions();

@@ -9,26 +9,23 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
-void GameEngine::startGame(void){
-    world = new World();
+void GameEngine::startGame():World{
 }
 
-void GameEngine::updateGame(void){
+void GameEngine::updateGame(){
 }
 
-void GameEngine::validateActions(void){
+void GameEngine::validateActions(){
 }
 
-void GameEngine::applyActions(void){
+void GameEngine::applyActions(){
 }
 
-void GameEngine::simulateActions(void){
+void GameEngine::simulateActions(){
 }
 
-void GameEngine::sendGameState(void){
+void GameEngine::sendGameState(){
 }
 
-void GameEngine::moveCharacter(void){
+void GameEngine::moveCharacter(){
 }
