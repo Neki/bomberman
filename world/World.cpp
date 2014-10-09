@@ -5,10 +5,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
-
-// World constructor
 World::World(int length, int height, std::vector<Entity::entity> world)
 {
    SetWorld(length, height, World[length][height]);
