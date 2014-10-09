@@ -25,7 +25,6 @@ namespace common {
 
     private:
 		QTime maxDuration;
-		Characters;
 		Players;
         World world;
 		
