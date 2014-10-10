@@ -5,57 +5,69 @@
 #include <string>
 #include <vector>
 
-World::World(int length, int height, std::vector<Entity::entity> world)
+World::World(int width, int height) :
+    width_(width),
+    height_(height),
+    entities_(nullptr)
 {
-   SetWorld(length, height, World[length][height]);
+    entities_ = new std::vector<std::vector<std::vector<entity::Entity*>>>(width_);
 }
 
-void World::World(int length, int height, std::vector<Entity::entity> world)
-{
-    wLength = length;
-    wHeight = height;
-    world = world;
+World::~World() {
+    // TODO libérer la mémoire
 }
 
-void CheckCoord(int x, int y){
-    if(x<0 || x > length || y<0 || y > height)
+int World::GetWidth(){
+    return width_;
+}
+
+int World::GetHeight(){
+    return height_;
+}
+
+bool World::CheckCoord(int x, int y){
+    if(x<0 || x >= width_ || y<0 || y >= height_)
         {
-            throw CoordOutOfRange;
+            return false;
         }
-}
-
-bool IsEmpty(int x, int y)
-{
-    CheckCoord(x,y);
-    if(world[x][y].size() > 0){
-        return false;
-    }else{
+    else
         return true;
-    }
 }
 
-bool HasItem(int x, int y, Entity entity)
+bool World::IsWalkable(int x, int y)
 {
-    checkCoord(x,y);
-    for(int i=0; i<World[x][y].size();i++ ){
-        if(World[x][y].at(i) == entity){
-            return True;
+    if(!CheckCoord(x,y))
+        return false;
+
+    for(auto entity: entities_[x][y]){
+        if(entity -> IsSolid()){
+            return false;
         }
     }
-    returne False;
+    return true;
 }
 
-
-void AddItem(int x, int y, Entity entity){
-    checkCoord(x,y);
+void World::AddItem(int x, int y, Entity* entity){
+    if(!checkCoord(x,y)){
+        // TODO exception
+        return;
+    }
     World[x][y].insert(entity);
 }
 
-void DestroyItem(int x, int y, Entity entity){
-    checkCoord(x,y);
-    for(int i=0; i<World[x][y].size();i++ ){
-        if(World[x][y].at(i) == entity){
-            World[x][y].erase(i);
+void World::RemoveItem(int id){
+    for(auto columns: entities_){
+        for(auto blocks: columns){
+            for(auto i = blocks.begin(); blocks.end();){
+                if(i -> getId() == id){
+                   i = blocks.erase(i);
+                }else{
+                    i++;
+                }
+            }
         }
     }
 }
+
+
+
