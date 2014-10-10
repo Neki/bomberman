@@ -28,6 +28,14 @@ file(GLOB_RECURSE SERVER_TESTS_SRCS "tests/server/*.cc")
 file(GLOB_RECURSE CLIENT_TESTS_SRCS "tests/client/*.cc")
 file(GLOB_RECURSE COMMON_TESTS_SRCS "tests/common/*.cc")
 
+# Gather header files
+file(GLOB_RECURSE SERVER_HEADERS "src/server/*.h")
+file(GLOB_RECURSE CLIENT_HEADERS "src/client/*.h")
+file(GLOB_RECURSE COMMON_HEADERS "src/common/*.h")
+file(GLOB_RECURSE SERVER_TESTS_HEADERS "tests/server/*.h")
+file(GLOB_RECURSE CLIENT_TESTS_HEADERS "tests/client/*.h")
+file(GLOB_RECURSE COMMON_TESTS_HEADERS "tests/common/*.h")
+
 # Tests
 if(enable_tests)
   enable_testing()
@@ -97,15 +105,15 @@ if(enable_tests)
 
 endif(enable_tests)
 
-add_library(common ${COMMON_SRCS})
+add_library(common ${COMMON_SRCS} ${COMMON_HEADERS})
 target_link_libraries(common Qt5::Core)
 
-add_executable(bomberman ${CLIENT_SRCS})
+add_executable(bomberman ${CLIENT_SRCS} ${CLIENT_HEADERS})
 target_link_libraries(bomberman Qt5::Widgets)
 target_link_libraries(bomberman Qt5::Network)
 target_link_libraries(bomberman common)
 
-add_executable(bombServer ${SERVER_SRCS})
+add_executable(bombServer ${SERVER_SRCS} ${SERVER_HEADERS})
 target_link_libraries(bombServer Qt5::Core)
 target_link_libraries(bombServer Qt5::Network)
 target_link_libraries(bombServer common)
