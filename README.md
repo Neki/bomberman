@@ -28,16 +28,22 @@ The project can be built using CMake (version 3.0.2 minimum). You need to have t
 #### Generate the Visual Studio project with CMake
 
 Launch C:\Program Files (x86)\CMake 3.0\bin\cmake-gui.exe
+
 Type in the source code path
+
 Type in the target directory path
+
 Add the following entries:
-* CMAKE_PREFIX_PATH (path) C:/Qt/5.3/msvc2013_64/lib/cmake
-* enable_tests (bool) 0
+* Name: `CMAKE_PREFIX_PATH`; Type: `path`; Value: `C:/Qt/5.3/msvc2013_64/lib/cmake`
+* Name: `enable_tests`; Type: `bool`; Value: `0`
 
-Click on 'Configure'
-Click on 'Generate'
+Click on 'Configure' => Choose your version of Visual Studio and leave the others parameters
 
-You now have a `.sln` file that can be used in Visual Studio. Use Visual Studio to build the project (no further configuration *should* be needed).
+Click on 'Generate'.
+
+You now have a `.sln` file that can be used in Visual Studio. Use Visual Studio to build the projects (no further configuration *should* be needed).
+
+After building the solution, you'll have 3 executables in your bin/Debug or bin/Release folder. If some QT DLLs are missing when you execute these .exe files, you should modify your PATH environment variable and add this path to the others: `C:\Qt\5.3\msvc2013_64\bin`. Then the executables should work
 
 #### Run the tests
 
