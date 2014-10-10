@@ -7,6 +7,7 @@
 #include <QThread>
 #include "src/common/net/Event.h"
 #include "NetworkWorker.h"
+#include "src/common/GameTimer.h"
 
 using namespace common::net;
 
@@ -34,7 +35,7 @@ namespace net {
        * @param client port port used in the client to receive data from the
        *        server (UDP protocol).
        */
-      NetworkManager(QHostAddress server_address, quint16 server_port, quint16 client_port);
+      NetworkManager(QHostAddress server_address, quint16 server_port, quint16 client_port, std::shared_ptr<common::GameTimer> game_timer);
 
       /**
        * Starts communicating with the game server. This must be called after
@@ -70,7 +71,9 @@ namespace net {
       quint16 client_port_;
       quint16 client_id_; // TODO initialize client_id when connecting to a lobby
       std::unique_ptr<NetworkWorker> game_worker_;
+      std::shared_ptr<common::GameTimer> game_timer_;
       NetworkState state_;
+
 
       QThread game_worker_thread_;
 
