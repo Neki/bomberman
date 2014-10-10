@@ -5,10 +5,11 @@
 
 namespace net {
 
-  // T should be a subclass of common::net::Event, but there is no simple way in C++11 to
-  // enforce that.
-  // A wrapper around an event sent by a client, that includes additional
-  // server-side information.
+  /**
+   * A container for an event received by the server.
+   * T should be a subclass of common::net::Event, but there is no simple way in C++11 to
+   * enforce that.
+   */
   template<class T>
   class ClientEvent {
 

@@ -14,15 +14,34 @@
 namespace common {
 namespace net {
 
+/**
+ * Internal class for the network API (not intended for direct use by the user).
+ * Instances are meant to be run in a thread separate from  the main thread, and
+ * contain the main loop (run by Qt) that actually communicates with the server
+ * on the network during a game. Network communication when in lobby is outside
+ * the scope of this class.
+ * @see NetworkManager
+ */
 class NetworkWorker : public QObject {
   Q_OBJECT
 
   public:
+    /**
+     * @param client_id the unique client ID given by the server in the game
+     *        lobby
+     * @param address the address of the server running the game
+     * @param server_port port on the server to connect to
+     * @param local_port port on the client used to receive data (todo:
+     * communicate this port to the server)
+     */
     NetworkWorker(quint8 client_id, QHostAddress address, quint16 server_port, quint16 local_port);
-    // can be called from another thread
-    // can not be a slot, as this would require the event to be copied
-    // if this slot was called from another thread (which is the purpose of this
-    // method)
+
+    /**
+     * Adds an event in the list of events to send to the server.
+     * Can be called from any thread.
+     * Is not a slot, as inter-thread communication with slots would require a
+     * copy of the event.
+     */
     void AddEvent(std::unique_ptr<Event> event);
 
   signals:
