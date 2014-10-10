@@ -3,37 +3,33 @@
 
 #include <vector>
 #include "Entity.h"
+#include "Character.h"
 
 namespace common {
 
 
-  class World : public QObject {
-    Q_OBJECT
-
+  class World {
     World(){ }
 
     private:
-        QTime maxDuration;
-        int wLength;
-        int wHeight;
-        std::vector<Entity::entity> myWorld;
+        int width_; // Width of the world eg number of blocks
+        int height_;
+        std::vector<std::vector<std::vector<Entity::Entity*>>>* entities_;
+        std::vector<Character::Character> characters_;
 
-        public:
-        World(int length, int height, std::vector<Entity::entity> World);
+    public:
+        World(int width, int height);
+        ~World();
 
-        void setWorld(int length, int height, std::vector<Entity::entity> World);
+        bool CheckCoord(int x, int y);
 
-        int GetLength() {return wLength;}
-        int GetHeight() {return wHeight;}
-        std::vector<Entity::entity> getEntityVector() {return myWorld;}
+        int GetWidth();
+        int GetHeight();
 
-        bool IsEmpty(int x, int y);
-        bool HasItem(int x, int y, Entity entity);
-        void AddItem(int x, int y, Entity entity);
-        void DestroyItem(int x, int y, Entity entity);
+        bool IsWalkable(int x, int y);
+        void AddItem(int x, int y, Entity* entity);
+        void RemoveItem(int id);
   };
-
-
 }
 
 
