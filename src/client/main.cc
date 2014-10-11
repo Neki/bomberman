@@ -3,8 +3,15 @@
 #include <QPushButton>
 #include "src/common/Game.h"
 
+#include "easylogging++.h"
+
+_INITIALIZE_EASYLOGGINGPP
+
 int main(int argc, char *argv[]) {
     std::cout << "Welcome to the client interface of Bomberman :)" << std::endl;
+
+    _START_EASYLOGGINGPP(argc, argv);
+    LOG(INFO) << "Started client";
 
     // This part should be moved to another class, that's just for test
     QApplication app(argc, argv);
