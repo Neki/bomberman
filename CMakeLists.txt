@@ -36,6 +36,9 @@ file(GLOB_RECURSE SERVER_TESTS_HEADERS "tests/server/*.h")
 file(GLOB_RECURSE CLIENT_TESTS_HEADERS "tests/client/*.h")
 file(GLOB_RECURSE COMMON_TESTS_HEADERS "tests/common/*.h")
 
+# EasyLoggingCpp
+include(easyloggingcpp.cmake)
+
 # Tests
 if(enable_tests)
   enable_testing()
@@ -62,13 +65,16 @@ endif(enable_tests)
 
 add_library(common ${COMMON_SRCS} ${COMMON_HEADERS})
 target_link_libraries(common Qt5::Core)
+add_dependencies(common easyloggingcpp)
 
 add_executable(bomberman ${CLIENT_SRCS} ${CLIENT_HEADERS})
 target_link_libraries(bomberman Qt5::Widgets)
 target_link_libraries(bomberman Qt5::Network)
 target_link_libraries(bomberman common)
+add_dependencies(bomberman easyloggingcpp)
 
 add_executable(bombServer ${SERVER_SRCS} ${SERVER_HEADERS})
 target_link_libraries(bombServer Qt5::Core)
 target_link_libraries(bombServer Qt5::Network)
 target_link_libraries(bombServer common)
+add_dependencies(bombServer easyloggingcpp)
