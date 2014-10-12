@@ -3,6 +3,7 @@
 #include <QTime>
 #include <QMutexLocker>
 #include "src/common/GameTimer.h"
+#include "easylogging++.h"
 
 namespace net {
 
@@ -48,6 +49,10 @@ void NetworkWorker::ReadPendingDatagrams() {
 
 void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
   QDataStream stream(datagram);
+  if(!CheckProtocolAndVersion(stream)) {
+    LOG(WARNING) << "Protocol or version ID mismatch, dropping datagram.";
+    return;
+  }
   quint8 packet_id = GetNextPacketType(stream);
   switch(packet_id) {
     case kPingPacketId:
@@ -57,6 +62,24 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
       // TODO: log unknown packet
       break;
   }
+}
+
+bool NetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
+  quint8 protocol_id;
+  quint8 server_version;
+  stream >> protocol_id;
+  stream >> server_version;
+  quint8 accepted_version = NetworkWorker::kClientVersion;
+  quint8 accepted_protocol_id = NetworkWorker::kProtocolId;
+  if(protocol_id != accepted_protocol_id) {
+    LOG(WARNING) << "Received unexpected protocol ID: got " << protocol_id << ", expected " << accepted_protocol_id;
+    return false;
+  }
+  if(server_version != accepted_version) {
+    LOG(WARNING) << "Received unsupported server version: got " << server_version << ", but only version " << accepted_version << "is supported by this client";
+    return false;
+  }
+  return true;
 }
 
 void NetworkWorker::ProcessPingPacket(QDataStream& stream) {

@@ -86,6 +86,7 @@ class NetworkWorker : public QObject {
     quint32 PrepareHeader(QDataStream& stream, quint8 packet_type);
     void ReadPendingDatagrams();
     void ProcessDatagram(const QByteArray& datagram);
+    bool CheckProtocolAndVersion(QDataStream& stream);
     void ProcessPingPacket(QDataStream& stream);
     quint8 GetNextPacketType(QDataStream& stream);
     void UpdateRoundTripTime(quint32 send_time);
