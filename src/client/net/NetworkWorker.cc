@@ -55,7 +55,8 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
     LOG(WARNING) << "Protocol or version ID mismatch, dropping datagram.";
     return;
   }
-  GetPacketId(stream); // id unused for now, but calling this method is necessary to consume the stream
+  quint32 packet_id = GetPacketId(stream);
+  VLOG(5) << "Received datagram packet id: " << packet_id;
   quint8 packet_type = GetPacketType(stream);
   switch(packet_type) {
     case kPingPacketId:
