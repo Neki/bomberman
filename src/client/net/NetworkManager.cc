@@ -1,4 +1,5 @@
 #include "NetworkManager.h"
+#include "easylogging++.h"
 
 namespace net {
 
@@ -21,6 +22,7 @@ void NetworkManager::StopGame() {
   if(state_ == NetworkState::kInGame) {
     game_worker_thread_.quit();
     game_worker_thread_.wait();
+    LOG(INFO) << "Network worker thread killed";
   }
 }
 

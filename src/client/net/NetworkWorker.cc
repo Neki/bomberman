@@ -23,6 +23,7 @@ NetworkWorker::NetworkWorker(quint8 client_id, QHostAddress address, quint16 ser
   timer_.start(100);
   ping_timer_.start(200);
   clean_ping_data_timer_.start(5000);
+  LOG(INFO) << "Initialized the client network worker.";
 }
 
 quint32 NetworkWorker::GetNextEventId() {
@@ -48,6 +49,7 @@ void NetworkWorker::ReadPendingDatagrams() {
 }
 
 void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
+  VLOG(6) << "Received a datagram";
   QDataStream stream(datagram);
   if(!CheckProtocolAndVersion(stream)) {
     LOG(WARNING) << "Protocol or version ID mismatch, dropping datagram.";
@@ -56,10 +58,11 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
   quint8 packet_id = GetNextPacketType(stream);
   switch(packet_id) {
     case kPingPacketId:
+      VLOG(5) << "The datagram is a ping packet.";
       ProcessPingPacket(stream);
       break;
     default:
-      // TODO: log unknown packet
+      LOG(WARNING) << "Received unknown packet type id " << packet_id << ", dropping datagram.";
       break;
   }
 }
@@ -76,7 +79,7 @@ bool NetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
     return false;
   }
   if(server_version != accepted_version) {
-    LOG(WARNING) << "Received unsupported server version: got " << server_version << ", but only version " << accepted_version << "is supported by this client";
+    LOG(WARNING) << "Received unsupported server version: got " << server_version << ", but only version " << accepted_version << " is supported by this client";
     return false;
   }
   return true;
@@ -89,7 +92,7 @@ void NetworkWorker::ProcessPingPacket(QDataStream& stream) {
   stream >> server_timestamp; // unused for now
   auto send_timestamp = ping_timestamps_.find(packet_id);
   if(send_timestamp == ping_timestamps_.end()) {
-    //TODO log error
+    LOG(WARNING) << "Received a ping response, but could not find when the question was sent.";
   } else {
     UpdateRoundTripTime(send_timestamp->second);
     // even if the line below is not called (exception), the CleanPingData
@@ -101,7 +104,8 @@ void NetworkWorker::ProcessPingPacket(QDataStream& stream) {
 void NetworkWorker::UpdateRoundTripTime(quint32 send_timestamp) {
   quint32 now = game_timer_->GetTimestamp();
   if(now < send_timestamp) {
-    // TODO log error
+    LOG(ERROR) << "The timestamp of a sent ping packet is in the future. This probably means the client clock settings changed after the packet was sent.";
+    return;
   }
   round_trip_time_ = (double)round_trip_time_ * 0.9 + ((double)now - (double)send_timestamp) * 0.1;
   emit Latency(round_trip_time_ / 2);
