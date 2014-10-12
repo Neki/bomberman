@@ -2,7 +2,6 @@
 #include "Entity.h"
 
 #include <iostream>
-#include <string>
 #include <vector>
 
 World::World(int width, int height) :
@@ -62,7 +61,7 @@ void World::RemoveItem(int id){
                 if(i -> getId() == id){
                    i = blocks.erase(i);
                 }else{
-                    i++;
+                    ++i;
                 }
             }
         }
