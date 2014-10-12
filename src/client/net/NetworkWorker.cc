@@ -55,14 +55,15 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
     LOG(WARNING) << "Protocol or version ID mismatch, dropping datagram.";
     return;
   }
-  quint8 packet_id = GetNextPacketType(stream);
-  switch(packet_id) {
+  GetPacketId(stream); // id unused for now, but calling this method is necessary to consume the stream
+  quint8 packet_type = GetPacketType(stream);
+  switch(packet_type) {
     case kPingPacketId:
       VLOG(5) << "The datagram is a ping packet.";
       ProcessPingPacket(stream);
       break;
     default:
-      LOG(WARNING) << "Received unknown packet type id " << packet_id << ", dropping datagram.";
+      LOG(WARNING) << "Received unknown packet type " << packet_type << ", dropping datagram.";
       break;
   }
 }
@@ -111,8 +112,14 @@ void NetworkWorker::UpdateRoundTripTime(quint32 send_timestamp) {
   emit Latency(round_trip_time_ / 2);
 }
 
-unsigned char NetworkWorker::GetNextPacketType(QDataStream& stream) {
+quint8 NetworkWorker::GetPacketType(QDataStream& stream) {
   quint8 packet_id;
+  stream >> packet_id;
+  return packet_id;
+}
+
+quint32 NetworkWorker::GetPacketId(QDataStream& stream) {
+  quint32 packet_id;
   stream >> packet_id;
   return packet_id;
 }

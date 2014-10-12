@@ -87,8 +87,9 @@ class NetworkWorker : public QObject {
     void ReadPendingDatagrams();
     void ProcessDatagram(const QByteArray& datagram);
     bool CheckProtocolAndVersion(QDataStream& stream);
+    quint32 GetPacketId(QDataStream& stream);
+    quint8 GetPacketType(QDataStream& stream);
     void ProcessPingPacket(QDataStream& stream);
-    quint8 GetNextPacketType(QDataStream& stream);
     void UpdateRoundTripTime(quint32 send_time);
     /**
      * Delete all data about ping packets sent more than 5 seconds ago.
