@@ -3,12 +3,13 @@
 #include <QPushButton>
 #include "src/common/Game.h"
 
-#include "easylogging++.h"
-
+#include "logging.h"
 _INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char *argv[]) {
     std::cout << "Welcome to the client interface of Bomberman :)" << std::endl;
+
+    initialize_logger();
 
     _START_EASYLOGGINGPP(argc, argv);
     LOG(INFO) << "Started client";
