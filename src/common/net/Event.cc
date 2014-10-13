@@ -8,6 +8,9 @@ Event::Event(quint32 id, quint64 timestamp) :
     timestamp_(timestamp) {
 }
 
+Event::Event(quint64 timestamp) :
+  Event(0, timestamp) {}
+
 quint32 Event::GetId() const {
   return id_;
 }

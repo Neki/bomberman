@@ -21,11 +21,18 @@ class Event {
 
   public:
     /**
-     * @param id a unique, strictly increasing event ID. Can be set to -1.
+     * @param id a unique, strictly increasing event ID.
      * @param timestamp in milliseconds since the beginning of the game, when
      * this action took place (in the point of view of the client)
      */
     Event(quint32 id, quint64 timestamp);
+
+    /**
+     * Creates a new Event with no ID (the ID will be set when the event is
+     * sent)
+     * @param timestamp in milliseconds since the beginning of the game.
+     */
+    Event(quint64 timestamp);
     void SetId(quint32 id);
     quint32 GetId() const;
     quint64 GetTimestamp() const;
