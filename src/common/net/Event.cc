@@ -25,9 +25,9 @@ QString Event::GetClientVersion() const {
 }
 
 void Event::SerializeBaseEvent(QDataStream& stream) const {
-  stream << this->GetClientVersion();
-  stream << this->GetId();
-  stream << this->GetTimestamp();
+  stream << GetClientVersion();
+  stream << GetId();
+  stream << GetTimestamp();
 }
 
 bool Event::operator==(const Event& event) const {

@@ -21,8 +21,8 @@ QPoint MoveEvent::GetPosition() const {
 void MoveEvent::Serialize(QDataStream& stream) const {
   stream << (quint32) EventId::kMoveEventId;
   SerializeBaseEvent(stream);
-  stream << this->GetPosition();
-  stream << this->GetDirection();
+  stream << GetPosition();
+  stream << GetDirection();
 }
 
 bool MoveEvent::operator==(const MoveEvent& event) const {
