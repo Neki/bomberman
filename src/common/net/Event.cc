@@ -11,6 +11,8 @@ Event::Event(quint32 id, quint64 timestamp) :
 Event::Event(quint64 timestamp) :
   Event(0, timestamp) {}
 
+Event::~Event() {}
+
 quint32 Event::GetId() const {
   return id_;
 }

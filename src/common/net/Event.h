@@ -33,6 +33,9 @@ class Event {
      * @param timestamp in milliseconds since the beginning of the game.
      */
     Event(quint64 timestamp);
+
+    virtual ~Event();
+
     void SetId(quint32 id);
     quint32 GetId() const;
     quint64 GetTimestamp() const;
