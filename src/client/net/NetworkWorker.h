@@ -11,7 +11,8 @@
 #include <QByteArray>
 #include "src/common/net/Event.h"
 
-namespace common {
+using common::net::Event;
+
 namespace net {
 
 /**
@@ -75,7 +76,6 @@ class NetworkWorker : public QObject {
 
 };
 
-}
 }
 
 #endif
