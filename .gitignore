@@ -35,9 +35,20 @@
 *.vcxproj
 *.vcxproj.user
 *.vcxproj.filters
-   
+
 # Build files
 build/*
 
 # Debug files
 Debug/*
+
+# Vim
+*.swp
+*.swo
+.ycm_extra_conf.py
+.ycm_extra_conf.pyc
+
+# Vagrant VMs (can be useful for testing on Travis)
+Vagrantfile
+.vagrant
+
