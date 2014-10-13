@@ -13,6 +13,7 @@
 #include "src/common/GameTimer.h"
 
 using common::net::Event;
+using common::GameTimer;
 
 namespace net {
 
