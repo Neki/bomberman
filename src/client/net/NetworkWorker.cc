@@ -3,8 +3,6 @@
 #include <QTime>
 #include <QMutexLocker>
 
-
-namespace common {
 namespace net {
 
 NetworkWorker::NetworkWorker(quint8 client_id, QHostAddress address, quint16 server_port, quint16 local_port)
@@ -75,5 +73,4 @@ quint64 NetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
   return packet_id;
 }
 
-}
 }
