@@ -1,7 +1,8 @@
 #include "Board.h"
 #include "Values.h"
 #include <QWidget>
-#include <iostream>
+#include "easylogging++.h"
+_INITIALIZE_EASYLOGGINGPP
 
 Board::Board(QWidget *parent):QWidget(parent)
 {
@@ -23,6 +24,8 @@ QRect Board::RectSquare(int x, int y)
 }
 
 void Board::InitGame(int nbPlayers){
+	(void) nbPlayers;
+
 	if (pixmapFire.get() == nullptr)
 	{
 		pixmapFire.reset(new QPixmap(":/res/fire.png"));
@@ -64,7 +67,7 @@ void Board::PaintSquare(QPainter &painter, square sq, int i, int j)
 		break;
 	// TODO Add bonus
 	default:
-		std::wcerr << "" << endl;
+		LOG(ERROR) << "default";
 		break;
 	}
 }
