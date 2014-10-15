@@ -52,7 +52,7 @@ class NetworkWorker : public QObject {
   signals:
     /**
      * Emitted when a new measure of the latency between the server and the
-     * client is available. THis value has already been pre-processed and can be
+     * client is available. This value has already been pre-processed and can be
      * consumed without any further checks or modifications (this is not a raw
      * value).
      */
