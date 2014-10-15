@@ -8,10 +8,6 @@
 #include <QWidget>
 #include "Board.h"
 
-namespace Ui {
-	class MainWindow;
-}
-
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
