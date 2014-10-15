@@ -1,7 +1,7 @@
 #include "Board.h"
 #include "Values.h"
 #include <QWidget>
-
+#include <iostream>
 
 Board::Board(QWidget *parent):QWidget(parent)
 {
@@ -12,28 +12,28 @@ void Board::PaintEvent(QPaintEvent *event)
 {
 	QPainter painter(this);
 
-	painter.setWindow(0, 0, LARGEUR_TERRAIN, HAUTEUR_TERRAIN); 
+	painter.setWindow(0, 0, WIDTH_BOARD, HEIGHT_BOARD); 
 	painter.setViewport(0, 0, width(), height());
 	painter.setClipRect(event->rect());
 }
 
 QRect Board::RectSquare(int x, int y)
 {
-	return QRect(x*COTE_CASE, y*COTE_CASE, COTE_CASE, COTE_CASE);
+	return QRect(x*SIDE_SQUARE, y*SIDE_SQUARE, SIDE_SQUARE, SIDE_SQUARE);
 }
 
 void Board::InitGame(int nbPlayers){
-	if (pixmap_fire == NULL)
+	if (pixmapFire.get() == nullptr)
 	{
-		pixmap_fire = new QPixmap(":/res/fire.png");
+		pixmapFire.reset(new QPixmap(":/res/fire.png"));
 	}
-	if (pixmap_block == NULL)
+	if (pixmapBlock.get() == nullptr)
 	{
-		pixmap_block = new QPixmap(":/res/caisse.png");
+		pixmapBlock.reset(new QPixmap(":/res/caisse.png"));
 	}
-	if (pixmap_wall == NULL)
+	if (pixmapWall.get() == nullptr)
 	{
-		pixmap_wall = new QPixmap(":/res/mur.png");
+		pixmapWall.reset(new QPixmap(":/res/mur.png"));
 	}
 }
 
@@ -62,27 +62,9 @@ void Board::PaintSquare(QPainter &painter, square sq, int i, int j)
 	case MUR_DESTRUCTIBLE:
 		painter.drawPixmap(rect, *pixmapBlock);
 		break;
-	case RAPIDE:
-		painter.setPen(Qt::green);
-		painter.setBrush(Qt::green);
-		painter.drawText(rect, Qt::AlignCenter, "R");
-		break;
-	case PUISSANCE:
-		painter.setPen(Qt::green);
-		painter.setBrush(Qt::green);
-		painter.drawText(rect, Qt::AlignCenter, "P");
-		break;
-	case BOMBE_SUPPLEMENTAIRE:
-		painter.setPen(Qt::green);
-		painter.setBrush(Qt::green);
-		painter.drawText(rect, Qt::AlignCenter, "B");
-		break;
-	case DETONATEUR:
-		painter.setPen(Qt::green);
-		painter.setBrush(Qt::green);
-		painter.drawText(rect, Qt::AlignCenter, "D");
-		break;
+	// TODO Add bonus
 	default:
+		std::wcerr << "" << endl;
 		break;
 	}
 }

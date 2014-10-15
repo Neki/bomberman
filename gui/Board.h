@@ -1,8 +1,9 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef GUI_BOARD_H
+#define GUI_BOARD_H
 
 #include <QtGui>
 #include <QWidget>
+#include <memory>
 #include "Values.h"
 
 class Board : public QWidget
@@ -13,9 +14,9 @@ public:
 	//~Board();
 
 private:
-	QPixmap *pixmapFire;
-	QPixmap *pixmapBlock;
-	QPixmap *pixmapWall;
+	std::unique_ptr<QPixmap> pixmapFire;
+	std::unique_ptr<QPixmap> pixmapBlock;
+	std::unique_ptr<QPixmap> pixmapWall;
 
 protected:
 	void PaintEvent(QPaintEvent *event);
@@ -28,4 +29,4 @@ signals:
 	public slots :
 };
 
-#endif // BOARD_H
+#endif // GUI_BOARD_H

@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <memory>
 #include <QMainWindow>
 #include <QTimer>
 #include <QLabel>
@@ -40,7 +41,7 @@ private:
 	QLabel scoreLabel;
 	QLabel deathsLabel;
 	QLabel killsLabel;
-	Board *board;
+	std::unique_ptr<Board> board;
 };
 
 #endif // MAINWINDOW_H
