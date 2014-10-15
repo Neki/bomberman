@@ -49,18 +49,18 @@ void NetworkWorker::ReadPendingDatagrams() {
 }
 
 void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
-  VLOG(6) << "Received a datagram";
+  VLOG(LOG_PACKET_LEVEL) << "Received a datagram";
   QDataStream stream(datagram);
   if(!CheckProtocolAndVersion(stream)) {
     LOG(WARNING) << "Protocol or version ID mismatch, dropping datagram.";
     return;
   }
   quint32 packet_id = GetPacketId(stream);
-  VLOG(5) << "Received datagram packet id: " << packet_id;
+  VLOG(LOG_PACKET_LEVEL) << "Received datagram packet id: " << packet_id;
   quint8 packet_type = GetPacketType(stream);
   switch(packet_type) {
     case kPingPacketId:
-      VLOG(5) << "The datagram is a ping packet.";
+      VLOG(LOG_PACKET_LEVEL) << "The datagram is a ping packet.";
       ProcessPingPacket(stream);
       break;
     default:

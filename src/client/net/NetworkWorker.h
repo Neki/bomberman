@@ -12,6 +12,8 @@
 #include "src/common/net/Event.h"
 #include "src/common/GameTimer.h"
 
+#define LOG_PACKET_LEVEL 5
+
 using common::net::Event;
 using common::GameTimer;
 
