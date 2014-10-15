@@ -81,7 +81,7 @@ bool NetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
     return false;
   }
   if(server_version != accepted_version) {
-    LOG(WARNING) << "Received unsupported server version: got " << server_version << ", but only version " << accepted_version << " is supported by this client";
+    LOG(WARNING) << "Received unsupported server version: got " << server_version << ", but only version " << accepted_version << " is supported by this client.";
     return false;
   }
   return true;
