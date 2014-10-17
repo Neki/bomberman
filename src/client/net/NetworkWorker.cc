@@ -152,7 +152,10 @@ void NetworkWorker::SendPendingEvents() {
       }
       lock.unlock();
       PrepareHeader(buffer_stream_, kEventPacketId);
-      buffer_stream_ << to_send;
+      buffer_stream_ << (quint8) to_send.size();
+      for(Event* evt : to_send) {
+        buffer_stream_ << evt;
+      }
       socket_.write(buffer_);
       to_send.clear();
       i = 0;
