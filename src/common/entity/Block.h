@@ -4,7 +4,7 @@
 #include <memory>
 #include <QPoint>
 #include "Entity.h"
-#include "World.h"
+#include "src/common/World.h"
 
 namespace common {
 namespace entity {
@@ -24,5 +24,5 @@ class Block : public Entity{
 }
 }
 
-#endif /* end of include guard: SRC_COMMON_ENTITY_BLOCK_H_
+#endif /* end of include guard: SRC_COMMON_ENTITY_BLOCK_H_ */
 

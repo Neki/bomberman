@@ -4,7 +4,7 @@
 #include <memory>
 #include <QPoint>
 #include <QString>
-#include "World.h"
+#include "src/common/World.h"
 #include "Character.h"
 
 namespace common {
@@ -52,5 +52,5 @@ class Entity {
 }
 }
 
-#endif /* end of include guard: SRC_COMMON_ENTITY_ENTITY_H_
+#endif /* end of include guard: SRC_COMMON_ENTITY_ENTITY_H_ */
 

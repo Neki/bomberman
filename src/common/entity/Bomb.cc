@@ -1,6 +1,7 @@
 
 #include "Bomb.h"
 #include "Fire.h"
+#include "src/common/GameEngine.h"
 
 namespace common {
 namespace entity {

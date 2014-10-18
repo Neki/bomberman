@@ -4,7 +4,7 @@
 #include <memory>
 #include <QPoint>
 #include "Entity.h"
-#include "World.h"
+#include "src/common/World.h"
 
 #include <QTime>
 
@@ -32,5 +32,5 @@ class Fire : public Entity{
 }
 }
 
-#endif /* end of include guard: SRC_COMMON_ENTITY_FIRE_H_
+#endif /* end of include guard: SRC_COMMON_ENTITY_FIRE_H_ */
 

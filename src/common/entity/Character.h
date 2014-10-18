@@ -4,7 +4,7 @@
 #include <memory>
 #include <QPoint>
 #include "Entity.h"
-#include "World.h"
+#include "src/common/World.h"
 
 #include <QPointF>
 #include <QTime>
@@ -45,5 +45,5 @@ class Character : public Character {
 }
 }
 
-#endif /* end of include guard: SRC_COMMON_ENTITY_CHARACTER_H_
+#endif /* end of include guard: SRC_COMMON_ENTITY_CHARACTER_H_ */
 
