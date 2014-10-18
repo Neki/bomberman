@@ -18,7 +18,7 @@ class Entity {
     /* Method called at every frame.
 	   t : duration of the frame in ms */
 
-    virtual void HitByFire() = 0;
+    virtual void HitByFire() {};
     /* Called when entity is hit by fire */
 
     virtual bool IsSolid();
@@ -37,6 +37,7 @@ class Entity {
     bool should_be_removed_; // true if the entity should be removed by the game engine by the end of the frame
 
   private:
+    ~Entity() {};
     QPoint position_; // Entity position in the world's grid
     std::weak_ptr<World> world_;
 }

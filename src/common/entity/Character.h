@@ -28,7 +28,7 @@ class Character : public Character {
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
-    virtual void HitByFire();
+    void HitByFire();
     /* Called when entity is hit by fire. */
 
   private:

@@ -21,11 +21,6 @@ QTime Fire::GetDisappearingTime() const
   return disappearing_time_;
 }
 
-void Fire::HitByFire() {
-  /* Called when entity is hit by fire. */
-
-}
-
 virtual void Fire::Update(int t)
 /* Method to be called at every frame.
    t : duration of the frame in ms */

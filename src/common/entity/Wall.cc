@@ -9,10 +9,5 @@ Wall::Wall(std::weak_ptr<World> world, QPoint position) : Entity(world, position
 
 }
 
-
-void Wall::HitByFire() {
-  /* Called when entity is hit by fire. */
-}
-
 }
 }

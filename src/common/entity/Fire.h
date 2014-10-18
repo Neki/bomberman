@@ -19,9 +19,6 @@ class Fire : public Entity{
     QTime GetSetTime() const;
     QTime GetDisappearingTime() const;
 
-    virtual void HitByFire();
-    /* Called when entity is hit by fire. */
-
     virtual void Update(unsigned int t) {};
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */

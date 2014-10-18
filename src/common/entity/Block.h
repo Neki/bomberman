@@ -14,7 +14,7 @@ class Block : public Entity{
   public:
     Block(std::weak_ptr<World> world, QPoint position);
 
-    virtual void HitByFire();
+    void HitByFire();
     /* Called when entity is hit by fire. */
 
   private:
