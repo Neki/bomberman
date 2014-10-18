@@ -24,7 +24,7 @@ bool Entity::GetShouldBeRemoved() const {
   return shouldBeRemoved;
 }
 
-bool Entiry::IsSolid () const {
+bool Entity::IsSolid () const {
   return is_solid_;
 }
 
