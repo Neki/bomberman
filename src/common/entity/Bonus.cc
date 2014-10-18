@@ -3,7 +3,8 @@
 namespace common {
 namespace entity {
 
-Bonus::Bonus(std::weak_ptr<World> world, QPoint position) : Entity(world, position, false)
+Bonus::Bonus(std::weak_ptr<World> world, QPoint position) :
+  Entity(world, position, false, false)
 {
 
 }

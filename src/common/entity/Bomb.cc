@@ -6,7 +6,7 @@ namespace common {
 namespace entity {
 
 Bomb::Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character> bomber):
-  Entity(world, position, true),
+  Entity(world, position, true, false),
   bomber_(bomber)
 {
   set_time_ = QTime::current_time(); // TODO : change to use the game clock
@@ -36,17 +36,12 @@ virtual void Bomb::HitByFire() {
 
 void Bomb::explode()
 {
-  // Add fire on the world's grid
-  GetWorld()->AddEntity(Fire(GetWorld(), GetPosition()));
-  for (unsigned int i = 1 ; i <= power_ ; i++)
-  {
-    // TODO: correct this part of the code
-    // Walls should stop fire propagation
-    GetWorld()->AddEntity(make_shared<Fire>(GetWorld(), GetPosition()+QPoint(0,-1)));
-    GetWorld()->AddEntity(make_shared<Fire>(GetWorld(), GetPosition()+QPoint(1,0)));
-    GetWorld()->AddEntity(make_shared<Fire>(GetWorld(), GetPosition()+QPoint(0,1)));
-    GetWorld()->AddEntity(make_shared<Fire>(GetWorld(), GetPosition()+QPoint(-1,0)));
-  }
+  std::weak_ptr<GameEngine> game_engine(GetWorld()->GetGameEngine());
+  
+  game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(0, -power_));
+  game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(power_, 0));
+  game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(0, power_));
+  game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(-power_, 0));
 
   // remove the bomb
   should_be_removed_ = true;

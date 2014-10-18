@@ -4,7 +4,8 @@
 namespace common {
 namespace entity {
 
-Block::Block(std::weak_ptr<World> world, QPoint position) : Entity(world, position, true)
+Block::Block(std::weak_ptr<World> world, QPoint position) :
+  Entity(world, position, true, true)
 {
 
 }

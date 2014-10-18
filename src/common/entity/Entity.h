@@ -12,7 +12,7 @@ namespace entity {
 class Entity {
 
   public:
-    Entity(std::weak_ptr<World> world, QPoint position, bool is_solid);
+    Entity(std::weak_ptr<World> world, QPoint position, bool is_solid, bool stops_fire);
 	
     virtual void Update(unsigned int t) {};
     /* Method called at every frame.
@@ -23,6 +23,9 @@ class Entity {
 
     virtual bool IsSolid();
     /* Returns true if entity can not be walked through. Returns false otherwise. */
+    
+    virtual bool StopsFire();
+    /* Returns true if entity stops fire propagation. Returns false otherwise. */
 	
     virtual void IsWalkedOn(GameEngine* gameEngine, Character* character const) {};
     /* Called when a character walk on the entity */
@@ -34,6 +37,7 @@ class Entity {
   protected:
     std::weak_ptr<World> GetWorld() const;
     bool is_solid_;
+    bool stops_fire_;
     bool should_be_removed_; // true if the entity should be removed by the game engine by the end of the frame
 
   private:
