@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QPoint>
-#include "World.h"
 
 namespace common {
 

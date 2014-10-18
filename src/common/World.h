@@ -10,7 +10,7 @@ class World {
   public:
     World(int width, int height);
 
-    std::weak_ptr<GameEngine> GetGameEngine();
+    std::weak_ptr<GameEngine> GetGameEngine() const;
     
   private:
     std::weak_ptr<GameEngine> game_engine_;

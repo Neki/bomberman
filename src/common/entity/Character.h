@@ -12,19 +12,20 @@
 namespace common {
 namespace entity {
 
-class Character : public Character {
+class Character : public Entity {
 
   public:
     Character(std::weak_ptr<World> world, QPoint position);
+    virtual ~Character();
 
     unsigned int GetPower() const;
     QPointF GetCurrentSpeed() const;
     float GetSpeed() const;
     QPointF GetExactPosition() const; // in tile
     unsigned int GetNumberOfBombs() const;
-    QTime GetBombDelay() const;
+    int GetBombDelay() const;
 
-    virtual void Update(unsigned int t) {};
+    virtual void Update(int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
@@ -37,10 +38,11 @@ class Character : public Character {
     float speed_; // nominal speed
     QPointF exact_position_;
     unsigned int number_of_bombs_;
+	int bomb_delay_;
     
     void moveTo(QPoint t, int speed);
       
-}
+};
 
 }
 }

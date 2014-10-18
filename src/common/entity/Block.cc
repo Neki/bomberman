@@ -10,6 +10,10 @@ Block::Block(std::weak_ptr<World> world, QPoint position) :
 
 }
 
+Block::~Block() {
+
+}
+
 void Block::HitByFire() {
   /* Called when entity is hit by fire. */
   // TODO : add bonus creation

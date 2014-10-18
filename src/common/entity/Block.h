@@ -13,13 +13,14 @@ class Block : public Entity{
 
   public:
     Block(std::weak_ptr<World> world, QPoint position);
+    virtual ~Block();
 
     void HitByFire();
     /* Called when entity is hit by fire. */
 
   private:
 
-}
+};
 
 }
 }

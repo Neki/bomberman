@@ -1,5 +1,10 @@
 #include "GameEngine.h"
 
+namespace common {
+
 void GameEngine::AddFireFromAtoB(QPoint a, QPoint b) {
-  return;
+  (void) a;
+  (void) b;
+}
+
 }

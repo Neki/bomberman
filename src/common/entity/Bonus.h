@@ -9,17 +9,18 @@
 namespace common {
 namespace entity {
 
-  class Bonus : public Entity {
+class Bonus : public Entity {
 
-    public:
-      Bonus(std::weak_ptr<World> world, QPoint position);
-      
-      void HitByFire();
-      /* Called when entity is hit by fire. */
+  public:
+    Bonus(std::weak_ptr<World> world, QPoint position);
+    virtual ~Bonus();
+    
+    void HitByFire();
+    /* Called when entity is hit by fire. */
 
-    private:
+  private:
 
-  }
+};
 
 }
 }

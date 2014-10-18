@@ -9,7 +9,11 @@ Bonus::Bonus(std::weak_ptr<World> world, QPoint position) :
 
 }
 
-void Bonus::HitByFire {
+Bonus::~Bonus() {
+
+}
+
+void Bonus::HitByFire () {
   /* Called when entity is hit by fire. */
   // The bonus is not yet destroyed by fire
 }

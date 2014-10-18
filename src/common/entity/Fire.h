@@ -15,11 +15,12 @@ class Fire : public Entity{
 
   public:
     Fire(std::weak_ptr<World> world, QPoint position);
+    virtual ~Fire();
 
     QTime GetSetTime() const;
     QTime GetDisappearingTime() const;
 
-    virtual void Update(unsigned int t) {};
+    virtual void Update(int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
@@ -27,7 +28,7 @@ class Fire : public Entity{
     QTime set_time_;
     QTime disappearing_time_;
 
-}
+};
 
 }
 }
