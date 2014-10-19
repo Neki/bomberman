@@ -20,7 +20,7 @@ namespace common {
     }
 
     int Game::GetPlayersCount() {
-        return players_.size();
+        return (int) players_.size();
     }
 
     void Game::Start() {
