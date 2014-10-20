@@ -38,7 +38,7 @@ bool World::IsWalkable(QPoint p) const {
     return false;
   }
 
-  for (auto i = 0; i != entities_[p.x()][p.y()].size(); i++) {
+  for (unsigned int i = 0; i != entities_[p.x()][p.y()].size(); i++) {
     if (entities_[p.x()][p.y()][i]->IsSolid()){
       return false;
     }
@@ -53,7 +53,7 @@ bool World::StopsFire(QPoint p) const {
     return true;
   }
 
-  for (auto i = 0; i != entities_[p.x()][p.y()].size(); i++) {
+  for (unsigned int i = 0; i != entities_[p.x()][p.y()].size(); i++) {
     if (entities_[p.x()][p.y()][i]->StopsFire()){
       return true;
     }
