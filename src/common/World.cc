@@ -1,5 +1,8 @@
 
 #include "World.h"
+#include "src/common/entity/Entity.h"
+#include "src/common/entity/Character.h"
+#include "GameEngine.h"
 
 namespace common {
 

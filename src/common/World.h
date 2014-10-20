@@ -3,11 +3,14 @@
 
 #include <memory>
 #include <QPoint>
-#include "src/common/entity/Entity.h"
-#include "src/common/entity/Character.h"
-#include "GameEngine.h"
+#include <vector>
 
 namespace common {
+namespace entity {
+class Entity;
+class Character;
+}
+class GameEngine;
 
 typedef std::vector<std::vector<std::vector<std::unique_ptr<entity::Entity> > > > grid_t;
 
