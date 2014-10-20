@@ -67,7 +67,7 @@ bool World::AddItem(std::unique_ptr<entity::Entity> entity) {
   if (!CheckCoord(entity->GetPosition())){
     return false;
   }
-  entities_[entity->GetPosition().x()][entity->GetPosition().y()].push_back(entity);
+  entities_[entity->GetPosition().x()][entity->GetPosition().y()].emplace_back(entity);
   return true;
 }
 
@@ -76,7 +76,7 @@ bool World::AddCharacter(std::unique_ptr<entity::Character> character) {
   if (!CheckCoord(character->GetPosition())){
     return false;
   }
-  characters_.push_back(std::make_unique<entity::Character>(character));
+  characters_.emplace_back(character);
   return true;
 }
 
