@@ -9,7 +9,7 @@
 
 namespace common {
 
-typedef std::vector<std::vector<std::vector<std::shared_ptr<entity::Entity> > > > grid_t;
+typedef std::vector<std::vector<std::vector<std::unique_ptr<entity::Entity> > > > grid_t;
 
 class World {
   public:
@@ -31,7 +31,7 @@ class World {
     int width_; // Width of the world eg number of blocks
     int height_;
     grid_t entities_;
-    std::vector<std::shared_ptr<entity::Character> > characters_;
+    std::vector<std::unique_ptr<entity::Character> > characters_;
 };
 
 }

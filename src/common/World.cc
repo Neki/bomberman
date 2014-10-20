@@ -35,13 +35,13 @@ bool World::IsWalkable(QPoint p) const {
     return false;
   }
 
-  for (auto entity : entities_[p.x()][p.y()]){
-    if (entity->IsSolid()){
+  for (auto i = 0; i != entities_[p.x()][p.y()].size(); i++) {
+    if (entities_[p.x()][p.y()][i]->IsSolid()){
       return false;
     }
   }
-  return true;
 
+  return true;
 }
 
 bool World::StopsFire(QPoint p) const {
@@ -50,11 +50,12 @@ bool World::StopsFire(QPoint p) const {
     return true;
   }
 
-  for (auto entity : entities_[p.x()][p.y()]){
-    if (entity->StopsFire()){
+  for (auto i = 0; i != entities_[p.x()][p.y()].size(); i++) {
+    if (entities_[p.x()][p.y()][i]->StopsFire()){
       return true;
     }
   }
+
   return false;
 }
 
@@ -63,7 +64,7 @@ bool World::AddItem(std::unique_ptr<entity::Entity> entity) {
   if (!CheckCoord(entity->GetPosition())){
     return false;
   }
-  entities_[entity->GetPosition().x()][entity->GetPosition().y()].push_back(std::make_shared<entity::Entity>(entity));
+  entities_[entity->GetPosition().x()][entity->GetPosition().y()].push_back(entity);
   return true;
 }
 
@@ -72,7 +73,7 @@ bool World::AddCharacter(std::unique_ptr<entity::Character> character) {
   if (!CheckCoord(character->GetPosition())){
     return false;
   }
-  characters_.push_back(std::make_shared<entity::Character>(character));
+  characters_.push_back(std::make_unique<entity::Character>(character));
   return true;
 }
 
