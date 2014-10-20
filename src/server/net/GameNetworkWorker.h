@@ -17,11 +17,11 @@ using namespace common::net;
 
 namespace net {
 
-class NetworkWorker : public QObject {
+class GameNetworkWorker : public QObject {
   Q_OBJECT
 
   public:
-    NetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer, std::vector<Client> clients);
+    GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer, std::vector<Client> clients);
 
   signals:
     void BombEventReceived(ClientEvent<BombEvent> event);
@@ -38,6 +38,7 @@ class NetworkWorker : public QObject {
     static const unsigned char kServerVersion = 0x01;
     static const unsigned char kProtocolId = 0xBC;
     static const unsigned char kPingPacketId = 0x01;
+    static const unsigned char kEventPacketId = 0x02;
 
     quint32 GetNextPacketId();
 
@@ -49,6 +50,7 @@ class NetworkWorker : public QObject {
     quint8 GetPacketType(QDataStream& stream);
     quint8 GetClientId(QDataStream& stream);
     void ProcessPingPacket(QDataStream& stream, const Client& client, quint32 packet_id);
+    void ProcessEventPacket(QDataStream& stream, const Client& client, quint32 packet_id);
     void SendPongPacket(const Client& client, quint32 packet_id);
 
 };

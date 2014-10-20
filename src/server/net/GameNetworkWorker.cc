@@ -1,9 +1,11 @@
-#include "NetworkWorker.h"
+#include "GameNetworkWorker.h"
 #include "easylogging++.h"
+#include "src/common/net/EventId.h"
+#include "src/common/net/Deserializer.h"
 
 namespace net {
 
-NetworkWorker::NetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer, std::vector<Client> clients)
+GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer, std::vector<Client> clients)
   : port_(port),
     game_timer_(game_timer),
     last_packet_id_(0) {
@@ -13,7 +15,7 @@ NetworkWorker::NetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer
   }
 }
 
-void NetworkWorker::ReadPendingDatagrams() {
+void GameNetworkWorker::ReadPendingDatagrams() {
   while(socket_.hasPendingDatagrams()) {
     QByteArray datagram;
     datagram.resize(socket_.pendingDatagramSize());
@@ -24,7 +26,7 @@ void NetworkWorker::ReadPendingDatagrams() {
   }
 }
 
-void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
+void GameNetworkWorker::ProcessDatagram(const QByteArray& datagram) {
   QDataStream stream(datagram);
   if(!CheckProtocolAndVersion(stream)) {
     LOG(WARNING) << "Protocol or version ID mismatch, dropping datagram.";
@@ -46,19 +48,23 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
       VLOG(5) << "The datagram is a ping packet.";
       ProcessPingPacket(stream, client, packet_id);
       break;
+    case kEventPacketId:
+      VLOG(5) << "The datagram is an event packet.";
+      ProcessEventPacket(stream, client, packet_id);
+      break;
     default:
       LOG(WARNING) << "Received unknown packet type " << packet_type << ", dropping datagram.";
       break;
   }
 }
 
-bool NetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
+bool GameNetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
   quint8 protocol_id;
   quint8 server_version;
   stream >> protocol_id;
   stream >> server_version;
-  quint8 accepted_version = NetworkWorker::kServerVersion;
-  quint8 accepted_protocol_id = NetworkWorker::kProtocolId;
+  quint8 accepted_version = GameNetworkWorker::kServerVersion;
+  quint8 accepted_protocol_id = GameNetworkWorker::kProtocolId;
   if(protocol_id != accepted_protocol_id) {
     LOG(WARNING) << "Received unexpected protocol ID: got " << protocol_id << ", expected " << accepted_protocol_id;
     return false;
@@ -70,30 +76,51 @@ bool NetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
   return true;
 }
 
-quint8 NetworkWorker::GetPacketType(QDataStream& stream) {
+quint8 GameNetworkWorker::GetPacketType(QDataStream& stream) {
   quint8 packet_id;
   stream >> packet_id;
   return packet_id;
 }
 
-quint32 NetworkWorker::GetPacketId(QDataStream& stream) {
+quint32 GameNetworkWorker::GetPacketId(QDataStream& stream) {
   quint32 packet_id;
   stream >> packet_id;
   return packet_id;
 }
 
-quint8 NetworkWorker::GetClientId(QDataStream& stream) {
+quint8 GameNetworkWorker::GetClientId(QDataStream& stream) {
   quint8 client_id;
   stream >> client_id;
   return client_id;
 }
 
-void NetworkWorker::ProcessPingPacket(QDataStream& stream, const Client& client, quint32 packet_id) {
+void GameNetworkWorker::ProcessPingPacket(QDataStream& stream, const Client& client, quint32 packet_id) {
   (void) stream; // unused for now, the ping content does not matter
   SendPongPacket(client, packet_id);
 }
 
-void NetworkWorker::SendPongPacket(const Client& client, quint32 packet_id) {
+void GameNetworkWorker::ProcessEventPacket(QDataStream& stream, const Client& client, quint32 packet_id) {
+  (void) packet_id;
+  quint8 events_size;
+  stream >> events_size;
+  for(int i = 0; i < events_size; i++) {
+    EventId event_type = Deserializer::GetNextEventId(stream);
+    switch(event_type) {
+      case EventId::kBombEventId: {
+        BombEvent event = Deserializer::DeserializeBombEvent(stream);
+        auto c_event = ClientEvent<BombEvent>(event, client, game_timer_->GetTimestamp());
+        break;
+      }
+      case EventId::kUnknownEventId: /* fall-through */
+      default:
+        LOG(WARNING) << "Received unknown event type: " << event_type << ", dropping the datagram.";
+        return;
+    }
+  }
+
+}
+
+void GameNetworkWorker::SendPongPacket(const Client& client, quint32 packet_id) {
   QByteArray buffer;
   QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   PrepareHeader(stream, kPingPacketId);
@@ -102,14 +129,14 @@ void NetworkWorker::SendPongPacket(const Client& client, quint32 packet_id) {
   socket_.writeDatagram(buffer, client.GetAddress(), client.GetPort());
 }
 
-void NetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
+void GameNetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
   stream << kProtocolId;
   stream << kServerVersion;
   stream << GetNextPacketId();
   stream << packet_type;
 }
 
-quint32 NetworkWorker::GetNextPacketId() {
+quint32 GameNetworkWorker::GetNextPacketId() {
   last_packet_id_ += 1;
   return last_packet_id_;
 }
