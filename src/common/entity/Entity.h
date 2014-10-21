@@ -15,6 +15,7 @@ class Entity {
 
   public:
     Entity(std::weak_ptr<World> world, QPoint position, bool is_solid, bool stops_fire, QString texture_path = "");
+    virtual ~Entity();
 
     virtual void Update(int t) = 0;
     /* Method called at every frame.
