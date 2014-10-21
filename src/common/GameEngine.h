@@ -1,37 +1,34 @@
 #ifndef SRC_SERVER_GAMEENGINE_H_
 #define SRC_SERVER_GAMEENGINE_H_
 
-#include <QObject>
 #include <QPoint>
 #include <QtCore>
-#include "Event.h"
-#include "MoveEvent.h"
-#include "BombEvent.h"
-#include "BombEvent.h"
-#include "MoveEvent.h"
+#include <vector>
+#include "src/common/net/Event.h"
+#include "src/common/net/MoveEvent.h"
+#include "src/common/net/BombEvent.h"
+#include "src/common/net/MoveEvent.h"
+//#include "src/common/net/InGameEventVisitor.h"
 #include "World.h"
-#include "Strategy.h"
+//#include "Strategy.h"
 #include "Player.h"
+#include "entity/Entity.h"
+#include "entity/Fire.h"
 
 namespace common {
 
-
-class GameEngine : public QObject {
-  Q_OBJECT
+class GameEngine : public InGameEventVisitor {
 
   public:
-    GameEngine();
-    GameEngine(Vector<Player> players);
+    GameEngine(std::vector<Player> players);
 
     void startGame();
-    bool addEntity(Entity* entity);
-    std::weak_ptr<World> GetWorld() const;
+    bool addEntity(std::unique_ptr<entity::Entity> e);
+    World* GetWorld() const;
     
     void AddFireFromAtoB(QPoint a, QPoint b);
     
   private:
-		
-		void update(int t); // t in ms
   
     QTime maxDuration;
     
@@ -41,13 +38,13 @@ class GameEngine : public QObject {
     void simulate(int t); // t in ms. t is the duration of the frame
     void sendGameState();
     
-    bool accept(BombEvent& e);
-    bool accept(MoveEvent& e);
+    //void accept(BombEvent& e);
+    //void accept(MoveEvent& e);
     
     void moveCharacter(int player_id, QPoint target);
     
-    std::shared_ptr<World> world_;
-    std::unique_ptr<Strategy> strategies_;
+    std::unique_ptr<World> world_;
+    //std::unique_ptr<Strategy> strategies_;
     
 };
 
