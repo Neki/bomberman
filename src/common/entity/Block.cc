@@ -11,7 +11,7 @@ Block::Block(std::weak_ptr<World> world, QPoint position) :
 }
 
 void Block::Update(int t) {
-
+  (void)t;
 }
 
 void Block::HitByFire() {
