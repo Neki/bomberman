@@ -15,7 +15,7 @@ namespace entity {
 class Bomb : public Entity{
 
   public:
-    Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character> bomber);
+    Bomb(World* world, QPoint position, std::weak_ptr<Character> bomber);
 
     std::weak_ptr<Character> GetBomber() const;
     QTime GetSetTime() const;

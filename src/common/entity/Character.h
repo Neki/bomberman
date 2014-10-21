@@ -15,7 +15,7 @@ namespace entity {
 class Character : public Entity {
 
   public:
-    Character(std::weak_ptr<World> world, QPoint position);
+    Character(World* world, QPoint position);
 
     unsigned int GetPower() const;
     QPointF GetCurrentSpeed() const;
