@@ -1,19 +1,22 @@
-#ifndef SRC_COMMON_NET_PLAYERLEFTDEVENT_H_
-#define SRC_COMMON_NET_PLAYERLEFTDEVENT_H_
+#ifndef SRC_COMMON_NET_PLAYERLEFTEVENT_H_
+#define SRC_COMMON_NET_PLAYERLEFTEVENT_H_
 
-#include "Event.h"
+#include "InGameEvent.h"
 #include "QuitReason.h"
+#include "GameEventVisitor.h"
 
 namespace common {
 namespace net {
 
-class PlayerLeftEvent : public Event {
+class PlayerLeftEvent : public InGameEvent {
 
   public:
     PlayerLeftEvent(QuitReason reason, quint32 id, quint64 timestamp);
     QuitReason GetReason() const;
 
     void Serialize(QDataStream& stream) const;
+
+    void Accept(GameEventVisitor& visitor) override;
 
     bool operator==(const PlayerLeftEvent& event) const;
 

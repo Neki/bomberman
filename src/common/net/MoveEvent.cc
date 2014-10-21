@@ -5,7 +5,7 @@ namespace common {
 namespace net {
 
 MoveEvent::MoveEvent(QPoint position, Direction direction, quint32 id, quint64 timestamp) :
-    Event(id, timestamp),
+    InGameEvent(id, timestamp),
     position_(position),
     direction_(direction) {
 }
@@ -23,6 +23,10 @@ void MoveEvent::Serialize(QDataStream& stream) const {
   SerializeBaseEvent(stream);
   stream << GetPosition();
   stream << GetDirection();
+}
+
+void MoveEvent::Accept(GameEventVisitor& visitor) {
+  visitor.Visit(*this);
 }
 
 bool MoveEvent::operator==(const MoveEvent& event) const {

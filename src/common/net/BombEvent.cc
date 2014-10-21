@@ -5,7 +5,7 @@ namespace common {
 namespace net {
 
 BombEvent::BombEvent(QPoint position, quint32 id, quint64 timestamp)
-    : Event(id, timestamp),
+    : InGameEvent(id, timestamp),
       position_(position) {
 
 }
@@ -18,6 +18,10 @@ void BombEvent::Serialize(QDataStream& stream) const {
   stream << (quint32) EventId::kBombEventId;
   SerializeBaseEvent(stream);
   stream << this->GetPosition();
+}
+
+void BombEvent::Accept(GameEventVisitor& visitor) {
+  visitor.Visit(*this);
 }
 
 bool BombEvent::operator==(const BombEvent& event) const {

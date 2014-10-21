@@ -3,13 +3,14 @@
 
 #include <QPoint>
 
-#include "Event.h"
+#include "InGameEvent.h"
+#include "GameEventVisitor.h"
 #include "src/common/Direction.h"
 
 namespace common {
 namespace net {
 
-class MoveEvent : public Event {
+class MoveEvent : public InGameEvent {
 
   public:
     MoveEvent(QPoint position, Direction getDirection, quint32 id, quint64 timestamp);
@@ -17,6 +18,8 @@ class MoveEvent : public Event {
     QPoint GetPosition() const;
 
     void Serialize(QDataStream& stream) const;
+
+    void Accept(GameEventVisitor& visitor) override;
 
     bool operator==(const MoveEvent& event) const;
 
