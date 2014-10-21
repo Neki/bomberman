@@ -5,7 +5,7 @@ namespace common {
 namespace net {
 
 BombEvent::BombEvent(QPoint position, quint32 id, quint64 timestamp)
-    : Event(id, timestamp),
+    : InGameEvent(id, timestamp),
       position_(position) {
 
 }

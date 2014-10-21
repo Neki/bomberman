@@ -3,12 +3,12 @@
 
 #include <QPoint>
 
-#include "Event.h"
+#include "InGameEvent.h"
 
 namespace common {
 namespace net {
 
-class BombEvent : public Event {
+class BombEvent : public InGameEvent {
 
   public:
     BombEvent(QPoint position, quint32 id, quint64 timestamp);

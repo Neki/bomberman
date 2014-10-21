@@ -5,7 +5,7 @@ namespace common {
 namespace net {
 
 PlayerLeftEvent::PlayerLeftEvent(QuitReason reason, quint32 id, quint64 timestamp)
-  : Event(id, timestamp),
+  : InGameEvent(id, timestamp),
     reason_(reason) {}
 
 QuitReason PlayerLeftEvent::GetReason() const {

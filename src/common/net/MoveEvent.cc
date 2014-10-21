@@ -5,7 +5,7 @@ namespace common {
 namespace net {
 
 MoveEvent::MoveEvent(QPoint position, Direction direction, quint32 id, quint64 timestamp) :
-    Event(id, timestamp),
+    InGameEvent(id, timestamp),
     position_(position),
     direction_(direction) {
 }

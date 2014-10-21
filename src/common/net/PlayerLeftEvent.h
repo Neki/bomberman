@@ -1,13 +1,13 @@
 #ifndef SRC_COMMON_NET_PLAYERLEFTDEVENT_H_
 #define SRC_COMMON_NET_PLAYERLEFTDEVENT_H_
 
-#include "Event.h"
+#include "InGameEvent.h"
 #include "QuitReason.h"
 
 namespace common {
 namespace net {
 
-class PlayerLeftEvent : public Event {
+class PlayerLeftEvent : public InGameEvent {
 
   public:
     PlayerLeftEvent(QuitReason reason, quint32 id, quint64 timestamp);
