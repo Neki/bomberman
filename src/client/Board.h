@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <memory>
 #include "Values.h"
+//#include "Character.h"
 
 class Board : public QWidget
 {
@@ -14,16 +15,19 @@ public:
 	//~Board();
 
 private:
-	std::unique_ptr<QPixmap> pixmapFire;
+	/*std::unique_ptr<QPixmap> pixmapFire;
 	std::unique_ptr<QPixmap> pixmapBlock;
-	std::unique_ptr<QPixmap> pixmapWall;
+	std::unique_ptr<QPixmap> pixmapWall;*/
 
 protected:
 	void PaintEvent(QPaintEvent *event);
-	void PaintSquare(QPainter &painter, square sq, int i, int j);
+	//void PaintEntity(QPainter &painter, Entity entity, int i, int j);
 	QRect RectSquare(int x, int y);
-	void InitGame(int nbPlayers);
+	//void InitGame(int nbPlayers);
 	void NewGame(int nbPlayers);
+	bool IsKeyPressEvent(QKeyEvent *);
+	bool IsKeyReleaseEvent(QKeyEvent *);
+	//void moveCharacter(Character *character)
 
 signals:
 	public slots :

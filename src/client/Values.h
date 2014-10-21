@@ -12,6 +12,5 @@
 #define FIRE_TIME       300
 
 enum direction  { UP, DOWN, LEFT, RIGHT, NONE};
-enum square  { FIRE, MUR, MUR_DESTRUCTIBLE, RAPIDE, PUISSANCE, BOMBE_SUPPLEMENTAIRE, DETONATEUR, VIDE };
 
 #endif

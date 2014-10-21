@@ -11,6 +11,9 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWind
 {
 	ui-> setupUi(this);
 
+	Board *board = new Board;
+	setCentralWidget(board);
+
 	SetScore(-5593);
 	SetDeaths(199);
 	SetKills(2);
