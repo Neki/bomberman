@@ -74,6 +74,7 @@ bool Board::IsKeyReleaseEvent(QKeyEvent *event)
 //}
 
 void Board::NewGame(int nbPlayers){
+	(void)nbPlayers;
 	//InitGame(nbPlayers);
 }
 
