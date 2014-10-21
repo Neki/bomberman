@@ -25,6 +25,10 @@ void MoveEvent::Serialize(QDataStream& stream) const {
   stream << GetDirection();
 }
 
+void MoveEvent::Accept(GameEventVisitor& visitor) {
+  visitor.Visit(*this);
+}
+
 bool MoveEvent::operator==(const MoveEvent& event) const {
   return Event::operator==(event) && direction_ == event.direction_ && position_ == event.position_;
 }

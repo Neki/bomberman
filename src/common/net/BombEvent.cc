@@ -20,6 +20,10 @@ void BombEvent::Serialize(QDataStream& stream) const {
   stream << this->GetPosition();
 }
 
+void BombEvent::Accept(GameEventVisitor& visitor) {
+  visitor.Visit(*this);
+}
+
 bool BombEvent::operator==(const BombEvent& event) const {
   return Event::operator==(event) && position_ == event.position_;
 }

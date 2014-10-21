@@ -3,6 +3,7 @@
 
 #include "InGameEvent.h"
 #include "QuitReason.h"
+#include "GameEventVisitor.h"
 
 namespace common {
 namespace net {
@@ -14,6 +15,8 @@ class PlayerLeftEvent : public InGameEvent {
     QuitReason GetReason() const;
 
     void Serialize(QDataStream& stream) const;
+
+    void Accept(GameEventVisitor& visitor) override;
 
     bool operator==(const PlayerLeftEvent& event) const;
 

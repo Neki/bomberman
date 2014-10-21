@@ -18,6 +18,10 @@ void PlayerLeftEvent::Serialize(QDataStream& stream) const {
   stream << GetReason();
 }
 
+void PlayerLeftEvent::Accept(GameEventVisitor& visitor) {
+  visitor.Visit(*this);
+}
+
 bool PlayerLeftEvent::operator==(const PlayerLeftEvent& event) const {
   return reason_ == event.reason_;
 }

@@ -4,6 +4,7 @@
 #include <QPoint>
 
 #include "InGameEvent.h"
+#include "GameEventVisitor.h"
 #include "src/common/Direction.h"
 
 namespace common {
@@ -17,6 +18,8 @@ class MoveEvent : public InGameEvent {
     QPoint GetPosition() const;
 
     void Serialize(QDataStream& stream) const;
+
+    void Accept(GameEventVisitor& visitor) override;
 
     bool operator==(const MoveEvent& event) const;
 

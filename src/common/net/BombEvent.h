@@ -16,6 +16,8 @@ class BombEvent : public InGameEvent {
 
     void Serialize(QDataStream& stream) const;
 
+    void Accept(GameEventVisitor& visitor) override;
+
     bool operator==(const BombEvent& event) const;
 
   private:
