@@ -67,7 +67,7 @@ bool World::AddItem(std::unique_ptr<entity::Entity> entity) {
   if (!CheckCoord(entity->GetPosition())){
     return false;
   }
-  entities_[entity->GetPosition().x()][entity->GetPosition().y()].emplace_back(entity);
+  entities_[entity->GetPosition().x()][entity->GetPosition().y()].emplace_back(std::move(entity));
   return true;
 }
 
@@ -76,17 +76,17 @@ bool World::AddCharacter(std::unique_ptr<entity::Character> character) {
   if (!CheckCoord(character->GetPosition())){
     return false;
   }
-  characters_.emplace_back(character);
+  characters_.emplace_back(std::move(character));
   return true;
 }
 
 void World::removeEntities() {
   // Removes entities that should be removed
-  for (auto columns : entities_){
-    for (auto cas : columns){
-      for (auto i = cas.begin(); i != cas.end();){
+  for (auto columns_it = entities_.begin(); columns_it != entities_.end(); ++ columns_it) {
+    for (auto case_it = columns_it->begin(); case_it != columns_it->end(); ++case_it){
+      for (auto i = case_it->begin(); i != case_it->end();){
         if ((*i)->GetShouldBeRemoved()){
-          i = cas.erase(i);
+          i = case_it->erase(i);
         } else {
           ++i;
         }
