@@ -79,3 +79,14 @@ TEST_F(SerializationTest, Event) {
     }
   }
 }
+
+TEST_F(SerializationTest, GenericEvent) {
+  QByteArray buffer;
+  QDataStream in(&buffer, QIODevice::OpenModeFlag::WriteOnly);
+  QDataStream out(&buffer, QIODevice::OpenModeFlag::ReadOnly);
+  for(auto p : event_id_map_) {
+    in << *p.second;
+    auto event = Deserializer::DeserializeEvent(out);
+    EXPECT_EQ(*p.second, *event.get());
+  }
+}

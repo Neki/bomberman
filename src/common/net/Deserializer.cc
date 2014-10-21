@@ -25,6 +25,29 @@ EventId Deserializer::GetNextEventId(QDataStream &stream) {
   }
 }
 
+std::unique_ptr<Event> Deserializer::DeserializeEvent(QDataStream& stream) {
+  EventId event_type = GetNextEventId(stream);
+  switch(event_type) {
+    case kBombEventId:
+      return std::unique_ptr<Event>(new BombEvent(DeserializeBombEvent(stream)));
+    case kMoveEventId:
+      return std::unique_ptr<Event>(new MoveEvent(DeserializeMoveEvent(stream)));
+    case kPlayerLeftEvent:
+      return std::unique_ptr<Event>(new PlayerLeftEvent(DeserializePlayerLeftEvent(stream)));
+    case kPlayerJoinedEvent:
+      return std::unique_ptr<Event>(new PlayerJoinedEvent(DeserializePlayerJoinedEvent(stream)));
+    case kSettingsEvent:
+      return std::unique_ptr<Event>(new SettingsEvent(DeserializeSettingsEvent(stream)));
+    case kSetAdminEvent:
+      return std::unique_ptr<Event>(new SetAdminEvent(DeserializeSetAdminEvent(stream)));
+    case kUnknownEventId:
+    default:
+      // TODO error handling
+      return std::unique_ptr<Event>();
+      break;
+  }
+}
+
 BaseEventData Deserializer::DeserializeBaseEvent(QDataStream& stream) {
   BaseEventData data;
   stream >> data.client_version;
