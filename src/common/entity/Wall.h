@@ -13,7 +13,7 @@ class Wall : public Entity{
 
   public:
     Wall(std::weak_ptr<World> world, QPoint position);
-    virtual ~Wall();
+    virtual void Update(int t);
 
   private:
 

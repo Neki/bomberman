@@ -17,10 +17,6 @@ Character::Character(std::weak_ptr<World> world, QPoint position)
 
 }
 
-Character::~Character() {
-
-}
-
 unsigned int Character::GetPower() const
 {
 	return power_;

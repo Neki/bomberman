@@ -9,7 +9,7 @@ Bonus::Bonus(std::weak_ptr<World> world, QPoint position) :
 
 }
 
-Bonus::~Bonus() {
+void Bonus::Update(int t) {
 
 }
 

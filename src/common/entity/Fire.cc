@@ -12,11 +12,6 @@ Fire::Fire(std::weak_ptr<World> world, QPoint position) :
   disappearing_time_ = set_time_.addMSecs(300);
 }
 
-Fire::~Fire() {  
-
-}
-
-
 QTime Fire::GetSetTime() const
 {
   return set_time_;

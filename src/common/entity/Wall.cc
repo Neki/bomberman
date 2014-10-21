@@ -10,7 +10,7 @@ Wall::Wall(std::weak_ptr<World> world, QPoint position) :
 
 }
 
-Wall::~Wall() {
+void Wall::Update(int t) {
 
 }
 

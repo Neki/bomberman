@@ -18,10 +18,6 @@ Bomb::Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character>
   }
 }
 
-Bomb::~Bomb() {
-
-}
-
 std::weak_ptr<Character> Bomb::GetBomber() const
 {
 	return bomber_;

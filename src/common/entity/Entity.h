@@ -15,8 +15,8 @@ class Entity {
 
   public:
     Entity(std::weak_ptr<World> world, QPoint position, bool is_solid, bool stops_fire, QString texture_path = "");
-	
-    virtual void Update(int t);
+
+    virtual void Update(int t) = 0;
     /* Method called at every frame.
 	   t : duration of the frame in ms */
 
@@ -38,7 +38,6 @@ class Entity {
     QString GetTexturePath() const;
 	
   protected:
-    ~Entity() {};
     std::weak_ptr<World> GetWorld() const;
     bool is_solid_;
     bool stops_fire_;
@@ -47,7 +46,7 @@ class Entity {
   private:
 	std::weak_ptr<World> world_;
 	QPoint position_; // Entity position in the world's grid
-    QString texture_path_;
+  QString texture_path_;
 };
 
 }

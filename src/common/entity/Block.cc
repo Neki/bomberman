@@ -10,7 +10,7 @@ Block::Block(std::weak_ptr<World> world, QPoint position) :
 
 }
 
-Block::~Block() {
+void Block::Update(int t) {
 
 }
 
