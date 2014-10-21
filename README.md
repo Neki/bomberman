@@ -24,6 +24,7 @@ The project can be built using CMake (version 3.0.2 minimum). You need to have t
 * Install Microsoft Visual Studio
 * Install CMake (version 3.0.2 or superior) http://www.cmake.org/download/
 * Install Qt http://www.qt.io/download/
+* Install tortoisesvn http://tortoisesvn.net/ (tick the command tools during the install)
 
 #### Generate the Visual Studio project with CMake
 
@@ -35,7 +36,6 @@ Type in the target directory path
 
 Add the following entries:
 * Name: `CMAKE_PREFIX_PATH`; Type: `path`; Value: `C:/Qt/5.3/msvc2013_64/lib/cmake`
-* Name: `enable_tests`; Type: `bool`; Value: `0`
 
 Click on 'Configure' => Choose your version of Visual Studio and leave the others parameters
 
