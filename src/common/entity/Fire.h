@@ -15,7 +15,6 @@ class Fire : public Entity{
 
   public:
     Fire(std::weak_ptr<World> world, QPoint position);
-    virtual ~Fire();
 
     QTime GetSetTime() const;
     QTime GetDisappearingTime() const;

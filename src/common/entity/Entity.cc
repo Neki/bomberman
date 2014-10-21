@@ -14,6 +14,10 @@ Entity::Entity(std::weak_ptr<World> world, QPoint position, bool is_solid, bool 
 
 }
 
+Entity::~Entity() {
+
+}
+
 void Entity::Update(int t)
 {
   (void) t;
