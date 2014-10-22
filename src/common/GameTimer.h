@@ -15,6 +15,7 @@ namespace common {
 class GameTimer {
 
   public:
+    GameTimer();
     void StartGame();
     quint32 GetTimestamp();
 

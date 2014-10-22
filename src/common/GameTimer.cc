@@ -2,6 +2,9 @@
 
 namespace common {
 
+GameTimer::GameTimer() {
+}
+
 void GameTimer::StartGame() {
   timer_.start();
 }
