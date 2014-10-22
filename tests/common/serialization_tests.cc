@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "src/common/net/Deserializer.h"
+#include "src/common/net/QuitReason.h"
 #include <QByteArray>
 
 using common::net::Deserializer;
@@ -80,13 +81,17 @@ TEST_F(SerializationTest, Event) {
   }
 }
 
-TEST_F(SerializationTest, GenericEvent) {
+TEST(InGameSerializationTest, InGameEvent) {
   QByteArray buffer;
   QDataStream in(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   QDataStream out(&buffer, QIODevice::OpenModeFlag::ReadOnly);
-  for(auto p : event_id_map_) {
-    in << *p.second;
-    auto event = Deserializer::DeserializeEvent(out);
-    EXPECT_EQ(*p.second, *event.get());
-  }
+  std::unique_ptr<common::net::InGameEvent> bomb_event(new common::net::BombEvent(QPoint(5,5), 12, 45));
+  std::unique_ptr<common::net::InGameEvent> move_event(new common::net::MoveEvent(QPoint(5,5), Direction::UP, 45, 42));
+  std::unique_ptr<common::net::InGameEvent> left_event(new common::net::PlayerLeftEvent(common::net::QuitReason::LEFT_GAME, 45, 42));
+  in << *bomb_event.get();
+  EXPECT_EQ(*bomb_event.get(), *Deserializer::DeserializeInGameEvent(out).get());
+  in << *move_event.get();
+  EXPECT_EQ(*move_event.get(), *Deserializer::DeserializeInGameEvent(out).get());
+  in << *left_event.get();
+  EXPECT_EQ(*left_event.get(), *Deserializer::DeserializeInGameEvent(out).get());
 }
