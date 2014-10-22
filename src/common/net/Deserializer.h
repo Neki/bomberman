@@ -45,7 +45,7 @@ class Deserializer {
      * @return the next event on the stream. If the event could not be properly
      * deserialized, the returned pointer will be null.
      */
-    static std::unique_ptr<Event> DeserializeEvent(QDataStream& stream);
+    static std::unique_ptr<InGameEvent> DeserializeInGameEvent(QDataStream& stream);
 
     static BombEvent DeserializeBombEvent(QDataStream& stream);
     static MoveEvent DeserializeMoveEvent(QDataStream& stream);
