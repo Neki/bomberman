@@ -156,7 +156,6 @@ void NetworkWorker::SendPendingEvents() {
       PrepareHeader(stream, kEventPacketId);
       stream << (quint8) to_send.size();
       for(Event* evt : to_send) {
-        buffer_stream_ << evt;
         stream << *evt;
       }
       socket_.write(buffer);
