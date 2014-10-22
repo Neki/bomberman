@@ -62,6 +62,14 @@ class NetworkWorker : public QObject {
   private slots:
     void SendPendingEvents();
     void SendPingPacket();
+    void ReadPendingDatagrams();
+    /**
+     * Delete all data about ping packets sent more than 5 seconds ago.
+     * Useful to prevent memory leaks when packrts are lost (as otherwise the
+     * only time when this data is deleted is when an answer to a ping packet is
+     * received)
+     */
+    void CleanPingData();
 
   private:
     std::map<quint32, std::unique_ptr<Event>> pending_; // can be accessed from two threads
@@ -87,20 +95,12 @@ class NetworkWorker : public QObject {
     quint32 GetNextEventId();
     quint32 GetNextPacketId();
     quint32 PrepareHeader(QDataStream& stream, quint8 packet_type);
-    void ReadPendingDatagrams();
     void ProcessDatagram(const QByteArray& datagram);
     bool CheckProtocolAndVersion(QDataStream& stream);
     quint32 GetPacketId(QDataStream& stream);
     quint8 GetPacketType(QDataStream& stream);
     void ProcessPingPacket(QDataStream& stream);
     void UpdateRoundTripTime(quint32 send_time);
-    /**
-     * Delete all data about ping packets sent more than 5 seconds ago.
-     * Useful to prevent memory leaks when packrts are lost (as otherwise the
-     * only time when this data is deleted is when an answer to a ping packet is
-     * received)
-     */
-    void CleanPingData();
 
 };
 
