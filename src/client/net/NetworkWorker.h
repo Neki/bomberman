@@ -75,10 +75,8 @@ class NetworkWorker : public QObject {
     std::map<quint32, std::unique_ptr<Event>> pending_; // can be accessed from two threads
     std::map<quint32, quint32> ping_timestamps_; // packet id -> timestamp
     QUdpSocket socket_;
-    QByteArray buffer_;
-    QDataStream buffer_stream_;
-    quint64 last_event_id_;
-    quint64 last_packet_id_;
+    quint32 last_event_id_;
+    quint32 last_packet_id_;
     quint8 client_id_;
     quint32 round_trip_time_; // in ms
     QTimer timer_;

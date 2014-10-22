@@ -8,8 +8,7 @@
 namespace net {
 
 NetworkWorker::NetworkWorker(quint8 client_id, QHostAddress address, quint16 server_port, quint16 local_port, std::shared_ptr<GameTimer> game_timer)
-  : buffer_stream_(&buffer_, QIODevice::OpenModeFlag::WriteOnly),
-    client_id_(client_id),
+  : client_id_(client_id),
     timer_(this),
     ping_timer_(this),
     clean_ping_data_timer_(this),
@@ -126,16 +125,17 @@ quint32 NetworkWorker::GetPacketId(QDataStream& stream) {
 }
 
 void NetworkWorker::SendPingPacket() {
+  QByteArray buffer;
+  QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   int id = GetNextEventId();
   ping_timestamps_[id] = game_timer_->GetTimestamp();
-  buffer_.clear();
-  PrepareHeader(buffer_stream_, kPingPacketId);
-  buffer_stream_ << ping_timestamps_[id];
-  socket_.write(buffer_);
+  buffer.clear();
+  PrepareHeader(stream, kPingPacketId);
+  stream << ping_timestamps_[id];
+  socket_.write(buffer);
 }
 
 void NetworkWorker::SendPendingEvents() {
-    buffer_.clear();
     // we know the event won't be deleted until we leave this method
     // so using a pointer (instead of a shared_ptr) is fine
     QVector<Event*> to_send;
@@ -151,12 +151,15 @@ void NetworkWorker::SendPendingEvents() {
         ++it;
       }
       lock.unlock();
-      PrepareHeader(buffer_stream_, kEventPacketId);
-      buffer_stream_ << (quint8) to_send.size();
+      QByteArray buffer;
+      QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
+      PrepareHeader(stream, kEventPacketId);
+      stream << (quint8) to_send.size();
       for(Event* evt : to_send) {
         buffer_stream_ << evt;
+        stream << *evt;
       }
-      socket_.write(buffer_);
+      socket_.write(buffer);
       to_send.clear();
       i = 0;
     }
