@@ -10,12 +10,13 @@ namespace net {
    * A container for an event received by the server.
    * T should be a subclass of common::net::Event, but there is no simple way in C++11 to
    * enforce that.
+   * This is a templated version a BaseClientEvent that does not lose the event
+   * exact type.
    */
   template<class T>
   class ClientEvent {
 
     public:
-      // TODO(faucon_b): Not sure about having to pass the event by copy
       ClientEvent(T event, Client client, quint32 server_timestamp)
         : event_(event),
           client_(client),
