@@ -150,7 +150,6 @@ void NetworkWorker::SendPendingEvents() {
         i++;
         ++it;
       }
-      lock.unlock();
       QByteArray buffer;
       QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
       PrepareHeader(stream, kEventPacketId);
