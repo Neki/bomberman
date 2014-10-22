@@ -9,6 +9,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 find_package(Qt5Core 5.2 REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
+find_package(Qt5Svg REQUIRED)
 
 # Build options
 option(enable_tests "Build tests" ON)
@@ -70,6 +71,7 @@ add_dependencies(common easyloggingcpp)
 add_executable(bomberman ${CLIENT_SRCS} ${CLIENT_HEADERS})
 target_link_libraries(bomberman Qt5::Widgets)
 target_link_libraries(bomberman Qt5::Network)
+target_link_libraries(bomberman Qt5::Svg)
 target_link_libraries(bomberman common)
 add_dependencies(bomberman easyloggingcpp)
 
