@@ -172,7 +172,7 @@ void NetworkWorker::AddEvent(std::unique_ptr<Event> event) {
 }
 
 quint32 NetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
-  quint64 packet_id = GetNextPacketId();
+  quint32 packet_id = GetNextPacketId();
   stream << kProtocolId << kClientVersion << client_id_ << packet_id << packet_type;
   return packet_id;
 }
