@@ -11,6 +11,7 @@
 #include "src/common/net/PlayerLeftEvent.h"
 #include "ClientEvent.h"
 #include "Client.h"
+#include "EmitterVisitor.h"
 
 using common::GameTimer;
 using namespace common::net;
@@ -52,6 +53,11 @@ class GameNetworkWorker : public QObject {
     void ProcessPingPacket(QDataStream& stream, const Client& client, quint32 packet_id);
     void ProcessEventPacket(QDataStream& stream, const Client& client, quint32 packet_id);
     void SendPongPacket(const Client& client, quint32 packet_id);
+
+    friend class EmitterVisitor;
+    void EmitEvent(ClientEvent<BombEvent> event);
+    void EmitEvent(ClientEvent<MoveEvent> event);
+    void EmitEvent(ClientEvent<PlayerLeftEvent> event);
 
 };
 
