@@ -143,7 +143,7 @@ void NetworkWorker::SendPendingEvents() {
     auto it = pending_.begin();
     int i = 0;
     while(it != pending_.end()) {
-      while(i < 6) {
+      while(i < 6 && it != pending_.end()) {
         // each packet contains at most 5 events in order not ot have the datagram splitted by the underlying network layers
         // TODO: add events until the datagram is 512 bytes (more robust)
         to_send.push_back(it->second.get());
