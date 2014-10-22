@@ -13,6 +13,7 @@ GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> ga
   for(Client client : clients) {
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
   }
+  QObject::connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
   LOG(DEBUG) << "In game network worker initialized and ready.";
 }
 

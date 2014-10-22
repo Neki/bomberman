@@ -32,6 +32,9 @@ class GameNetworkWorker : public QObject {
     void MoveEventReceived(ClientEvent<MoveEvent> event);
     void PlayerLeftEventReceived(ClientEvent<PlayerLeftEvent> event);
 
+  private slots:
+    void ReadPendingDatagrams();
+
   private:
     quint16 port_;
     std::shared_ptr<GameTimer> game_timer_;
@@ -49,7 +52,6 @@ class GameNetworkWorker : public QObject {
     quint32 GetNextPacketId();
 
     void PrepareHeader(QDataStream& stream, quint8 packet_type);
-    void ReadPendingDatagrams();
     void ProcessDatagram(const QByteArray& datagram);
     bool CheckProtocolAndVersion(QDataStream& stream);
     quint32 GetPacketId(QDataStream& stream);
