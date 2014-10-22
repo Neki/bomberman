@@ -82,7 +82,7 @@ class NetworkWorker : public QObject {
     static const unsigned char kProtocolId = 0xBC;
     static const unsigned char kClientVersion = 0x01;
     static const unsigned char kEventPacketId = 0x02;
-    static const unsigned char kPingPacketId = 0x02;
+    static const unsigned char kPingPacketId = 0x01;
 
     quint32 GetNextEventId();
     quint32 GetNextPacketId();
