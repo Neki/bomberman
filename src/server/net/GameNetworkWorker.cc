@@ -104,20 +104,33 @@ void GameNetworkWorker::ProcessEventPacket(QDataStream& stream, const Client& cl
   quint8 events_size;
   stream >> events_size;
   for(int i = 0; i < events_size; i++) {
-    EventId event_type = Deserializer::GetNextEventId(stream);
-    switch(event_type) {
-      case EventId::kBombEventId: {
-        BombEvent event = Deserializer::DeserializeBombEvent(stream);
-        auto c_event = ClientEvent<BombEvent>(event, client, game_timer_->GetTimestamp());
-        break;
-      }
-      case EventId::kUnknownEventId: /* fall-through */
-      default:
-        LOG(WARNING) << "Received unknown event type: " << event_type << ", dropping the datagram.";
-        return;
+    std::unique_ptr<InGameEvent> event = Deserializer::DeserializeInGameEvent(stream);
+    if(event.get() == nullptr) {
+      LOG(WARNING) << "Could not deserialize the received event. Dropping it.";
+      return;
+    }
+    auto client_event = std::unique_ptr<BaseClientEvent>(new BaseClientEvent(std::move(event), client, game_timer_->GetTimestamp()));
+    HandlePendingEvent(std::move(client_event));
+  }
+}
+
+// TODO: defends against a client attacking the server by sending bad events id
+void GameNetworkWorker::HandlePendingEvent(std::unique_ptr<BaseClientEvent> event) {
+  event_cache_.insert(std::pair<quint32, std::unique_ptr<BaseClientEvent>>(event->GetEvent()->GetId(), std::move(event)));
+  EmitReadyEvents();
+}
+
+void GameNetworkWorker::EmitReadyEvents() {
+  auto it = event_cache_.begin();
+  while(it != event_cache_.end()) {
+    it = event_cache_.find(last_event_id_);
+    if(it != event_cache_.end()) {
+      EmitterVisitor visitor(this, it->second.get());
+      it->second->GetEvent()->Accept(visitor);
+      event_cache_.erase(it->first);
+      last_event_id_++;
     }
   }
-
 }
 
 void GameNetworkWorker::SendPongPacket(const Client& client, quint32 packet_id) {
@@ -139,6 +152,21 @@ void GameNetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
 quint32 GameNetworkWorker::GetNextPacketId() {
   last_packet_id_ += 1;
   return last_packet_id_;
+}
+
+void GameNetworkWorker::EmitEvent(ClientEvent<BombEvent> event) {
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: bomb event ready / id: " << event.getEventData().GetId();
+  emit BombEventReceived(event);
+}
+
+void GameNetworkWorker::EmitEvent(ClientEvent<MoveEvent> event) {
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: move event ready / id: " << event.getEventData().GetId();
+  emit MoveEventReceived(event);
+}
+
+void GameNetworkWorker::EmitEvent(ClientEvent<PlayerLeftEvent> event) {
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: player left event ready / id: " << event.getEventData().GetId();
+  emit PlayerLeftEventReceived(event);
 }
 
 }

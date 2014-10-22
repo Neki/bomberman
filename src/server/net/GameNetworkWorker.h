@@ -9,9 +9,12 @@
 #include "src/common/net/BombEvent.h"
 #include "src/common/net/MoveEvent.h"
 #include "src/common/net/PlayerLeftEvent.h"
+#include "BaseClientEvent.h"
 #include "ClientEvent.h"
 #include "Client.h"
 #include "EmitterVisitor.h"
+
+#define EVENT_READY_LOG_LEVEL 3
 
 using common::GameTimer;
 using namespace common::net;
@@ -35,6 +38,8 @@ class GameNetworkWorker : public QObject {
     std::map<int, Client> clients_;
     QUdpSocket socket_;
     quint32 last_packet_id_;
+    std::map<quint32, std::unique_ptr<BaseClientEvent>> event_cache_;
+    quint32 last_event_id_;
 
     static const unsigned char kServerVersion = 0x01;
     static const unsigned char kProtocolId = 0xBC;
@@ -52,6 +57,8 @@ class GameNetworkWorker : public QObject {
     quint8 GetClientId(QDataStream& stream);
     void ProcessPingPacket(QDataStream& stream, const Client& client, quint32 packet_id);
     void ProcessEventPacket(QDataStream& stream, const Client& client, quint32 packet_id);
+    void HandlePendingEvent(std::unique_ptr<BaseClientEvent> event);
+    void EmitReadyEvents();
     void SendPongPacket(const Client& client, quint32 packet_id);
 
     friend class EmitterVisitor;
