@@ -27,7 +27,7 @@ class GameNetworkWorker : public QObject {
   signals:
     void BombEventReceived(ClientEvent<BombEvent> event);
     void MoveEventReceived(ClientEvent<MoveEvent> event);
-    void PlayerJoinedEventReceived(ClientEvent<PlayerLeftEvent> event);
+    void PlayerLeftEventReceived(ClientEvent<PlayerLeftEvent> event);
 
   private:
     quint16 port_;
