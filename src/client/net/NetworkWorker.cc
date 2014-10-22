@@ -18,7 +18,7 @@ NetworkWorker::NetworkWorker(quint8 client_id, QHostAddress address, quint16 ser
   socket_.bind(QHostAddress::LocalHost, local_port);
   connect(&timer_, SIGNAL(timeout()), this, SLOT(SendPendingEvents()));
   connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
-  connect(&ping_timer_, SIGNAL(timeout()), this, SLOT(SendPingPacket));
+  connect(&ping_timer_, SIGNAL(timeout()), this, SLOT(SendPingPacket()));
   connect(&clean_ping_data_timer_, SIGNAL(timeout()), this, SLOT(CleanPingData()));
   timer_.start(100);
   ping_timer_.start(200);
