@@ -4,6 +4,7 @@
 #include <QMutexLocker>
 #include "src/common/GameTimer.h"
 #include "easylogging++.h"
+#include <cassert>
 
 namespace net {
 
@@ -133,6 +134,7 @@ void NetworkWorker::SendPingPacket() {
   PrepareHeader(stream, kPingPacketId);
   stream << ping_timestamps_[id];
   socket_.write(buffer);
+  VLOG(9) << "Ping packet sent / timestamp = " << ping_timestamps_[id];
 }
 
 void NetworkWorker::SendPendingEvents() {
@@ -147,6 +149,7 @@ void NetworkWorker::SendPendingEvents() {
         // each packet contains at most 5 events in order not ot have the datagram splitted by the underlying network layers
         // TODO: add events until the datagram is 512 bytes (more robust)
         to_send.push_back(it->second.get());
+        VLOG(9) << "Preparing to send the event with id " << it->second->GetId();
         i++;
         ++it;
       }
@@ -157,10 +160,12 @@ void NetworkWorker::SendPendingEvents() {
       for(Event* evt : to_send) {
         stream << *evt;
       }
+      assert(stream.status() == QDataStream::Status::Ok);
       socket_.write(buffer);
       to_send.clear();
       i = 0;
     }
+    VLOG(9) << "All pending events sent";
 }
 
 void NetworkWorker::AddEvent(std::unique_ptr<Event> event) {

@@ -13,9 +13,11 @@ GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> ga
   for(Client client : clients) {
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
   }
+  LOG(DEBUG) << "In game network worker initialized and ready.";
 }
 
 void GameNetworkWorker::ReadPendingDatagrams() {
+  VLOG(9) << "Reading pending datagrams...";
   while(socket_.hasPendingDatagrams()) {
     QByteArray datagram;
     datagram.resize(socket_.pendingDatagramSize());
