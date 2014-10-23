@@ -9,11 +9,14 @@
 namespace net {
 
 NetworkWorker::NetworkWorker(quint8 client_id, QHostAddress address, quint16 server_port, quint16 local_port, std::shared_ptr<GameTimer> game_timer)
-  : client_id_(client_id),
+  : last_event_id_(0), // the first class to GetNextEventId will return 1 (intended)
+    last_packet_id_(0), // idem with GetNextPacketId
+    client_id_(client_id),
     timer_(this),
     ping_timer_(this),
     clean_ping_data_timer_(this),
     game_timer_(game_timer) {
+
   socket_.connectToHost(address, server_port);
 
   connect(&timer_, SIGNAL(timeout()), this, SLOT(SendPendingEvents()));
@@ -137,13 +140,11 @@ quint32 NetworkWorker::GetPacketId(QDataStream& stream) {
 void NetworkWorker::SendPingPacket() {
   QByteArray buffer;
   QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
-  int id = GetNextEventId();
+  quint32 id = PrepareHeader(stream, kPingPacketId);
   ping_timestamps_[id] = game_timer_->GetTimestamp();
-  buffer.clear();
-  PrepareHeader(stream, kPingPacketId);
   stream << ping_timestamps_[id];
   socket_.write(buffer);
-  VLOG(9) << "Ping packet sent / timestamp = " << ping_timestamps_[id];
+  VLOG(9) << "Ping packet sent / timestamp = " << ping_timestamps_[id] << " / packet id = " << id;
 }
 
 void NetworkWorker::SendPendingEvents() {
@@ -164,7 +165,7 @@ void NetworkWorker::SendPendingEvents() {
       }
       QByteArray buffer;
       QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
-      PrepareHeader(stream, kEventPacketId);
+      quint32 packet_id = PrepareHeader(stream, kEventPacketId);
       stream << (quint8) to_send.size();
       for(Event* evt : to_send) {
         stream << *evt;
@@ -173,6 +174,7 @@ void NetworkWorker::SendPendingEvents() {
       socket_.write(buffer);
       to_send.clear();
       i = 0;
+      VLOG(9) << "Packet event with id " << packet_id << " sent";
     }
     VLOG(9) << "All pending events sent";
 }
