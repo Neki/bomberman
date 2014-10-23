@@ -25,12 +25,7 @@ quint64 Event::GetTimestamp() const {
   return timestamp_;
 }
 
-QString Event::GetClientVersion() const {
-  return QString(CLIENT_VERSION);
-}
-
 void Event::SerializeBaseEvent(QDataStream& stream) const {
-  stream << GetClientVersion();
   stream << GetId();
   stream << GetTimestamp();
 }

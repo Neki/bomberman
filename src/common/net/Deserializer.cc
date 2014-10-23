@@ -44,7 +44,6 @@ std::unique_ptr<InGameEvent> Deserializer::DeserializeInGameEvent(QDataStream& s
 
 BaseEventData Deserializer::DeserializeBaseEvent(QDataStream& stream) {
   BaseEventData data;
-  stream >> data.client_version;
   stream >> data.id;
   stream >> data.timestamp;
   return data;

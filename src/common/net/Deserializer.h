@@ -20,7 +20,6 @@ namespace net {
  * For internal use by the Deserializer class.
  */
 struct BaseEventData {
-  QString client_version;
   quint32 id;
   quint64 timestamp;
 };
