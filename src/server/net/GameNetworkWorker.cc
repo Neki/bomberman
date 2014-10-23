@@ -8,13 +8,15 @@ namespace net {
 GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer, std::vector<Client> clients)
   : port_(port),
     game_timer_(game_timer),
-    last_packet_id_(0) {
-  socket_.bind(QHostAddress::LocalHost, port_);
+    last_packet_id_(1),
+    last_event_id_(1) {
+  QObject::connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
+  QObject::connect(&socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(SocketError(QAbstractSocket::SocketError)));
+  socket_.bind( port_);
   for(Client client : clients) {
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
   }
-  QObject::connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
-  LOG(DEBUG) << "In game network worker initialized and ready.";
+  LOG(DEBUG) << "In game network worker initialized and ready on port " << port_;
 }
 
 void GameNetworkWorker::ReadPendingDatagrams() {
