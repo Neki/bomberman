@@ -147,8 +147,11 @@ void GameNetworkWorker::SendPongPacket(const Client& client, quint32 packet_id) 
   QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   PrepareHeader(stream, kPingPacketId);
   stream << packet_id;
-  stream << game_timer_->GetTimestamp();
+  quint32 timestamp = game_timer_->GetTimestamp();
+  stream << timestamp;
   socket_.writeDatagram(buffer, client.GetAddress(), client.GetPort());
+  VLOG(9) << "Answered pong with timestamp " << timestamp << " to the ping with id " << packet_id;
+  VLOG(9) << "Client was at address " << client.GetAddress().toString().toStdWString() << ":" << client.GetPort();
 }
 
 void GameNetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
