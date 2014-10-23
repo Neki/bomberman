@@ -36,7 +36,7 @@ class Event {
 
     void SetId(quint32 id);
     quint32 GetId() const;
-    quint64 GetTimestamp() const;
+    quint32 GetTimestamp() const;
 
     virtual void Serialize(QDataStream& stream) const = 0;
 

@@ -21,7 +21,7 @@ namespace net {
  */
 struct BaseEventData {
   quint32 id;
-  quint64 timestamp;
+  quint32 timestamp;
 };
 
 /**

@@ -21,7 +21,7 @@ void Event::SetId(quint32 id) {
   id_ = id;
 }
 
-quint64 Event::GetTimestamp() const {
+quint32 Event::GetTimestamp() const {
   return timestamp_;
 }
 
