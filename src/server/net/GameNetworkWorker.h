@@ -34,6 +34,7 @@ class GameNetworkWorker : public QObject {
 
   private slots:
     void ReadPendingDatagrams();
+    void SocketError(QAbstractSocket::SocketError error);
 
   private:
     quint16 port_;

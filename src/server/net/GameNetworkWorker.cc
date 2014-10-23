@@ -29,6 +29,12 @@ void GameNetworkWorker::ReadPendingDatagrams() {
   }
 }
 
+void GameNetworkWorker::SocketError(QAbstractSocket::SocketError error) {
+  LOG(ERROR) << "Error on socket: " << socket_.errorString().toStdWString();
+  (void) error;
+}
+
+
 void GameNetworkWorker::ProcessDatagram(const QByteArray& datagram) {
   QDataStream stream(datagram);
   if(!CheckProtocolAndVersion(stream)) {
