@@ -15,15 +15,23 @@ NetworkWorker::NetworkWorker(quint8 client_id, QHostAddress address, quint16 ser
     clean_ping_data_timer_(this),
     game_timer_(game_timer) {
   socket_.connectToHost(address, server_port);
-  socket_.bind(QHostAddress::LocalHost, local_port);
+
   connect(&timer_, SIGNAL(timeout()), this, SLOT(SendPendingEvents()));
-  connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
   connect(&ping_timer_, SIGNAL(timeout()), this, SLOT(SendPingPacket()));
   connect(&clean_ping_data_timer_, SIGNAL(timeout()), this, SLOT(CleanPingData()));
   timer_.start(100);
   ping_timer_.start(200);
   clean_ping_data_timer_.start(5000);
-  LOG(INFO) << "Initialized the client network worker.";
+
+  connect(&receive_socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
+  connect(&receive_socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(SocketError(QAbstractSocket::SocketError)));
+  receive_socket_.bind(local_port);
+
+  LOG(INFO) << "Initialized the client network worker: listening on " << local_port << ", connected to " << address.toString().toStdWString() << ":" << server_port;
+}
+
+void NetworkWorker::SocketError(QAbstractSocket::SocketError) {
+  LOG(ERROR) << "Socket error: " << socket_.errorString().toStdWString();
 }
 
 quint32 NetworkWorker::GetNextEventId() {
@@ -37,12 +45,13 @@ quint32 NetworkWorker::GetNextPacketId() {
 }
 
 void NetworkWorker::ReadPendingDatagrams() {
-  while(socket_.hasPendingDatagrams()) {
+  VLOG(9) << "Reading pending datagrams...";
+  while(receive_socket_.hasPendingDatagrams()) {
     QByteArray datagram;
-    datagram.resize(socket_.pendingDatagramSize());
+    datagram.resize(receive_socket_.pendingDatagramSize());
     QHostAddress sender;
     quint16 sender_port;
-    socket_.readDatagram(datagram.data(), datagram.size(), &sender, &sender_port);
+    receive_socket_.readDatagram(datagram.data(), datagram.size(), &sender, &sender_port);
     ProcessDatagram(datagram);
   }
 

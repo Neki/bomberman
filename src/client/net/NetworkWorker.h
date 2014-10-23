@@ -70,11 +70,13 @@ class NetworkWorker : public QObject {
      * received)
      */
     void CleanPingData();
+    void SocketError(QAbstractSocket::SocketError);
 
   private:
     std::map<quint32, std::unique_ptr<Event>> pending_; // can be accessed from two threads
     std::map<quint32, quint32> ping_timestamps_; // packet id -> timestamp
     QUdpSocket socket_;
+    QUdpSocket receive_socket_;
     quint32 last_event_id_;
     quint32 last_packet_id_;
     quint8 client_id_;
