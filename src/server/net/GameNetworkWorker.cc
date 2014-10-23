@@ -118,6 +118,11 @@ void GameNetworkWorker::ProcessEventPacket(QDataStream& stream, const Client& cl
       LOG(WARNING) << "Could not deserialize the received event. Dropping it.";
       return;
     }
+    VLOG(9) << "Deserialized event has ID " << event->GetId();
+    if(event->GetId() < last_event_id_) {
+      VLOG(8) << "The client has sent an event that has already been processed (according to its ID).";
+      return;
+    }
     auto client_event = std::unique_ptr<BaseClientEvent>(new BaseClientEvent(std::move(event), client, game_timer_->GetTimestamp()));
     HandlePendingEvent(std::move(client_event));
   }
