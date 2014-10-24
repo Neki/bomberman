@@ -4,26 +4,37 @@
 #include <QMutexLocker>
 #include "src/common/GameTimer.h"
 #include "easylogging++.h"
+#include <cassert>
 
 namespace net {
 
 NetworkWorker::NetworkWorker(quint8 client_id, QHostAddress address, quint16 server_port, quint16 local_port, std::shared_ptr<GameTimer> game_timer)
-  : buffer_stream_(&buffer_, QIODevice::OpenModeFlag::WriteOnly),
+  : last_event_id_(0), // the first class to GetNextEventId will return 1 (intended)
+    last_packet_id_(0), // idem with GetNextPacketId
     client_id_(client_id),
     timer_(this),
     ping_timer_(this),
     clean_ping_data_timer_(this),
     game_timer_(game_timer) {
+
   socket_.connectToHost(address, server_port);
-  socket_.bind(QHostAddress::LocalHost, local_port);
+
   connect(&timer_, SIGNAL(timeout()), this, SLOT(SendPendingEvents()));
-  connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
-  connect(&ping_timer_, SIGNAL(timeout()), this, SLOT(SendPingPacket));
+  connect(&ping_timer_, SIGNAL(timeout()), this, SLOT(SendPingPacket()));
   connect(&clean_ping_data_timer_, SIGNAL(timeout()), this, SLOT(CleanPingData()));
   timer_.start(100);
   ping_timer_.start(200);
   clean_ping_data_timer_.start(5000);
-  LOG(INFO) << "Initialized the client network worker.";
+
+  connect(&receive_socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
+  connect(&receive_socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(SocketError(QAbstractSocket::SocketError)));
+  receive_socket_.bind(local_port);
+
+  LOG(INFO) << "Initialized the client network worker: listening on " << local_port << ", connected to " << address.toString().toStdWString() << ":" << server_port;
+}
+
+void NetworkWorker::SocketError(QAbstractSocket::SocketError) {
+  LOG(ERROR) << "Socket error: " << socket_.errorString().toStdWString();
 }
 
 quint32 NetworkWorker::GetNextEventId() {
@@ -37,12 +48,13 @@ quint32 NetworkWorker::GetNextPacketId() {
 }
 
 void NetworkWorker::ReadPendingDatagrams() {
-  while(socket_.hasPendingDatagrams()) {
+  VLOG(9) << "Reading pending datagrams...";
+  while(receive_socket_.hasPendingDatagrams()) {
     QByteArray datagram;
-    datagram.resize(socket_.pendingDatagramSize());
+    datagram.resize(receive_socket_.pendingDatagramSize());
     QHostAddress sender;
     quint16 sender_port;
-    socket_.readDatagram(datagram.data(), datagram.size(), &sender, &sender_port);
+    receive_socket_.readDatagram(datagram.data(), datagram.size(), &sender, &sender_port);
     ProcessDatagram(datagram);
   }
 
@@ -126,16 +138,16 @@ quint32 NetworkWorker::GetPacketId(QDataStream& stream) {
 }
 
 void NetworkWorker::SendPingPacket() {
-  int id = GetNextEventId();
+  QByteArray buffer;
+  QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
+  quint32 id = PrepareHeader(stream, kPingPacketId);
   ping_timestamps_[id] = game_timer_->GetTimestamp();
-  buffer_.clear();
-  PrepareHeader(buffer_stream_, kPingPacketId);
-  buffer_stream_ << ping_timestamps_[id];
-  socket_.write(buffer_);
+  stream << ping_timestamps_[id];
+  socket_.write(buffer);
+  VLOG(9) << "Ping packet sent / timestamp = " << ping_timestamps_[id] << " / packet id = " << id;
 }
 
 void NetworkWorker::SendPendingEvents() {
-    buffer_.clear();
     // we know the event won't be deleted until we leave this method
     // so using a pointer (instead of a shared_ptr) is fine
     QVector<Event*> to_send;
@@ -143,20 +155,28 @@ void NetworkWorker::SendPendingEvents() {
     auto it = pending_.begin();
     int i = 0;
     while(it != pending_.end()) {
-      while(i < 6) {
+      while(i < 6 && it != pending_.end()) {
         // each packet contains at most 5 events in order not ot have the datagram splitted by the underlying network layers
         // TODO: add events until the datagram is 512 bytes (more robust)
         to_send.push_back(it->second.get());
+        VLOG(9) << "Preparing to send the event with id " << it->second->GetId();
         i++;
         ++it;
       }
-      lock.unlock();
-      PrepareHeader(buffer_stream_, kEventPacketId);
-      buffer_stream_ << to_send;
-      socket_.write(buffer_);
+      QByteArray buffer;
+      QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
+      quint32 packet_id = PrepareHeader(stream, kEventPacketId);
+      stream << (quint8) to_send.size();
+      for(Event* evt : to_send) {
+        stream << *evt;
+      }
+      assert(stream.status() == QDataStream::Status::Ok);
+      socket_.write(buffer);
       to_send.clear();
       i = 0;
+      VLOG(9) << "Packet event with id " << packet_id << " sent";
     }
+    VLOG(9) << "All pending events sent";
 }
 
 void NetworkWorker::AddEvent(std::unique_ptr<Event> event) {
@@ -167,7 +187,7 @@ void NetworkWorker::AddEvent(std::unique_ptr<Event> event) {
 }
 
 quint32 NetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
-  quint64 packet_id = GetNextPacketId();
+  quint32 packet_id = GetNextPacketId();
   stream << kProtocolId << kClientVersion << client_id_ << packet_id << packet_type;
   return packet_id;
 }

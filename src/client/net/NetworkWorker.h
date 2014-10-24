@@ -52,7 +52,7 @@ class NetworkWorker : public QObject {
   signals:
     /**
      * Emitted when a new measure of the latency between the server and the
-     * client is available. THis value has already been pre-processed and can be
+     * client is available. This value has already been pre-processed and can be
      * consumed without any further checks or modifications (this is not a raw
      * value).
      */
@@ -62,15 +62,23 @@ class NetworkWorker : public QObject {
   private slots:
     void SendPendingEvents();
     void SendPingPacket();
+    void ReadPendingDatagrams();
+    /**
+     * Delete all data about ping packets sent more than 5 seconds ago.
+     * Useful to prevent memory leaks when packrts are lost (as otherwise the
+     * only time when this data is deleted is when an answer to a ping packet is
+     * received)
+     */
+    void CleanPingData();
+    void SocketError(QAbstractSocket::SocketError);
 
   private:
     std::map<quint32, std::unique_ptr<Event>> pending_; // can be accessed from two threads
     std::map<quint32, quint32> ping_timestamps_; // packet id -> timestamp
     QUdpSocket socket_;
-    QByteArray buffer_;
-    QDataStream buffer_stream_;
-    quint64 last_event_id_;
-    quint64 last_packet_id_;
+    QUdpSocket receive_socket_;
+    quint32 last_event_id_;
+    quint32 last_packet_id_;
     quint8 client_id_;
     quint32 round_trip_time_; // in ms
     QTimer timer_;
@@ -82,25 +90,17 @@ class NetworkWorker : public QObject {
     static const unsigned char kProtocolId = 0xBC;
     static const unsigned char kClientVersion = 0x01;
     static const unsigned char kEventPacketId = 0x02;
-    static const unsigned char kPingPacketId = 0x02;
+    static const unsigned char kPingPacketId = 0x01;
 
     quint32 GetNextEventId();
     quint32 GetNextPacketId();
     quint32 PrepareHeader(QDataStream& stream, quint8 packet_type);
-    void ReadPendingDatagrams();
     void ProcessDatagram(const QByteArray& datagram);
     bool CheckProtocolAndVersion(QDataStream& stream);
     quint32 GetPacketId(QDataStream& stream);
     quint8 GetPacketType(QDataStream& stream);
     void ProcessPingPacket(QDataStream& stream);
     void UpdateRoundTripTime(quint32 send_time);
-    /**
-     * Delete all data about ping packets sent more than 5 seconds ago.
-     * Useful to prevent memory leaks when packrts are lost (as otherwise the
-     * only time when this data is deleted is when an answer to a ping packet is
-     * received)
-     */
-    void CleanPingData();
 
 };
 

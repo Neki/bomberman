@@ -20,9 +20,8 @@ namespace net {
  * For internal use by the Deserializer class.
  */
 struct BaseEventData {
-  QString client_version;
   quint32 id;
-  quint64 timestamp;
+  quint32 timestamp;
 };
 
 /**
@@ -39,6 +38,13 @@ class Deserializer {
      *         (see the serialization tests for an example)
      */
     static EventId GetNextEventId(QDataStream& stream);
+
+    /*
+     * Deserialize the next event on the stream.
+     * @return the next event on the stream. If the event could not be properly
+     * deserialized, the returned pointer will be null.
+     */
+    static std::unique_ptr<InGameEvent> DeserializeInGameEvent(QDataStream& stream);
 
     static BombEvent DeserializeBombEvent(QDataStream& stream);
     static MoveEvent DeserializeMoveEvent(QDataStream& stream);

@@ -25,9 +25,25 @@ EventId Deserializer::GetNextEventId(QDataStream &stream) {
   }
 }
 
+std::unique_ptr<InGameEvent> Deserializer::DeserializeInGameEvent(QDataStream& stream) {
+  EventId event_type = GetNextEventId(stream);
+  switch(event_type) {
+    case kBombEventId:
+      return std::unique_ptr<InGameEvent>(new BombEvent(DeserializeBombEvent(stream)));
+    case kMoveEventId:
+      return std::unique_ptr<InGameEvent>(new MoveEvent(DeserializeMoveEvent(stream)));
+    case kPlayerLeftEvent:
+      return std::unique_ptr<InGameEvent>(new PlayerLeftEvent(DeserializePlayerLeftEvent(stream)));
+    case kUnknownEventId:
+    default:
+      // TODO error handling
+      return std::unique_ptr<InGameEvent>();
+      break;
+  }
+}
+
 BaseEventData Deserializer::DeserializeBaseEvent(QDataStream& stream) {
   BaseEventData data;
-  stream >> data.client_version;
   stream >> data.id;
   stream >> data.timestamp;
   return data;

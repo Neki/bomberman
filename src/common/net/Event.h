@@ -1,8 +1,6 @@
 #ifndef SRC_COMMON_NET_EVENT_H_
 #define SRC_COMMON_NET_EVENT_H_
 
-#define CLIENT_VERSION "0.1.0"
-
 #include <QString>
 #include <QDataStream>
 
@@ -38,13 +36,7 @@ class Event {
 
     void SetId(quint32 id);
     quint32 GetId() const;
-    quint64 GetTimestamp() const;
-
-    /**
-     * @return a version string identifying the version of the game run by the
-     * client
-     */
-    QString GetClientVersion() const;
+    quint32 GetTimestamp() const;
 
     virtual void Serialize(QDataStream& stream) const = 0;
 

@@ -77,6 +77,7 @@ add_dependencies(bomberman easyloggingcpp)
 
 add_executable(bombServer ${SERVER_SRCS} ${SERVER_HEADERS})
 target_link_libraries(bombServer Qt5::Core)
+target_link_libraries(bombServer Qt5::Widgets)
 target_link_libraries(bombServer Qt5::Network)
 target_link_libraries(bombServer common)
 add_dependencies(bombServer easyloggingcpp)
