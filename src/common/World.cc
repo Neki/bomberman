@@ -3,6 +3,7 @@
 #include "src/common/entity/Entity.h"
 #include "src/common/entity/Character.h"
 #include "GameEngine.h"
+#include <cassert>
 
 namespace common {
 
@@ -13,7 +14,31 @@ World::World(std::weak_ptr<GameEngine> game_engine, int width, int height)
     height_(height),
     entities_(),
     characters_() {
+  for (int x = 0; x < width_; x++) {
+    entities_[x] = std::vector<std::vector<std::unique_ptr<entity::Entity> > >();
+    for (int y = 0; y < height_; y++) {
+      entities_[x][y] = std::vector<std::unique_ptr<entity::Entity> >();
+    }
+  }
+  
+}
 
+std::vector<std::unique_ptr<entity::Entity> >::const_iterator World::IteratorAtBegin(QPoint a) {
+  assert(CheckCoord(a));
+  return entities_[a.x()][a.y()].cbegin();
+}
+
+std::vector<std::unique_ptr<entity::Entity> >::const_iterator World::IteratorAtEnd(QPoint a) {
+  assert(CheckCoord(a));
+  return entities_[a.x()][a.y()].cend();
+}
+
+std::vector<std::unique_ptr<entity::Character> >::const_iterator World::CharacterIteratorBegin() {
+  return characters_.cbegin();
+}
+
+std::vector<std::unique_ptr<entity::Character> >::const_iterator World::CharacterIteratorEnd() {
+  return characters_.cend();
 }
 
 std::weak_ptr<GameEngine> World::GetGameEngine() const {
