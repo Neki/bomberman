@@ -6,10 +6,9 @@
 namespace common {
 namespace entity {
 
-Bomb::Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character> bomber):
-  Entity(world, position, true, false),
-  bomber_(bomber)
-{
+Bomb::Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character> bomber)
+ :  Entity(world, position, true, false, "res/bomb.png"),
+    bomber_(bomber) {
   set_time_ = QTime::currentTime(); // TODO : change to use the game clock
   std::shared_ptr<Character> s_bomber(bomber_.lock());
   if (s_bomber) {
@@ -18,18 +17,15 @@ Bomb::Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character>
   }
 }
 
-std::weak_ptr<Character> Bomb::GetBomber() const
-{
+std::weak_ptr<Character> Bomb::GetBomber() const {
 	return bomber_;
 }
 
-QTime Bomb::GetSetTime() const
-{
+QTime Bomb::GetSetTime() const {
 	return set_time_;
 }
 
-QTime Bomb::GetExplosionTime() const
-{
+QTime Bomb::GetExplosionTime() const {
 	return explosion_time_;
 }
 
@@ -38,8 +34,7 @@ void Bomb::HitByFire() {
   explode();
 }
 
-void Bomb::explode()
-{
+void Bomb::explode() {
   std::shared_ptr<World> s_world(GetWorld().lock());
   if (s_world) {
 	std::shared_ptr<GameEngine> s_game_engine(s_world->GetGameEngine().lock());
@@ -59,10 +54,9 @@ void Bomb::explode()
   should_be_removed_ = true;
 }
 
-void Bomb::Update(int t)
+void Bomb::Update(int t) {
 /* Method to be called at every frame.
    t : duration of the frame in ms */
-{
   (void) t;
   if (QTime::currentTime() >= this->GetExplosionTime()) {// TODO : change to use the game clock
     this->explode();

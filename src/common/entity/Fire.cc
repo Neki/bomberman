@@ -5,9 +5,8 @@
 namespace common {
 namespace entity {
 
-Fire::Fire(std::weak_ptr<World> world, QPoint position) :
-  Entity(world, position, false, false)
-{  
+Fire::Fire(std::weak_ptr<World> world, QPoint position)
+  : Entity(world, position, false, false, "res/fire.png") {  
   set_time_ = QTime::currentTime(); // TODO : change to use the game clock
   disappearing_time_ = set_time_.addMSecs(300);
 }

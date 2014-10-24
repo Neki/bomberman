@@ -6,10 +6,11 @@
 #include <QString>
 #include "src/common/World.h"
 #include "src/common/GameEngine.h"
-class Character;
 
 namespace common {
 namespace entity {
+
+class Character;
 
 class Entity {
 
@@ -33,21 +34,23 @@ class Entity {
     virtual void IsWalkedOn(std::weak_ptr<GameEngine> game_engine, const std::weak_ptr<Character> character);
     /* Called when a character walk on the entity */
 
-    QPoint GetPosition() const;
-    void SetPosition(QPoint position);
+    virtual QPoint GetPosition() const;
+    virtual QPointF GetPositionF() const;
     bool GetShouldBeRemoved() const;
-    QString GetTexturePath() const;
+    virtual QString GetTexturePath() const;
+    int GetId() const;
 	
   protected:
     std::weak_ptr<World> GetWorld() const;
+    QPoint position_; // Entity position in the world's grid
     bool is_solid_;
     bool stops_fire_;
     bool should_be_removed_; // true if the entity should be removed by the game engine by the end of the frame
 
   private:
-	std::weak_ptr<World> world_;
-	QPoint position_; // Entity position in the world's grid
-  QString texture_path_;
+	  std::weak_ptr<World> world_;
+    QString texture_path_;
+    int id_;
 };
 
 }

@@ -1,8 +1,7 @@
 #ifndef SRC_COMMON_ENTITY_BONUS_H_
 #define SRC_COMMON_ENTITY_BONUS_H_
 
-#include <memory>
-#include <QPoint>
+#include <QString>
 #include "Entity.h"
 #include "src/common/World.h"
 
@@ -12,7 +11,7 @@ namespace entity {
 class Bonus : public Entity {
 
   public:
-    Bonus(std::weak_ptr<World> world, QPoint position);
+    Bonus(std::weak_ptr<World> world, QPoint position, QString texture_path = "");
     
     virtual void Update(int t);
     

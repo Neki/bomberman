@@ -5,12 +5,13 @@ namespace common {
 namespace entity {
 
 Entity::Entity(std::weak_ptr<World> world, QPoint position, bool is_solid, bool stops_fire, QString texture_path)
-  : is_solid_(is_solid),
+  : position_(position), 
+    is_solid_(is_solid),
     stops_fire_(stops_fire),
     should_be_removed_(false),
     world_(world),
-    position_(position),
-    texture_path_(texture_path) {
+    texture_path_(texture_path),
+    id_(0) {
 
 }
 
@@ -33,8 +34,8 @@ QPoint Entity::GetPosition() const {
   return position_;
 }
 
-void Entity::SetPosition(QPoint position) {
-  position_ = position;
+QPointF Entity::GetPositionF() const {
+  return QPointF(position_);
 }
 
 bool Entity::GetShouldBeRemoved() const {
@@ -51,6 +52,10 @@ bool Entity::StopsFire () const {
 
 QString Entity::GetTexturePath() const {
   return texture_path_;
+}
+
+int Entity::GetId() const {
+  return id_;
 }
 
 std::weak_ptr<World> Entity::GetWorld() const{
