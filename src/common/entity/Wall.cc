@@ -4,13 +4,13 @@
 namespace common {
 namespace entity {
 
-Wall::Wall(std::weak_ptr<World> world, QPoint position) :
-  Entity(world, position, true, true, "res/wall.png")
+Wall::Wall(QPoint position) :
+  Entity(position, true, true, "res/wall.png")
 {
 
 }
 
-void Wall::Update(int t) {
+void Wall::Update(std::weak_ptr<GameEngine> game_engine, int t) {
   (void) t;
 }
 

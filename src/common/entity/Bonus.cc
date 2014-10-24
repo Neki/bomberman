@@ -3,13 +3,13 @@
 namespace common {
 namespace entity {
 
-Bonus::Bonus(std::weak_ptr<World> world, QPoint position, QString texture_path) :
-  Entity(world, position, false, false, texture_path)
+Bonus::Bonus(QPoint position, QString texture_path) :
+  Entity(position, false, false, texture_path)
 {
 
 }
 
-void Bonus::Update(int t) {
+void Bonus::Update(std::weak_ptr<GameEngine> game_engine, int t) {
   (void)t;
 }
 

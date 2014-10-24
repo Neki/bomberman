@@ -4,7 +4,7 @@
 #include <memory>
 #include <QPoint>
 #include "Entity.h"
-#include "src/common/World.h"
+#include "src/common/GameEngine.h"
 
 #include <QPointF>
 #include <QTime>
@@ -15,7 +15,7 @@ namespace entity {
 class Character : public Entity {
 
   public:
-    Character(std::weak_ptr<World> world, QPoint position);
+    Character(QPoint position);
 
     unsigned int GetPower() const;
     QPointF GetCurrentSpeed() const;
@@ -24,7 +24,7 @@ class Character : public Entity {
     unsigned int GetNumberOfBombs() const;
     int GetBombDelay() const;
 
-    virtual void Update(int t);
+    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 

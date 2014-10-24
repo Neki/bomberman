@@ -4,7 +4,7 @@
 #include <memory>
 #include <QPoint>
 #include "Entity.h"
-#include "src/common/World.h"
+#include "src/common/GameEngine.h"
 
 namespace common {
 namespace entity {
@@ -12,9 +12,9 @@ namespace entity {
 class Block : public Entity{
 
   public:
-    Block(std::weak_ptr<World> world, QPoint position);
+    Block(QPoint position);
     
-    virtual void Update(int t);
+    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
 
     void HitByFire();
     /* Called when entity is hit by fire. */
