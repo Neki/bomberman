@@ -68,8 +68,16 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
     return;
   }
   quint32 packet_id = GetPacketId(stream);
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the packet ID";
+    return;
+  }
   VLOG(LOG_PACKET_LEVEL) << "Received datagram packet id: " << packet_id;
   quint8 packet_type = GetPacketType(stream);
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the packet type.";
+    return;
+  }
   switch(packet_type) {
     case kPingPacketId:
       VLOG(LOG_PACKET_LEVEL) << "The datagram is a ping packet.";
@@ -82,10 +90,15 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
 }
 
 bool NetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
+  assert(stream.status() == QDataStream::Ok);
   quint8 protocol_id;
   quint8 server_version;
   stream >> protocol_id;
   stream >> server_version;
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the protocol ID or version.";
+    return false;
+  }
   quint8 accepted_version = NetworkWorker::kClientVersion;
   quint8 accepted_protocol_id = NetworkWorker::kProtocolId;
   if(protocol_id != accepted_protocol_id) {
@@ -100,10 +113,15 @@ bool NetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
 }
 
 void NetworkWorker::ProcessPingPacket(QDataStream& stream) {
+  assert(stream.status() == QDataStream::Ok);
   quint32 packet_id;
   quint32 server_timestamp;
   stream >> packet_id;
   stream >> server_timestamp; // unused for now
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the ping packet contents.";
+    return;
+  }
   auto send_timestamp = ping_timestamps_.find(packet_id);
   if(send_timestamp == ping_timestamps_.end()) {
     LOG(WARNING) << "Received a ping response, but could not find when the question was sent.";
@@ -126,12 +144,14 @@ void NetworkWorker::UpdateRoundTripTime(quint32 send_timestamp) {
 }
 
 quint8 NetworkWorker::GetPacketType(QDataStream& stream) {
+  assert(stream.status() == QDataStream::Ok);
   quint8 packet_id;
   stream >> packet_id;
   return packet_id;
 }
 
 quint32 NetworkWorker::GetPacketId(QDataStream& stream) {
+  assert(stream.status() == QDataStream::Ok);
   quint32 packet_id;
   stream >> packet_id;
   return packet_id;
@@ -143,6 +163,7 @@ void NetworkWorker::SendPingPacket() {
   quint32 id = PrepareHeader(stream, kPingPacketId);
   ping_timestamps_[id] = game_timer_->GetTimestamp();
   stream << ping_timestamps_[id];
+  assert(stream.status() == QDataStream::Status::Ok);
   socket_.write(buffer);
   VLOG(9) << "Ping packet sent / timestamp = " << ping_timestamps_[id] << " / packet id = " << id;
 }
@@ -187,6 +208,7 @@ void NetworkWorker::AddEvent(std::unique_ptr<Event> event) {
 }
 
 quint32 NetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
+  assert(stream.status() == QDataStream::Ok);
   quint32 packet_id = GetNextPacketId();
   stream << kProtocolId << kClientVersion << client_id_ << packet_id << packet_type;
   return packet_id;
@@ -202,7 +224,16 @@ void NetworkWorker::CleanPingData() {
       ++it;
     }
   }
-
 }
+
+bool NetworkWorker::CheckStreamStatus(const QDataStream& stream) const {
+  if(stream.status() != QDataStream::Ok) {
+    LOG(WARNING) << "Deserialization stream status is not OK (code is: " << (int) stream.status() << "), the current message will be lost";
+    return false;
+  }
+  return true;
+}
+
+
 
 }

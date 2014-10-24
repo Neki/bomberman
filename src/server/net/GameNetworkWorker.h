@@ -64,6 +64,8 @@ class GameNetworkWorker : public QObject {
     void EmitReadyEvents();
     void SendPongPacket(const Client& client, quint32 packet_id);
 
+    bool CheckStreamStatus(const QDataStream& stream) const;
+
     friend class EmitterVisitor;
     void EmitEvent(ClientEvent<BombEvent> event);
     void EmitEvent(ClientEvent<MoveEvent> event);

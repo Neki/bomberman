@@ -2,6 +2,7 @@
 #include "easylogging++.h"
 #include "src/common/net/EventId.h"
 #include "src/common/net/Deserializer.h"
+#include <cassert>
 
 namespace net {
 
@@ -44,6 +45,10 @@ void GameNetworkWorker::ProcessDatagram(const QByteArray& datagram) {
     return;
   }
   quint8 client_id = GetClientId(stream);
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the client id.";
+    return;
+  }
   VLOG(5) << "Datagram comes from client " << client_id;
   auto it = clients_.find(client_id);
   if(it == clients_.end()) {
@@ -52,8 +57,16 @@ void GameNetworkWorker::ProcessDatagram(const QByteArray& datagram) {
   }
   Client client = it->second;
   quint32 packet_id = GetPacketId(stream);
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the packet id.";
+    return;
+  }
   VLOG(5) << "Received datagram packet id: " << packet_id;
   quint8 packet_type = GetPacketType(stream);
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the packet type.";
+    return;
+  }
   switch(packet_type) {
     case kPingPacketId:
       VLOG(5) << "The datagram is a ping packet.";
@@ -70,10 +83,17 @@ void GameNetworkWorker::ProcessDatagram(const QByteArray& datagram) {
 }
 
 bool GameNetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
+  assert(stream.status() == QDataStream::Ok);
   quint8 protocol_id;
   quint8 server_version;
   stream >> protocol_id;
   stream >> server_version;
+
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the protocol and version.";
+    return false;
+  }
+
   quint8 accepted_version = GameNetworkWorker::kServerVersion;
   quint8 accepted_protocol_id = GameNetworkWorker::kProtocolId;
   if(protocol_id != accepted_protocol_id) {
@@ -88,18 +108,21 @@ bool GameNetworkWorker::CheckProtocolAndVersion(QDataStream &stream) {
 }
 
 quint8 GameNetworkWorker::GetPacketType(QDataStream& stream) {
+  assert(stream.status() == QDataStream::Ok);
   quint8 packet_id;
   stream >> packet_id;
   return packet_id;
 }
 
 quint32 GameNetworkWorker::GetPacketId(QDataStream& stream) {
+  assert(stream.status() == QDataStream::Ok);
   quint32 packet_id;
   stream >> packet_id;
   return packet_id;
 }
 
 quint8 GameNetworkWorker::GetClientId(QDataStream& stream) {
+  assert(stream.status() == QDataStream::Ok);
   quint8 client_id;
   stream >> client_id;
   return client_id;
@@ -111,11 +134,21 @@ void GameNetworkWorker::ProcessPingPacket(QDataStream& stream, const Client& cli
 }
 
 void GameNetworkWorker::ProcessEventPacket(QDataStream& stream, const Client& client, quint32 packet_id) {
+  assert(stream.status() == QDataStream::Ok);
   (void) packet_id;
   quint8 events_size;
   stream >> events_size;
+
+  if(!CheckStreamStatus(stream)) {
+    LOG(WARNING) << "Could not deserialize the number of events.";
+    return;
+  }
+
   for(int i = 0; i < events_size; i++) {
     std::unique_ptr<InGameEvent> event = Deserializer::DeserializeInGameEvent(stream);
+    if(stream.status() != QDataStream::Ok) {
+      LOG(WARNING) << "Stream is in an invalid state after having deserialized the event. Continuing anyway.";
+    }
     if(event.get() == nullptr) {
       LOG(WARNING) << "Could not deserialize the received event. Dropping it.";
       return;
@@ -156,12 +189,14 @@ void GameNetworkWorker::SendPongPacket(const Client& client, quint32 packet_id) 
   stream << packet_id;
   quint32 timestamp = game_timer_->GetTimestamp();
   stream << timestamp;
+  assert(stream.status() == QDataStream::Ok);
   socket_.writeDatagram(buffer, client.GetAddress(), client.GetPort());
   VLOG(9) << "Answered pong with timestamp " << timestamp << " to the ping with id " << packet_id;
   VLOG(9) << "Client was at address " << client.GetAddress().toString().toStdWString() << ":" << client.GetPort();
 }
 
 void GameNetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
+  assert(stream.status() == QDataStream::Ok);
   stream << kProtocolId;
   stream << kServerVersion;
   stream << GetNextPacketId();
@@ -187,5 +222,14 @@ void GameNetworkWorker::EmitEvent(ClientEvent<PlayerLeftEvent> event) {
   VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: player left event ready / id: " << event.getEventData().GetId();
   emit PlayerLeftEventReceived(event);
 }
+
+bool GameNetworkWorker::CheckStreamStatus(const QDataStream& stream) const {
+  if(stream.status() != QDataStream::Ok) {
+    LOG(WARNING) << "Deserialization stream status is not OK (code is: " << (int) stream.status() << "), the current message will be lost.";
+    return false;
+  }
+  return true;
+}
+
 
 }
