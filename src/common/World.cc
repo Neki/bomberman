@@ -2,15 +2,13 @@
 #include "World.h"
 #include "src/common/entity/Entity.h"
 #include "src/common/entity/Character.h"
-#include "GameEngine.h"
 #include <cassert>
 
 namespace common {
 
 
-World::World(std::weak_ptr<GameEngine> game_engine, int width, int height)
-  : game_engine_(game_engine),
-    width_(width),
+World::World(int width, int height)
+  : width_(width),
     height_(height),
     entities_(),
     characters_() {
@@ -39,10 +37,6 @@ std::vector<std::unique_ptr<entity::Character> >::const_iterator World::Characte
 
 std::vector<std::unique_ptr<entity::Character> >::const_iterator World::CharacterIteratorEnd() {
   return characters_.cend();
-}
-
-std::weak_ptr<GameEngine> World::GetGameEngine() const {
-  return game_engine_;
 }
 
 int World::GetWidth() const {

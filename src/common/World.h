@@ -16,9 +16,7 @@ typedef std::vector<std::vector<std::vector<std::unique_ptr<entity::Entity> > > 
 
 class World {
   public:
-    World(std::weak_ptr<GameEngine> game_engine, int width, int height);
-
-    std::weak_ptr<GameEngine> GetGameEngine() const;
+    World(int width, int height);
 
     int GetWidth() const;
     int GetHeight() const;
@@ -35,7 +33,6 @@ class World {
     std::vector<std::unique_ptr<entity::Character> >::const_iterator CharacterIteratorEnd();
     
   private:
-    std::weak_ptr<GameEngine> game_engine_;
     const int width_; // Width of the world eg number of blocks
     const int height_;
     grid_t entities_;
