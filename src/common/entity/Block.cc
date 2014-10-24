@@ -5,8 +5,7 @@ namespace common {
 namespace entity {
 
 Block::Block(std::weak_ptr<World> world, QPoint position) :
-  Entity(world, position, true, true)
-{
+  Entity(world, position, true, true, "res/block.png") {
 
 }
 

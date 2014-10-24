@@ -3,8 +3,8 @@
 namespace common {
 namespace entity {
 
-Bonus::Bonus(std::weak_ptr<World> world, QPoint position) :
-  Entity(world, position, false, false)
+Bonus::Bonus(std::weak_ptr<World> world, QPoint position, QString texture_path) :
+  Entity(world, position, false, false, texture_path)
 {
 
 }
