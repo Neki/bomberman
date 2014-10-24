@@ -12,8 +12,15 @@ World::World(std::weak_ptr<GameEngine> game_engine, int width, int height)
   : game_engine_(game_engine),
     width_(width),
     height_(height),
-    entities_(width, std::vector<std::vector<std::unique_ptr<entity::Entity> > >(height)),
+    entities_(),
     characters_() {
+  for (int x = 0; x < width_; x++) {
+    entities_[x] = std::vector<std::vector<std::unique_ptr<entity::Entity> > >();
+    for (int y = 0; y < height_; y++) {
+      entities_[x][y] = std::vector<std::unique_ptr<entity::Entity> >();
+    }
+  }
+  
 }
 
 std::vector<std::unique_ptr<entity::Entity> >::const_iterator World::IteratorAtBegin(QPoint a) {
