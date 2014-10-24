@@ -10,7 +10,8 @@ Entity::Entity(std::weak_ptr<World> world, QPoint position, bool is_solid, bool 
     stops_fire_(stops_fire),
     should_be_removed_(false),
     world_(world),
-    texture_path_(texture_path) {
+    texture_path_(texture_path),
+    id_(0) {
 
 }
 
@@ -51,6 +52,10 @@ bool Entity::StopsFire () const {
 
 QString Entity::GetTexturePath() const {
   return texture_path_;
+}
+
+int Entity::GetId() const {
+  return id_;
 }
 
 std::weak_ptr<World> Entity::GetWorld() const{

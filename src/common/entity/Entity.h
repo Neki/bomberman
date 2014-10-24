@@ -38,6 +38,7 @@ class Entity {
     virtual QPointF GetPositionF() const;
     bool GetShouldBeRemoved() const;
     virtual QString GetTexturePath() const;
+    int GetId() const;
 	
   protected:
     std::weak_ptr<World> GetWorld() const;
@@ -49,6 +50,7 @@ class Entity {
   private:
 	  std::weak_ptr<World> world_;
     QString texture_path_;
+    int id_;
 };
 
 }
