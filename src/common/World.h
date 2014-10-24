@@ -36,8 +36,8 @@ class World {
     
   private:
     std::weak_ptr<GameEngine> game_engine_;
-    int width_; // Width of the world eg number of blocks
-    int height_;
+    const int width_; // Width of the world eg number of blocks
+    const int height_;
     grid_t entities_;
     std::vector<std::unique_ptr<entity::Character> > characters_;
 };
