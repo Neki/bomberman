@@ -5,11 +5,12 @@
 #include <QPoint>
 #include <QString>
 #include "src/common/World.h"
-#include "src/common/GameEngine.h"
-class Character;
+#include "src/common/GameEngine.h
 
 namespace common {
 namespace entity {
+
+class Character;
 
 class Entity {
 
