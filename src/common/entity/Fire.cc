@@ -25,6 +25,7 @@ void Fire::Update(std::weak_ptr<GameEngine> game_engine, int t)
 /* Method to be called at every frame.
    t : duration of the frame in ms */
 {
+  (void)game_engine;
 	(void) t;
   if (QTime::currentTime() >= this->GetDisappearingTime()) {// TODO : change to use the game clock
     should_be_removed_ = true;

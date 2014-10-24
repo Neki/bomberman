@@ -28,7 +28,7 @@ class Character : public Entity {
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
-    void HitByFire();
+    void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire. */
 
   private:

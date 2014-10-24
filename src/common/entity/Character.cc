@@ -45,14 +45,16 @@ void Character::moveTo(QPoint t, int speed) {
   (void) speed;
 }
 
-void Character::HitByFire() {
+void Character::HitByFire(std::weak_ptr<GameEngine> game_engine) {
   /* Called when entity is hit by fire. */
+  (void) game_engine;
 	should_be_removed_ = true;
 }
 
 void Character::Update(std::weak_ptr<GameEngine> game_engine, int t) {
 /* Method to be called at every frame.
    t : duration of the frame in ms */
+  (void)game_engine;
   (void) t;
 	// TODO : Update position
 }

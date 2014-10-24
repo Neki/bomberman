@@ -15,7 +15,7 @@ class Bonus : public Entity {
     
     virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
     
-    void HitByFire();
+    void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire. */
 
   private:

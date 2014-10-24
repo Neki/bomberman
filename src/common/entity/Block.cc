@@ -10,12 +10,14 @@ Block::Block(QPoint position) :
 }
 
 void Block::Update(std::weak_ptr<GameEngine> game_engine, int t) {
-  (void)t;
+  (void) game_engine;
+  (void) t;
 }
 
-void Block::HitByFire() {
+void Block::HitByFire(std::weak_ptr<GameEngine> game_engine) {
   /* Called when entity is hit by fire. */
   // TODO : add bonus creation
+  (void) game_engine;
   should_be_removed_ = true;
 }
 
