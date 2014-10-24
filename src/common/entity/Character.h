@@ -20,7 +20,7 @@ class Character : public Entity {
     unsigned int GetPower() const;
     QPointF GetCurrentSpeed() const;
     float GetSpeed() const;
-    QPointF GetExactPosition() const; // in tile
+    QPointF GetPositionF() const; // in tile
     unsigned int GetNumberOfBombs() const;
     int GetBombDelay() const;
 
@@ -37,7 +37,7 @@ class Character : public Entity {
     float speed_; // nominal speed
     QPointF exact_position_;
     unsigned int number_of_bombs_;
-	int bomb_delay_;
+  	int bomb_delay_;
     
     void moveTo(QPoint t, int speed);
       

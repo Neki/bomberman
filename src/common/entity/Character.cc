@@ -14,7 +14,6 @@ Character::Character(std::weak_ptr<World> world, QPoint position)
     exact_position_(position),
     number_of_bombs_(1),
     bomb_delay_(300) {// TODO: correct
-
 }
 
 unsigned int Character::GetPower() const
@@ -32,7 +31,7 @@ float Character::GetSpeed() const
 	return speed_;
 }
 
-QPointF Character::GetExactPosition() const
+QPointF Character::GetPositionF() const
 {
 	return exact_position_;
 }
