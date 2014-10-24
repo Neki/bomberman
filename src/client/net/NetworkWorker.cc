@@ -226,7 +226,7 @@ void NetworkWorker::CleanPingData() {
   }
 }
 
-bool NetworkWorker::CheckStreamStatus(const QDataStream& stream) {
+bool NetworkWorker::CheckStreamStatus(const QDataStream& stream) const {
   if(stream.status() != QDataStream::Ok) {
     LOG(WARNING) << "Deserialization stream status is not OK (code is: " << (int) stream.status() << "), the current message will be lost";
     return false;
