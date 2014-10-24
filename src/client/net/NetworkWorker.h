@@ -102,6 +102,8 @@ class NetworkWorker : public QObject {
     void ProcessPingPacket(QDataStream& stream);
     void UpdateRoundTripTime(quint32 send_time);
 
+    bool CheckStreamStatus(const QDataStream& stream);
+
 };
 
 }
