@@ -14,7 +14,7 @@ namespace entity {
 class Fire : public Entity{
 
   public:
-    Fire(std::weak_ptr<World> world, QPoint position);
+    Fire(World* world, QPoint position);
 
     QTime GetSetTime() const;
     QTime GetDisappearingTime() const;

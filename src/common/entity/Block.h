@@ -12,7 +12,7 @@ namespace entity {
 class Block : public Entity{
 
   public:
-    Block(std::weak_ptr<World> world, QPoint position);
+    Block(World* world, QPoint position);
     
     virtual void Update(int t);
 

@@ -14,7 +14,7 @@ namespace entity {
 class Entity {
 
   public:
-    Entity(std::weak_ptr<World> world, QPoint position, bool is_solid, bool stops_fire, QString texture_path = "");
+    Entity(World* world, QPoint position, bool is_solid, bool stops_fire, QString texture_path = "");
     virtual ~Entity();
 
     virtual void Update(int t) = 0;
@@ -39,13 +39,13 @@ class Entity {
     QString GetTexturePath() const;
 	
   protected:
-    std::weak_ptr<World> GetWorld() const;
+    World* GetWorld() const;
     bool is_solid_;
     bool stops_fire_;
     bool should_be_removed_; // true if the entity should be removed by the game engine by the end of the frame
 
   private:
-	std::weak_ptr<World> world_;
+	World* world_;
 	QPoint position_; // Entity position in the world's grid
   QString texture_path_;
 };

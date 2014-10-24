@@ -4,7 +4,7 @@
 namespace common {
 namespace entity {
 
-Wall::Wall(std::weak_ptr<World> world, QPoint position) :
+  Wall::Wall(World* world, QPoint position) :
   Entity(world, position, true, true)
 {
 

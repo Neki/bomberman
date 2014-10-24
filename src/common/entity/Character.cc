@@ -6,7 +6,7 @@
 namespace common {
 namespace entity {
 
-Character::Character(std::weak_ptr<World> world, QPoint position)
+  Character::Character(World* world, QPoint position)
   : Entity(world, position, false, false),
     power_(1), // bomb power in tiles
     current_speed_(), // in tiles per second. might be temporary superior to the nominal speed

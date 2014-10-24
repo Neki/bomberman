@@ -12,7 +12,7 @@ namespace entity {
 class Bonus : public Entity {
 
   public:
-    Bonus(std::weak_ptr<World> world, QPoint position);
+    Bonus(World* world, QPoint position);
     
     virtual void Update(int t);
     

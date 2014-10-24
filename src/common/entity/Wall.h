@@ -12,7 +12,7 @@ namespace entity {
 class Wall : public Entity{
 
   public:
-    Wall(std::weak_ptr<World> world, QPoint position);
+    Wall(World* world, QPoint position);
     virtual void Update(int t);
 
   private:

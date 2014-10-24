@@ -6,7 +6,7 @@
 namespace common {
 namespace entity {
 
-Bomb::Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character> bomber):
+  Bomb::Bomb(World* world, QPoint position, std::weak_ptr<Character> bomber) :
   Entity(world, position, true, false),
   bomber_(bomber)
 {

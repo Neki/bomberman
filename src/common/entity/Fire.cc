@@ -5,7 +5,7 @@
 namespace common {
 namespace entity {
 
-Fire::Fire(std::weak_ptr<World> world, QPoint position) :
+  Fire::Fire(World* world, QPoint position) :
   Entity(world, position, false, false)
 {  
   set_time_ = QTime::currentTime(); // TODO : change to use the game clock
