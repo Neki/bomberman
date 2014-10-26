@@ -42,8 +42,8 @@ class GameNetworkWorker : public QObject {
     std::map<int, Client> clients_;
     QUdpSocket socket_;
     quint32 last_packet_id_;
-    std::map<quint32, std::unique_ptr<BaseClientEvent>> event_cache_;
-    quint32 last_event_id_;
+    std::map<quint8, std::map<quint32, std::unique_ptr<BaseClientEvent>>> event_cache_;
+    std::map<quint8, quint32> last_event_ids_;
 
     static const unsigned char kServerVersion = 0x01;
     static const unsigned char kProtocolId = 0xBC;
@@ -61,7 +61,7 @@ class GameNetworkWorker : public QObject {
     void ProcessPingPacket(QDataStream& stream, const Client& client, quint32 packet_id);
     void ProcessEventPacket(QDataStream& stream, const Client& client, quint32 packet_id);
     void HandlePendingEvent(std::unique_ptr<BaseClientEvent> event);
-    void EmitReadyEvents();
+    void EmitReadyEvents(quint8 client_id);
     void SendPongPacket(const Client& client, quint32 packet_id);
 
     bool CheckStreamStatus(const QDataStream& stream) const;
