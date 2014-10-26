@@ -9,13 +9,13 @@ namespace net {
 GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer, std::vector<Client> clients)
   : port_(port),
     game_timer_(game_timer),
-    last_packet_id_(1),
-    last_event_id_(1) {
+    last_packet_id_(1) {
   QObject::connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
   QObject::connect(&socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(SocketError(QAbstractSocket::SocketError)));
   socket_.bind( port_);
   for(Client client : clients) {
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
+    last_event_ids_[client.GetId()] = 1;
   }
   LOG(DEBUG) << "In game network worker initialized and ready on port " << port_;
 }
@@ -49,13 +49,13 @@ void GameNetworkWorker::ProcessDatagram(const QByteArray& datagram) {
     LOG(WARNING) << "Could not deserialize the client id.";
     return;
   }
-  VLOG(5) << "Datagram comes from client " << client_id;
   auto it = clients_.find(client_id);
   if(it == clients_.end()) {
-    LOG(WARNING) << "Got a datagram with client id " << client_id << " that does not match a registered client, dropping it.";
+    LOG(WARNING) << "Got a datagram with client id " << (int) client_id << " that does not match a registered client, dropping it.";
     return;
   }
   Client client = it->second;
+  VLOG(5) << "Datagram comes from client " << client.GetId();
   quint32 packet_id = GetPacketId(stream);
   if(!CheckStreamStatus(stream)) {
     LOG(WARNING) << "Could not deserialize the packet id.";
@@ -154,7 +154,7 @@ void GameNetworkWorker::ProcessEventPacket(QDataStream& stream, const Client& cl
       return;
     }
     VLOG(9) << "Deserialized event has ID " << event->GetId();
-    if(event->GetId() < last_event_id_) {
+    if(event->GetId() < last_event_ids_[client.GetId()]) {
       VLOG(8) << "The client has sent an event that has already been processed (according to its ID).";
       return;
     }
@@ -165,19 +165,21 @@ void GameNetworkWorker::ProcessEventPacket(QDataStream& stream, const Client& cl
 
 // TODO: defends against a client attacking the server by sending bad events id
 void GameNetworkWorker::HandlePendingEvent(std::unique_ptr<BaseClientEvent> event) {
-  event_cache_.insert(std::pair<quint32, std::unique_ptr<BaseClientEvent>>(event->GetEvent()->GetId(), std::move(event)));
-  EmitReadyEvents();
+  quint8 client_id = event->GetClient().GetId();
+  auto pair = std::pair<const quint32, std::unique_ptr<BaseClientEvent>>(event->GetEvent()->GetId(), std::move(event));
+  event_cache_[client_id].insert(std::move(pair));
+  EmitReadyEvents(client_id);
 }
 
-void GameNetworkWorker::EmitReadyEvents() {
-  auto it = event_cache_.begin();
-  while(it != event_cache_.end()) {
-    it = event_cache_.find(last_event_id_);
-    if(it != event_cache_.end()) {
+void GameNetworkWorker::EmitReadyEvents(quint8 client_id) {
+  auto it = event_cache_[client_id].begin();
+  while(it != event_cache_[client_id].end()) {
+    it = event_cache_[client_id].find(last_event_ids_[client_id]);
+    if(it != event_cache_[client_id].end()) {
       EmitterVisitor visitor(this, it->second.get());
       it->second->GetEvent()->Accept(visitor);
       event_cache_.erase(it->first);
-      last_event_id_++;
+      last_event_ids_[client_id]++;
     }
   }
 }
@@ -209,17 +211,17 @@ quint32 GameNetworkWorker::GetNextPacketId() {
 }
 
 void GameNetworkWorker::EmitEvent(ClientEvent<BombEvent> event) {
-  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: bomb event ready / id: " << event.getEventData().GetId();
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: bomb event ready / client id: " << (int) event.getClientId() << " / id: " << event.getEventData().GetId();
   emit BombEventReceived(event);
 }
 
 void GameNetworkWorker::EmitEvent(ClientEvent<MoveEvent> event) {
-  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: move event ready / id: " << event.getEventData().GetId();
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: move event ready / client id: " << (int) event.getClientId() << " / id: " << event.getEventData().GetId();
   emit MoveEventReceived(event);
 }
 
 void GameNetworkWorker::EmitEvent(ClientEvent<PlayerLeftEvent> event) {
-  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: player left event ready / id: " << event.getEventData().GetId();
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: player left event ready / client id: " << (int) event.getClientId() << " / id: " << event.getEventData().GetId();
   emit PlayerLeftEventReceived(event);
 }
 
