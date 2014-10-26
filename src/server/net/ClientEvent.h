@@ -23,12 +23,20 @@ namespace net {
           server_timestamp_(server_timestamp) {
       }
 
-      T getEventData() const {
+      T GetEventData() const {
         return event_;
       }
 
-      quint8 getClientId() const {
+      quint32 GetEventId() const {
+        return event_.GetId();
+      }
+
+      quint8 GetClientId() const {
         return client_.GetId();
+      }
+
+      Client GetClient() const {
+        return client_;
       }
 
     private:

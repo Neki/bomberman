@@ -211,17 +211,17 @@ quint32 GameNetworkWorker::GetNextPacketId() {
 }
 
 void GameNetworkWorker::EmitEvent(ClientEvent<BombEvent> event) {
-  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: bomb event ready / client id: " << (int) event.getClientId() << " / id: " << event.getEventData().GetId();
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: bomb event ready / client id: " << (int) event.GetClientId() << " / id: " << event.GetEventData().GetId();
   emit BombEventReceived(event);
 }
 
 void GameNetworkWorker::EmitEvent(ClientEvent<MoveEvent> event) {
-  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: move event ready / client id: " << (int) event.getClientId() << " / id: " << event.getEventData().GetId();
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: move event ready / client id: " << (int) event.GetClientId() << " / id: " << event.GetEventData().GetId();
   emit MoveEventReceived(event);
 }
 
 void GameNetworkWorker::EmitEvent(ClientEvent<PlayerLeftEvent> event) {
-  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: player left event ready / client id: " << (int) event.getClientId() << " / id: " << event.getEventData().GetId();
+  VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: player left event ready / client id: " << (int) event.GetClientId() << " / id: " << event.GetEventData().GetId();
   emit PlayerLeftEventReceived(event);
 }
 
