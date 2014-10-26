@@ -3,7 +3,7 @@
 
 #include <QString>
 #include "Entity.h"
-#include "src/common/World.h"
+#include "src/common/GameEngine.h"
 
 namespace common {
 namespace entity {
@@ -11,11 +11,11 @@ namespace entity {
 class Bonus : public Entity {
 
   public:
-    Bonus(std::weak_ptr<World> world, QPoint position, QString texture_path = "");
+    Bonus(QPoint position, QString texture_path = "");
     
-    virtual void Update(int t);
+    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
     
-    void HitByFire();
+    void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire. */
 
   private:

@@ -4,18 +4,20 @@
 namespace common {
 namespace entity {
 
-Block::Block(std::weak_ptr<World> world, QPoint position) :
-  Entity(world, position, true, true, "res/block.png") {
+Block::Block(QPoint position) :
+  Entity(position, true, true, "res/block.png") {
 
 }
 
-void Block::Update(int t) {
-  (void)t;
+void Block::Update(std::weak_ptr<GameEngine> game_engine, int t) {
+  (void) game_engine;
+  (void) t;
 }
 
-void Block::HitByFire() {
+void Block::HitByFire(std::weak_ptr<GameEngine> game_engine) {
   /* Called when entity is hit by fire. */
   // TODO : add bonus creation
+  (void) game_engine;
   should_be_removed_ = true;
 }
 

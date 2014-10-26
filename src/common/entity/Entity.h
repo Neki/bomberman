@@ -3,8 +3,6 @@
 
 #include <memory>
 #include <QPoint>
-#include <QString>
-#include "src/common/World.h"
 #include "src/common/GameEngine.h"
 
 namespace common {
@@ -15,14 +13,14 @@ class Character;
 class Entity {
 
   public:
-    Entity(std::weak_ptr<World> world, QPoint position, bool is_solid, bool stops_fire, QString texture_path = "");
+    Entity(QPoint position, bool is_solid, bool stops_fire, QString texture_path = "");
     virtual ~Entity();
 
-    virtual void Update(int t) = 0;
+    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t) = 0;
     /* Method called at every frame.
 	   t : duration of the frame in ms */
 
-    virtual void HitByFire() {};
+    virtual void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire */
 
     virtual bool IsSolid() const;
@@ -41,14 +39,12 @@ class Entity {
     int GetId() const;
 	
   protected:
-    std::weak_ptr<World> GetWorld() const;
     QPoint position_; // Entity position in the world's grid
     bool is_solid_;
     bool stops_fire_;
     bool should_be_removed_; // true if the entity should be removed by the game engine by the end of the frame
 
   private:
-	  std::weak_ptr<World> world_;
     QString texture_path_;
     int id_;
 };

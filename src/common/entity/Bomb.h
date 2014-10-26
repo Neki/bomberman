@@ -6,7 +6,7 @@
 #include <QTime>
 
 #include "Entity.h"
-#include "src/common/World.h"
+#include "src/common/GameEngine.h"
 #include "Character.h"
 
 namespace common {
@@ -15,21 +15,21 @@ namespace entity {
 class Bomb : public Entity{
 
   public:
-    Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character> bomber);
+    Bomb(QPoint position, std::weak_ptr<Character> bomber);
 
     std::weak_ptr<Character> GetBomber() const;
     QTime GetSetTime() const;
     QTime GetExplosionTime() const;
 
-    virtual void HitByFire();
+    virtual void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire. */
 	  
-    virtual void Update(int t);
+    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
   private:
-    void explode();
+    void explode(std::weak_ptr<GameEngine> game_engine);
   
     std::weak_ptr<Character> bomber_;
     QTime set_time_;

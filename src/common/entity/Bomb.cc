@@ -6,8 +6,8 @@
 namespace common {
 namespace entity {
 
-Bomb::Bomb(std::weak_ptr<World> world, QPoint position, std::weak_ptr<Character> bomber)
- :  Entity(world, position, true, false, "res/bomb.png"),
+Bomb::Bomb(QPoint position, std::weak_ptr<Character> bomber)
+ :  Entity(position, true, false, "res/bomb.png"),
     bomber_(bomber) {
   set_time_ = QTime::currentTime(); // TODO : change to use the game clock
   std::shared_ptr<Character> s_bomber(bomber_.lock());
@@ -29,15 +29,13 @@ QTime Bomb::GetExplosionTime() const {
 	return explosion_time_;
 }
 
-void Bomb::HitByFire() {
+void Bomb::HitByFire(std::weak_ptr<GameEngine> game_engine) {
   /* Called when entity is hit by fire. */
-  explode();
+  explode(game_engine);
 }
 
-void Bomb::explode() {
-  std::shared_ptr<World> s_world(GetWorld().lock());
-  if (s_world) {
-	std::shared_ptr<GameEngine> s_game_engine(s_world->GetGameEngine().lock());
+void Bomb::explode(std::weak_ptr<GameEngine> game_engine) {
+	std::shared_ptr<GameEngine> s_game_engine(game_engine.lock());
 	if (s_game_engine) {
 	  s_game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(0, -power_));
 	  s_game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(power_, 0));
@@ -46,20 +44,17 @@ void Bomb::explode() {
 	} else {
 	  // TODO: Log errors
 	}
-  } else {
-	  // TODO: Log errors
-  }  
 
   // remove the bomb
   should_be_removed_ = true;
 }
 
-void Bomb::Update(int t) {
+void Bomb::Update(std::weak_ptr<GameEngine> game_engine, int t) {
 /* Method to be called at every frame.
    t : duration of the frame in ms */
   (void) t;
   if (QTime::currentTime() >= this->GetExplosionTime()) {// TODO : change to use the game clock
-    this->explode();
+    this->explode(game_engine);
   }
 }
 

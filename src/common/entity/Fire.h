@@ -4,7 +4,7 @@
 #include <memory>
 #include <QPoint>
 #include "Entity.h"
-#include "src/common/World.h"
+#include "src/common/GameEngine.h"
 
 #include <QTime>
 
@@ -14,12 +14,12 @@ namespace entity {
 class Fire : public Entity{
 
   public:
-    Fire(std::weak_ptr<World> world, QPoint position);
+    Fire(QPoint position);
 
     QTime GetSetTime() const;
     QTime GetDisappearingTime() const;
 
-    virtual void Update(int t);
+    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 

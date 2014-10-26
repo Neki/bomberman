@@ -6,8 +6,8 @@
 namespace common {
 namespace entity {
 
-Character::Character(std::weak_ptr<World> world, QPoint position)
-  : Entity(world, position, false, false, "res/default_character.png"),
+Character::Character(QPoint position)
+  : Entity(position, false, false, "res/default_character.png"),
     power_(1), // bomb power in tiles
     current_speed_(), // in tiles per second. might be temporary superior to the nominal speed
     speed_(), // nominal speed
@@ -45,14 +45,16 @@ void Character::moveTo(QPoint t, int speed) {
   (void) speed;
 }
 
-void Character::HitByFire() {
+void Character::HitByFire(std::weak_ptr<GameEngine> game_engine) {
   /* Called when entity is hit by fire. */
+  (void) game_engine;
 	should_be_removed_ = true;
 }
 
-void Character::Update(int t) {
+void Character::Update(std::weak_ptr<GameEngine> game_engine, int t) {
 /* Method to be called at every frame.
    t : duration of the frame in ms */
+  (void)game_engine;
   (void) t;
 	// TODO : Update position
 }
