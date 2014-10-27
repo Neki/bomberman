@@ -13,8 +13,9 @@ namespace net {
 class MoveEvent : public InGameEvent {
 
   public:
-    MoveEvent(QPoint position, Direction getDirection, quint32 id, quint64 timestamp);
+    MoveEvent(QPoint position, QPoint destination, Direction direction, quint32 id, quint64 timestamp);
     Direction GetDirection() const;
+    QPoint GetDestination() const;
     QPoint GetPosition() const;
 
     void Serialize(QDataStream& stream) const;
@@ -26,6 +27,7 @@ class MoveEvent : public InGameEvent {
   private:
     QPoint position_;
     Direction direction_;
+    QPoint destination_;
 
 };
 
