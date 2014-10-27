@@ -28,7 +28,7 @@ void MoveEvent::Serialize(QDataStream& stream) const {
   SerializeBaseEvent(stream);
   stream << GetPosition();
   stream << GetDestination();
-  stream << GetDirection();
+  stream << (quint8) GetDirection();
 }
 
 void MoveEvent::Accept(GameEventVisitor& visitor) {

@@ -63,7 +63,7 @@ MoveEvent Deserializer::DeserializeMoveEvent(QDataStream& stream) {
   Direction direction;
   stream >> position;
   stream >> destination;
-  int direction_int;
+  quint8 direction_int;
   stream >> direction_int;
   switch(direction_int) {
     case Direction::UP:
