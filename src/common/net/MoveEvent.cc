@@ -4,10 +4,11 @@
 namespace common {
 namespace net {
 
-MoveEvent::MoveEvent(QPoint position, Direction direction, quint32 id, quint64 timestamp) :
+MoveEvent::MoveEvent(QPoint position, QPoint destination, Direction direction, quint32 id, quint64 timestamp) :
     InGameEvent(id, timestamp),
     position_(position),
-    direction_(direction) {
+    direction_(direction),
+    destination_(destination) {
 }
 
 Direction MoveEvent::GetDirection() const {
@@ -18,11 +19,16 @@ QPoint MoveEvent::GetPosition() const {
   return position_;
 }
 
+QPoint MoveEvent::GetDestination() const {
+  return destination_;
+}
+
 void MoveEvent::Serialize(QDataStream& stream) const {
   stream << (quint32) EventId::kMoveEventId;
   SerializeBaseEvent(stream);
   stream << GetPosition();
-  stream << GetDirection();
+  stream << GetDestination();
+  stream << (quint8) GetDirection();
 }
 
 void MoveEvent::Accept(GameEventVisitor& visitor) {

@@ -59,9 +59,11 @@ BombEvent Deserializer::DeserializeBombEvent(QDataStream& stream) {
 MoveEvent Deserializer::DeserializeMoveEvent(QDataStream& stream) {
   BaseEventData data = DeserializeBaseEvent(stream);
   QPoint position;
+  QPoint destination;
   Direction direction;
   stream >> position;
-  int direction_int;
+  stream >> destination;
+  quint8 direction_int;
   stream >> direction_int;
   switch(direction_int) {
     case Direction::UP:
@@ -81,7 +83,7 @@ MoveEvent Deserializer::DeserializeMoveEvent(QDataStream& stream) {
       // TODO ERROR
        break;
   }
-  return MoveEvent(position, direction, data.id, data.timestamp);
+  return MoveEvent(position, destination, direction, data.id, data.timestamp);
 }
 
 PlayerJoinedEvent Deserializer::DeserializePlayerJoinedEvent(QDataStream& stream) {

@@ -14,7 +14,7 @@ class SerializationTest : public testing::Test {
     SerializationTest()
       :  testing::Test(),
          bomb_event_(common::net::BombEvent(QPoint(1,3), 20, 20)),
-         move_event_(common::net::MoveEvent(QPoint(0,8), Direction::LEFT, 20, 25)),
+         move_event_(common::net::MoveEvent(QPoint(0,8), QPoint(0,9), Direction::LEFT, 20, 25)),
          joined_event_(common::net::PlayerJoinedEvent(QString("The mad bomber"), 20, 25)),
          left_event_(common::net::PlayerLeftEvent(common::net::QuitReason::TIMEOUT, 15, 23)),
          admin_event_(common::net::SetAdminEvent(15, 23)) {
@@ -86,7 +86,7 @@ TEST(InGameSerializationTest, InGameEvent) {
   QDataStream in(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   QDataStream out(&buffer, QIODevice::OpenModeFlag::ReadOnly);
   std::unique_ptr<common::net::InGameEvent> bomb_event(new common::net::BombEvent(QPoint(5,5), 12, 45));
-  std::unique_ptr<common::net::InGameEvent> move_event(new common::net::MoveEvent(QPoint(5,5), Direction::UP, 45, 42));
+  std::unique_ptr<common::net::InGameEvent> move_event(new common::net::MoveEvent(QPoint(5,5), QPoint(0,9), Direction::UP, 45, 42));
   std::unique_ptr<common::net::InGameEvent> left_event(new common::net::PlayerLeftEvent(common::net::QuitReason::LEFT_GAME, 45, 42));
   in << *bomb_event.get();
   EXPECT_EQ(*bomb_event.get(), *Deserializer::DeserializeInGameEvent(out).get());
