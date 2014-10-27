@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SRC_CLIENT_MAINWINDOW_H
+#define SRC_CLIENT_MAINWINDOW_H
 
 #include "ui_mainwindow.h"
 #include <memory>
@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QWidget>
 #include "Board.h"
+#include "ServerHandler.h"
 
 class MainWindow : public QMainWindow
 {
@@ -18,16 +19,16 @@ public:
 	~MainWindow();
 	void Start();
 
-	public slots:
+public slots:
 	void Timer();
 	void StartNewGame();
 	void SetScore(float score);
 	void SetKills(int kills);
 	void SetDeaths(int deaths);
 
-	private slots:
-	void on_actionCreate_clicked();
-	void on_actionJoin_clicked();
+private slots:
+	void on_actionCreate_triggered();
+	void on_actionJoin_triggered();
 	void on_actionQuit_triggered();
 
 protected:
@@ -39,6 +40,7 @@ private:
 	QLabel deathsLabel;
 	QLabel killsLabel;
 	std::unique_ptr<Board> board;
+    std::shared_ptr<ServerHandler> server_handler_;
 };
 
-#endif // MAINWINDOW_H
+#endif // SRC_CLIENT_MAINWINDOW_H

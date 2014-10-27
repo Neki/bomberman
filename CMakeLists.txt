@@ -69,6 +69,7 @@ target_link_libraries(common Qt5::Core)
 add_dependencies(common easyloggingcpp)
 
 add_executable(bomberman ${CLIENT_SRCS} ${CLIENT_HEADERS})
+target_link_libraries(bomberman Qt5::Core)
 target_link_libraries(bomberman Qt5::Widgets)
 target_link_libraries(bomberman Qt5::Network)
 target_link_libraries(bomberman Qt5::Svg)
