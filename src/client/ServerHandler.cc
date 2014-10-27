@@ -2,7 +2,7 @@
 #include <QWidget>
 #include "easylogging++.h"
 
-ServerHandler::ServerHandler() : QWidget(), running_(false), server_process_(std::unique_ptr<QProcess>(new QProcess(this))) {
+ServerHandler::ServerHandler() : QWidget(), server_process_(std::unique_ptr<QProcess>(new QProcess(this))) {
 }
 
 ServerHandler::~ServerHandler() {
@@ -41,7 +41,7 @@ void ServerHandler::terminateServer() {
 
 void ServerHandler::finishedServer(int exit_code, QProcess::ExitStatus exit_status) {
     running_ = false;
-    LOG(INFO) << "Server finished.";
+    LOG(INFO) << "Server finished (exit code: " << exit_code << ", exit status: " << exit_status << ")";
 }
 
 void ServerHandler::errorServer(QProcess::ProcessError error) {
