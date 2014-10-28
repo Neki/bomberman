@@ -5,6 +5,7 @@ namespace common {
 namespace entity {
 
 enum EntityId {
+  kUnknownEntity,
   kBlockId,
   kBombId,
   kBonusId,
