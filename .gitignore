@@ -4,6 +4,10 @@
 *.o
 *.obj
 
+# Log files
+*.log
+logs/*
+
 # Precompiled Headers
 *.gch
 *.pch

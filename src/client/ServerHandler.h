@@ -1,6 +1,10 @@
 #ifndef SRC_CLIENT_SERVERHANDLER_H_
 #define SRC_CLIENT_SERVERHANDLER_H_
-#define SERVER_EXE "bombServer.exe"
+#ifdef _WIN32
+    #define SERVER_EXE "bombServer.exe"
+#else
+    #define SERVER_EXE "./bombServer"
+#endif
 #define SERVER_PORT "4567"
 
 #include <QObject>
