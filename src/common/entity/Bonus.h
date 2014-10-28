@@ -21,7 +21,6 @@ class Bonus : public Entity {
     void Serialize(QDataStream& stream) const override;
 
   private:
-    QString texture_path_;
 
 };
 
