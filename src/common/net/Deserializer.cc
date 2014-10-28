@@ -122,5 +122,79 @@ SettingsEvent Deserializer::DeserializeSettingsEvent(QDataStream& stream) {
   return SettingsEvent(data.id, data.timestamp);
 }
 
+EntityId GetNextEntityId(QDataStream& stream) {
+  quint8 type;
+  stream >> type;
+  switch(type) {
+    case EntityId::kWallId:
+      return kWallId;
+    case EntityId::kBombId:
+      return kBombId;
+    case EntityId::kBonusId:
+      return kBonusId;
+    case EntityId::kBlockId:
+      return kBlockId;
+    case EntityId::kFireId:
+      return kFireId;
+    case EntityId::kCharacterId:
+      return kCharacterId;
+    case EntityId::kUnknownEntity: /* fall-throuf */
+    default: // TODO error
+     return kUnknownEntity;
+ }
+}
+
+BaseEntityData Deserializer::DeserializeBaseEntity(QDataStream& stream) {
+  BaseEntityData data;
+  stream >> data.id;
+  stream >> data.temp_id;
+  stream >> data.position;
+  return data;
+}
+
+Block Deserializer::DeserializeBlock(QDataStream& stream) {
+  BaseEntityData data = DeserializeBaseEntity(stream);
+  return Block(data.position);
+}
+
+Fire Deserializer::DeserializeFire(QDataStream& stream) {
+  BaseEntityData data = DeserializeBaseEntity(stream);
+  quint32 set_time;
+  stream >> set_time;
+  return Fire(data.position, set_time);
+}
+
+Wall Deserializer::DeserializeWall(QDataStream& stream) {
+  BaseEntityData data = DeserializeBaseEntity(stream);
+  return Wall(data.position);
+}
+
+Character Deserializer::DeserializeCharacter(QDataStream& stream) {
+  BaseEntityData data = DeserializeBaseEntity(stream);
+  quint32 power;
+  float speed;
+  quint32 number_of_bombs;
+  stream >> power;
+  stream >> speed;
+  stream >> number_of_bombs;
+  return Character(data.position, power, speed, number_of_bombs);
+}
+
+Bonus Deserializer::DeserializeBonus(QDataStream& stream) {
+  BaseEntityData data = DeserializeBaseEntity(stream);
+  return Bonus(data.position);
+}
+
+Bomb Deserializer::DeserializeBomb(QDataStream& stream) {
+  BaseEntityData data = DeserializeBaseEntity(stream);
+  quint32 set_time;
+  quint32 explosion_time;
+  quint8 power;
+  stream >> set_time;
+  stream >> explosion_time;
+  stream >> power;
+  return Bomb(data.position, set_time, explosion_time, power);
+}
+
 }
 }

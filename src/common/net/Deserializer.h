@@ -13,6 +13,16 @@
 #include "SetAdminEvent.h"
 #include "SettingsEvent.h"
 
+#include "src/common/entity/EntityId.h"
+#include "src/common/entity/Block.h"
+#include "src/common/entity/Bomb.h"
+#include "src/common/entity/Bonus.h"
+#include "src/common/entity/Character.h"
+#include "src/common/entity/Fire.h"
+#include "src/common/entity/Wall.h"
+
+using namespace common::entity;
+
 namespace common {
 namespace net {
 
@@ -25,7 +35,16 @@ struct BaseEventData {
 };
 
 /**
- * Provides static methods to deserialize an event. Part of the common library
+ * Internal use by the Deserializer class
+ */
+struct BaseEntityData {
+  quint32 id;
+  quint32 temp_id;
+  QPoint position;
+};
+
+/**
+ * Provides static methods to deserialize events and entities. Part of the common library
  * to make testing serialization and deserialization easier to test (as
  * everything is in one place).
  */
@@ -53,8 +72,18 @@ class Deserializer {
     static SetAdminEvent DeserializeSetAdminEvent(QDataStream& stream);
     static SettingsEvent DeserializeSettingsEvent(QDataStream& stream);
 
+    static EntityId GetNextEntityId(QDataStream& stream);
+    static Block DeserializeBlock(QDataStream& stream);
+    static Bomb DeserializeBomb(QDataStream& stream);
+    static Bonus DeserializeBonus(QDataStream& stream);
+    static Character DeserializeCharacter(QDataStream& stream);
+    static Fire DeserializeFire(QDataStream& stream);
+    static Wall DeserializeWall(QDataStream& stream);
+
+
   private:
     static BaseEventData DeserializeBaseEvent(QDataStream& stream);
+    static BaseEntityData DeserializeBaseEntity(QDataStream& stream);
 
 };
 
