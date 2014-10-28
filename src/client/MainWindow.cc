@@ -9,11 +9,14 @@
 #include "easylogging++.h"
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWindow),
-    server_handler_(std::make_shared<ServerHandler>()) {
+    server_handler_(std::make_shared<ServerHandler>()),
+    timer_(std::make_shared<common::GameTimer>()) {
 	ui->setupUi(this);
 
 	Board *board = new Board;
 	setCentralWidget(board);
+
+    timer_->StartGame();
 
 	SetScore(-5593);
 	SetDeaths(199);
@@ -26,7 +29,6 @@ void MainWindow::Start() {
 }
 
 MainWindow::~MainWindow() {
-    LOG(INFO) << "deleting";
 	delete ui;
 }
 
@@ -61,9 +63,7 @@ void MainWindow::SetKills(int kills) {
 
 void MainWindow::on_actionCreate_triggered() {
     server_handler_->runServer();
-    //auto timer = std::make_shared<common::GameTimer>();
-    //timer->StartGame();
-    //net::NetworkWorker worker(1, QHostAddress("127.0.0.1"), 4567, 4568, timer);
+    network_worker_ = std::unique_ptr<net::NetworkWorker>(new net::NetworkWorker(1, QHostAddress("127.0.0.1"), 4567, 4568, timer_));
 }
 
 void MainWindow::on_actionJoin_triggered() {

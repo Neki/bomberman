@@ -29,6 +29,8 @@ private slots:
     void errorServer(QProcess::ProcessError error);
 
 private:
+    bool IsPidFileExisting();
+
     std::unique_ptr<QProcess> server_process_;
     bool running_;
 };

@@ -1,9 +1,7 @@
 #include "ServerHandler.h"
 #include <QWidget>
 #include <QFile>
-#include <QTextStream>
-#include <sys/types.h>
-#include <signal.h>
+#include <QtWidgets/QApplication>
 #include "easylogging++.h"
 
 ServerHandler::ServerHandler() : QWidget(), server_process_(std::unique_ptr<QProcess>(new QProcess(this))), running_(false) {
@@ -15,6 +13,10 @@ ServerHandler::~ServerHandler() {
 
 void ServerHandler::runServer() {
     LOG(INFO) << "Starting server...";
+
+    if (IsPidFileExisting()) {
+        LOG(WARNING) << "The server.pid file exists, please check if the server is not already open";
+    }
     if (running_) {
         LOG(ERROR) << "Server is already live!";
         return;
@@ -60,4 +62,9 @@ void ServerHandler::errorServer(QProcess::ProcessError error) {
     default:
         LOG(ERROR) << "Server error: error code " << error << ")";
     }
+}
+
+bool ServerHandler::IsPidFileExisting() {
+    std::ifstream pid_file((QCoreApplication::applicationDirPath() + "/server.pid").toStdString(), std::ios::binary);
+    return pid_file ? true : false;
 }

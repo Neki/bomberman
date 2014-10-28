@@ -5,10 +5,16 @@
 #include "src/common/GameTimer.h"
 #include "net/GameNetworkWorker.h"
 #include "src/server/net/Client.h"
+#include "PidLogger.h"
 #include <QtWidgets/QApplication>
 #include <QCommandLineParser>
-#include <QFile>
 _INITIALIZE_EASYLOGGINGPP
+
+void onExit(int sig) {
+    PidLogger::RemoveFile();
+    el::Helpers::logCrashReason(sig);
+    el::Helpers::crashAbort(sig);
+}
 
 int main(int argc, char *argv[]) {
     initialize_logger();
@@ -20,6 +26,8 @@ int main(int argc, char *argv[]) {
     QCommandLineParser parser;
     QCommandLineOption portOption("port", "Server port", "port", "4567");
     parser.addOption(portOption);
+    QCommandLineOption verboseOption("v", "Verbose level");
+    parser.addOption(verboseOption);
     parser.process(app);
 
     int port = parser.value(portOption).toInt();
@@ -28,16 +36,10 @@ int main(int argc, char *argv[]) {
         exit(0);
     }
 
-    /*QFile file(QCoreApplication::applicationDirPath() + "/server.pid");
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        LOG(ERROR) << "Could not open file to write pid.";
-        exit(0);
-    }
+    el::Helpers::setCrashHandler(onExit);
+    PidLogger::CreatePidFile();
 
-    QTextStream out(&file);
-    out << QCoreApplication::applicationPid();*/
-    
-    net::Client client(1, QHostAddress("127.0.0.1"), port+1);
+    net::Client client(1, QHostAddress("127.0.0.1"), 4568);
     std::vector<net::Client> clients;
     clients.push_back(client);
     auto timer = std::make_shared<common::GameTimer>();
