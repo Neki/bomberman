@@ -15,6 +15,8 @@ class Wall : public Entity{
     Wall(QPoint position);
     virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
 
+    void Serialize(QDataStream& stream) const override;
+
   private:
 
 };

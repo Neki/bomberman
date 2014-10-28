@@ -15,7 +15,7 @@ namespace entity {
 class Character : public Entity {
 
   public:
-    Character(QPoint position);
+    Character(QPoint position, int power = 1, float speed = 0, unsigned int number_of_bombs = 1);
 
     unsigned int GetPower() const;
     QPointF GetCurrentSpeed() const;
@@ -31,6 +31,8 @@ class Character : public Entity {
     void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire. */
 
+    void Serialize(QDataStream& stream) const override;
+
   private:
     unsigned int power_; // bomb power in tiles
     QPointF current_speed_; // in tiles per second. might be temporary superior to the nominal speed
@@ -38,9 +40,9 @@ class Character : public Entity {
     QPointF exact_position_;
     unsigned int number_of_bombs_;
   	int bomb_delay_;
-    
+
     void moveTo(QPoint t, int speed);
-      
+
 };
 
 }

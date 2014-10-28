@@ -15,5 +15,10 @@ void Wall::Update(std::weak_ptr<GameEngine> game_engine, int t) {
   (void) t;
 }
 
+void Wall::Serialize(QDataStream& stream)  const {
+  SerializeBaseEntity(stream, EntityId::kWallId);
+  // nothing else to do
+}
+
 }
 }

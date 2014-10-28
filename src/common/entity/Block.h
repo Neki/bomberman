@@ -13,11 +13,13 @@ class Block : public Entity{
 
   public:
     Block(QPoint position);
-    
+
     virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
 
     void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire. */
+
+    void Serialize(QDataStream& stream) const override;
 
   private:
 

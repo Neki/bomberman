@@ -21,6 +21,10 @@ void Block::HitByFire(std::weak_ptr<GameEngine> game_engine) {
   should_be_removed_ = true;
 }
 
+void Block::Serialize(QDataStream& stream) const {
+  SerializeBaseEntity(stream, EntityId::kBlockId); //othing else to do
+}
+
 
 }
 }

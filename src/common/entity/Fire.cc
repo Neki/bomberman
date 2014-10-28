@@ -5,18 +5,18 @@
 namespace common {
 namespace entity {
 
-Fire::Fire(QPoint position)
-  : Entity(position, false, false, "res/fire.png") {  
-  set_time_ = QTime::currentTime(); // TODO : change to use the game clock
-  disappearing_time_ = set_time_.addMSecs(300);
+Fire::Fire(QPoint position, quint32 set_time)
+  : Entity(position, false, false, "res/fire.png"),
+    set_time_(set_time) {
+  disappearing_time_ = set_time_ + 300;
 }
 
-QTime Fire::GetSetTime() const
+quint32 Fire::GetSetTime() const
 {
   return set_time_;
 }
 
-QTime Fire::GetDisappearingTime() const
+quint32 Fire::GetDisappearingTime() const
 {
   return disappearing_time_;
 }
@@ -27,9 +27,14 @@ void Fire::Update(std::weak_ptr<GameEngine> game_engine, int t)
 {
   (void)game_engine;
 	(void) t;
-  if (QTime::currentTime() >= this->GetDisappearingTime()) {// TODO : change to use the game clock
+  if ((quint32) QTime::currentTime().msec() >= disappearing_time_) {// TODO : change to use the game clock
     should_be_removed_ = true;
   }
+}
+
+void Fire::Serialize(QDataStream& stream) const {
+  SerializeBaseEntity(stream, kFireId);
+  stream << set_time_;
 }
 
 }
