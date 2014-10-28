@@ -1,8 +1,12 @@
 #include "ServerHandler.h"
 #include <QWidget>
+#include <QFile>
+#include <QTextStream>
+#include <sys/types.h>
+#include <signal.h>
 #include "easylogging++.h"
 
-ServerHandler::ServerHandler() : QWidget(), server_process_(std::unique_ptr<QProcess>(new QProcess(this))) {
+ServerHandler::ServerHandler() : QWidget(), server_process_(std::unique_ptr<QProcess>(new QProcess(this))), running_(false) {
 }
 
 ServerHandler::~ServerHandler() {
@@ -18,7 +22,7 @@ void ServerHandler::runServer() {
 
     QString program = SERVER_EXE;
     QStringList arguments;
-    arguments << "-port" << SERVER_PORT;
+    arguments << "--port" << SERVER_PORT;
 
     QObject::connect(server_process_.get(), SIGNAL(started()), this, SLOT(startedServer()));
     QObject::connect(server_process_.get(), SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finishedServer(int, QProcess::ExitStatus)));

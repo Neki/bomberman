@@ -30,7 +30,7 @@ private slots:
 
 private:
     std::unique_ptr<QProcess> server_process_;
-    bool running_ = false;
+    bool running_;
 };
 
 #endif
