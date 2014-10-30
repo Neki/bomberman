@@ -39,7 +39,7 @@ struct BaseEventData {
  */
 struct BaseEntityData {
   quint32 id;
-  quint32 temp_id;
+  quint16 temp_id;
   QPoint position;
 };
 
