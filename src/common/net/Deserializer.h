@@ -73,6 +73,13 @@ class Deserializer {
     static SettingsEvent DeserializeSettingsEvent(QDataStream& stream);
 
     static EntityId GetNextEntityId(QDataStream& stream);
+
+    /**
+     * Deserialize the next entity on the stream.
+     * @return the next entity on the stream, or null if the deserialization
+     * could not be done.
+     */
+    static std::unique_ptr<Entity> DeserializeEntity(QDataStream& stream);
     static Block DeserializeBlock(QDataStream& stream);
     static Bomb DeserializeBomb(QDataStream& stream);
     static Bonus DeserializeBonus(QDataStream& stream);

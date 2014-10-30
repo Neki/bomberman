@@ -144,6 +144,27 @@ EntityId Deserializer::GetNextEntityId(QDataStream& stream) {
  }
 }
 
+std::unique_ptr<Entity> Deserializer::DeserializeEntity(QDataStream& stream) {
+  EntityId type = GetNextEntityId(stream);
+  switch(type) {
+    case EntityId::kWallId:
+      return std::unique_ptr<Entity>(new Wall(DeserializeWall(stream)));
+    case EntityId::kBombId:
+      return std::unique_ptr<Entity>(new Bomb(DeserializeBomb(stream)));
+    case EntityId::kBonusId:
+      return std::unique_ptr<Entity>(new Bonus(DeserializeBonus(stream)));
+    case EntityId::kBlockId:
+      return std::unique_ptr<Entity>(new Block(DeserializeBlock(stream)));
+    case EntityId::kFireId:
+      return std::unique_ptr<Entity>(new Fire(DeserializeFire(stream)));
+    case EntityId::kCharacterId:
+      return std::unique_ptr<Entity>(new Character(DeserializeCharacter(stream)));
+    case EntityId::kUnknownEntity: /* fall-through */
+    default:
+      return std::unique_ptr<Entity>();
+  }
+}
+
 BaseEntityData Deserializer::DeserializeBaseEntity(QDataStream& stream) {
   BaseEntityData data;
   stream >> data.id;
