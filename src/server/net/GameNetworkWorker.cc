@@ -197,12 +197,14 @@ void GameNetworkWorker::SendPongPacket(const Client& client, quint32 packet_id) 
   VLOG(9) << "Client was at address " << client.GetAddress().toString().toStdWString() << ":" << client.GetPort();
 }
 
-void GameNetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
+quint32 GameNetworkWorker::PrepareHeader(QDataStream& stream, quint8 packet_type) {
   assert(stream.status() == QDataStream::Ok);
+  quint32 packet_id = GetNextPacketId();
   stream << kProtocolId;
   stream << kServerVersion;
-  stream << GetNextPacketId();
+  stream << packet_id;
   stream << packet_type;
+  return packet_id;
 }
 
 quint32 GameNetworkWorker::GetNextPacketId() {

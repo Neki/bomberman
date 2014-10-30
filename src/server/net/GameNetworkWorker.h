@@ -52,7 +52,7 @@ class GameNetworkWorker : public QObject {
 
     quint32 GetNextPacketId();
 
-    void PrepareHeader(QDataStream& stream, quint8 packet_type);
+    quint32 PrepareHeader(QDataStream& stream, quint8 packet_type);
     void ProcessDatagram(const QByteArray& datagram);
     bool CheckProtocolAndVersion(QDataStream& stream);
     quint32 GetPacketId(QDataStream& stream);
