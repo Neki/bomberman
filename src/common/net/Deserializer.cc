@@ -122,7 +122,7 @@ SettingsEvent Deserializer::DeserializeSettingsEvent(QDataStream& stream) {
   return SettingsEvent(data.id, data.timestamp);
 }
 
-EntityId GetNextEntityId(QDataStream& stream) {
+EntityId Deserializer::GetNextEntityId(QDataStream& stream) {
   quint8 type;
   stream >> type;
   switch(type) {
