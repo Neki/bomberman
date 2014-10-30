@@ -42,12 +42,14 @@ class Entity {
 
     virtual void Serialize(QDataStream& stream) const = 0;
 
+
   protected:
     QPoint position_; // Entity position in the world's grid
     bool is_solid_;
     bool stops_fire_;
     bool should_be_removed_; // true if the entity should be removed by the game engine by the end of the frame
 
+    bool operator==(const Entity& other) const;
     void SerializeBaseEntity(QDataStream& stream, EntityId entity_id) const;
 
   private:

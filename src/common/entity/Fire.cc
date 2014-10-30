@@ -32,6 +32,10 @@ void Fire::Update(std::weak_ptr<GameEngine> game_engine, int t)
   }
 }
 
+bool Fire::operator==(const Fire& other) const {
+  return Entity::operator==(other) && set_time_ == other.set_time_ && disappearing_time_ == other.disappearing_time_;
+}
+
 void Fire::Serialize(QDataStream& stream) const {
   SerializeBaseEntity(stream, kFireId);
   stream << set_time_;

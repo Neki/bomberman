@@ -25,6 +25,10 @@ void Block::Serialize(QDataStream& stream) const {
   SerializeBaseEntity(stream, EntityId::kBlockId); //othing else to do
 }
 
+bool Block::operator==(const Block& other) const {
+  return Entity::operator==(other);
+}
+
 
 }
 }

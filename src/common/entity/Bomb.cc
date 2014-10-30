@@ -50,6 +50,10 @@ void Bomb::Update(std::weak_ptr<GameEngine> game_engine, int t) {
   }
 }
 
+bool Bomb::operator==(const Bomb& other) {
+  return Entity::operator==(other)&& set_time_ == other.set_time_ && explosion_time_ == other.explosion_time_ && power_ == other.power_;
+}
+
 void Bomb::Serialize(QDataStream& stream) const {
   SerializeBaseEntity(stream, EntityId::kBombId);
   stream << set_time_;

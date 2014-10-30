@@ -70,6 +70,11 @@ void Entity::SerializeBaseEntity(QDataStream& stream, EntityId entity_id) const 
   stream << position_;
 }
 
+bool Entity::operator==(const Entity& other) const {
+  //FIXME : once the id will be properly handled, make the correct comparison
+  return is_solid_ == other.is_solid_ && stops_fire_ == other.stops_fire_ && position_ == other.position_;
+}
+
 QDataStream& operator<<(QDataStream& stream, const Entity& entity) {
   entity.Serialize(stream);
   return stream;

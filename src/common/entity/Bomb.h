@@ -29,6 +29,8 @@ class Bomb : public Entity{
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
+    bool operator==(const Bomb& other);
+
     void Serialize(QDataStream& stream) const override;
 
   private:

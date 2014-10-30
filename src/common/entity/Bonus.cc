@@ -19,6 +19,10 @@ void Bonus::HitByFire(std::weak_ptr<GameEngine> game_engine) {
   (void)game_engine;
 }
 
+bool Bonus::operator==(const Bonus& other) const {
+  return Entity::operator==(other);
+}
+
 void Bonus::Serialize(QDataStream& stream) const {
   SerializeBaseEntity(stream, EntityId::kBonusId);
   // TODO: fix the bonus constructor (so the texture path is not serialized...)

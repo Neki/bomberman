@@ -18,6 +18,8 @@ class Bonus : public Entity {
     void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire. */
 
+    bool operator==(const Bonus& other) const;
+
     void Serialize(QDataStream& stream) const override;
 
   private:

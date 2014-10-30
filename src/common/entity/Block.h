@@ -19,6 +19,8 @@ class Block : public Entity{
     void HitByFire(std::weak_ptr<GameEngine> game_engine);
     /* Called when entity is hit by fire. */
 
+    bool operator==(const Block& other) const;
+
     void Serialize(QDataStream& stream) const override;
 
   private:

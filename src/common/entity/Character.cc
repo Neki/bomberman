@@ -59,6 +59,11 @@ void Character::Update(std::weak_ptr<GameEngine> game_engine, int t) {
 	// TODO : Update position
 }
 
+bool Character::operator==(const Character& other) const {
+  return Entity::operator==(other) && power_ == other.power_ && number_of_bombs_ == other.number_of_bombs_ && bomb_delay_ == other.bomb_delay_;
+  //TODO: better comparison using also the speed
+}
+
 void Character::Serialize(QDataStream& stream) const {
   SerializeBaseEntity(stream, kCharacterId);
   stream << power_;

@@ -23,6 +23,8 @@ class Fire : public Entity{
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
+    bool operator==(const Fire& other) const;
+
     void Serialize(QDataStream& stream) const override;
 
   private:
