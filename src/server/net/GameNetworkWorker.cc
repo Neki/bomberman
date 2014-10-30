@@ -6,10 +6,12 @@
 
 namespace net {
 
-GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer, std::vector<Client> clients)
+GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> game_timer, std::weak_ptr<World> world, std::vector<Client> clients)
   : port_(port),
     game_timer_(game_timer),
-    last_packet_id_(1) {
+    last_packet_id_(1),
+    world_ptr_(world),
+    send_entities_timer_() {
   QObject::connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
   QObject::connect(&socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(SocketError(QAbstractSocket::SocketError)));
   socket_.bind( port_);
@@ -17,6 +19,7 @@ GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> ga
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
     last_event_ids_[client.GetId()] = 1;
   }
+  send_entities_timer_.start(100);
   LOG(DEBUG) << "In game network worker initialized and ready on port " << port_;
 }
 
@@ -225,6 +228,47 @@ void GameNetworkWorker::EmitEvent(ClientEvent<MoveEvent> event) {
 void GameNetworkWorker::EmitEvent(ClientEvent<PlayerLeftEvent> event) {
   VLOG(EVENT_READY_LOG_LEVEL) << "Network worker: player left event ready / client id: " << (int) event.GetClientId() << " / id: " << event.GetEventData().GetId();
   emit PlayerLeftEventReceived(event);
+}
+
+void GameNetworkWorker::BroadcastWorld() {
+  quint32 timestamp = game_timer_->GetTimestamp();
+  VLOG(9) << "Broadcasting the world state to clients, timestamp is " << timestamp;
+  auto world = world_ptr_.lock();
+  if(world.get() == nullptr) {
+    LOG(WARNING) << "The World has gone out of scope, can not send it to clients!";
+    return;
+  }
+  std::vector<Entity*> to_send;
+  // do not put to many entites in the same packet to prevent the packet from
+  // being cut by the network layer
+  for(int i = 0; i < world->GetWidth(); i++)  {
+    for(int j = 0; j < world->GetHeight(); j++) {
+      QPoint point(i, j);// TODO check indices
+      for(auto it = world->CharacterIteratorBegin(); it != world->CharacterIteratorEnd(); ++it) {
+        to_send.push_back(it->get());
+      }
+    }
+  }
+  auto it = to_send.begin();
+  while(it != to_send.end()) {
+    QByteArray buffer;
+    QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
+    quint32 packet_id = PrepareHeader(stream, kEntitiesPacketId);
+    stream << timestamp;
+    std::vector<Entity*> packet;
+    for(int i = 0; i < 10 && it != to_send.end(); ++i) {
+      packet.push_back(*it);
+      ++it;
+    }
+    stream << (quint8) packet.size();
+    for(Entity* entity: packet) {
+      stream << *entity;
+    }
+    for(auto p: clients_) {
+      socket_.writeDatagram(buffer, buffer.size(), p.second.GetAddress(), p.second.GetPort());
+    }
+    VLOG(9) << "Sent the entities packet with ID: " << packet_id << " to all the clients";
+  }
 }
 
 bool GameNetworkWorker::CheckStreamStatus(const QDataStream& stream) const {
