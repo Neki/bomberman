@@ -22,7 +22,7 @@ void Block::HitByFire(std::weak_ptr<GameEngine> game_engine) {
 }
 
 void Block::Serialize(QDataStream& stream) const {
-  SerializeBaseEntity(stream, EntityId::kBlockId); //othing else to do
+  SerializeBaseEntity(stream, EntityId::kBlockId); //nothing else to do
 }
 
 bool Block::operator==(const Block& other) const {
