@@ -50,7 +50,7 @@ void Bomb::Update(std::weak_ptr<GameEngine> game_engine, int t) {
   }
 }
 
-bool Bomb::operator==(const Bomb& other) {
+bool Bomb::operator==(const Bomb& other) const {
   return Entity::operator==(other)&& set_time_ == other.set_time_ && explosion_time_ == other.explosion_time_ && power_ == other.power_;
 }
 

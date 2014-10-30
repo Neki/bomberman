@@ -15,7 +15,7 @@ void Wall::Update(std::weak_ptr<GameEngine> game_engine, int t) {
   (void) t;
 }
 
-bool Wall::operator==(const Wall& other) {
+bool Wall::operator==(const Wall& other) const {
   return Entity::operator==(other);
 }
 
