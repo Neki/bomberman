@@ -56,6 +56,9 @@ class Entity {
     quint16 temp_id_;
 };
 
+
+QDataStream& operator<<(QDataStream& stream, const Entity& entity);
+
 }
 }
 

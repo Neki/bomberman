@@ -70,5 +70,10 @@ void Entity::SerializeBaseEntity(QDataStream& stream, EntityId entity_id) const 
   stream << position_;
 }
 
+QDataStream& operator<<(QDataStream& stream, const Entity& entity) {
+  entity.Serialize(stream);
+  return stream;
+}
+
 }
 }
