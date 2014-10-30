@@ -8,10 +8,10 @@
 using common::net::Deserializer;
 using common::net::EventId;
 
-class SerializationTest : public testing::Test {
+class EventSerializationTest : public testing::Test {
 
   public:
-    SerializationTest()
+    EventSerializationTest()
       :  testing::Test(),
          bomb_event_(common::net::BombEvent(QPoint(1,3), 20, 20)),
          move_event_(common::net::MoveEvent(QPoint(0,8), QPoint(0,9), Direction::LEFT, 20, 25)),
@@ -34,7 +34,7 @@ class SerializationTest : public testing::Test {
     std::map<EventId, common::net::Event*> event_id_map_;
 };
 
-TEST_F(SerializationTest, EventId) {
+TEST_F(EventSerializationTest, EventId) {
   QByteArray buffer;
   QDataStream in(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   QDataStream out(&buffer, QIODevice::OpenModeFlag::ReadOnly);
@@ -47,7 +47,7 @@ TEST_F(SerializationTest, EventId) {
   }
 }
 
-TEST_F(SerializationTest, Event) {
+TEST_F(EventSerializationTest, Event) {
   QByteArray buffer;
   QDataStream in(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   QDataStream out(&buffer, QIODevice::OpenModeFlag::ReadOnly);
