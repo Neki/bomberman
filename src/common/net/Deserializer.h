@@ -58,7 +58,7 @@ class Deserializer {
      */
     static EventId GetNextEventId(QDataStream& stream);
 
-    /*
+    /**
      * Deserialize the next event on the stream.
      * @return the next event on the stream. If the event could not be properly
      * deserialized, the returned pointer will be null.
