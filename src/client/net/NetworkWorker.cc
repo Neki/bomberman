@@ -87,7 +87,7 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
       ProcessPingPacket(stream);
       break;
     case kEntitiesPacketId:
-      VLOG(LOG_PACKET_LEVEL) << "The datagram is an entites packet.";
+      VLOG(LOG_PACKET_LEVEL) << "The datagram is an entities packet.";
       ProcessEntitiesPacket(stream);
       break;
     default:
@@ -160,6 +160,7 @@ void NetworkWorker::DeserializeEntity(QDataStream& stream, quint32 timestamp) {
     LOG(WARNING) << "Could not deserialize an entity";
   }
   ServerEntity server_entity(timestamp, std::move(entity));
+  VLOG(9) << "Received an entity / id = " << server_entity.GetEntity()->GetId() << " / server timestamp = " << server_entity.GetTimestamp();
   emit EntityReceived(server_entity);
 }
 
