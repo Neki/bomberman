@@ -3,8 +3,11 @@
 #include <QTime>
 #include <QMutexLocker>
 #include "src/common/GameTimer.h"
+#include "src/common/net/Deserializer.h"
 #include "easylogging++.h"
 #include <cassert>
+
+using common::net::Deserializer;
 
 namespace net {
 
@@ -83,6 +86,10 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
       VLOG(LOG_PACKET_LEVEL) << "The datagram is a ping packet.";
       ProcessPingPacket(stream);
       break;
+    case kEntitiesPacketId:
+      VLOG(LOG_PACKET_LEVEL) << "The datagram is an entities packet.";
+      ProcessEntitiesPacket(stream);
+      break;
     default:
       LOG(WARNING) << "Received unknown packet type " << packet_type << ", dropping datagram.";
       break;
@@ -131,6 +138,30 @@ void NetworkWorker::ProcessPingPacket(QDataStream& stream) {
     // method will prevent the memory leak
     ping_timestamps_.erase(send_timestamp);
   }
+}
+
+void NetworkWorker::ProcessEntitiesPacket(QDataStream& stream) {
+  assert(stream.status() == QDataStream::Ok);
+  quint32 server_timestamp;
+  quint32 entities_nb;
+  stream >> server_timestamp;
+  stream >> entities_nb;
+  for(quint32 i = 0; i < entities_nb && stream.status() == QDataStream::Ok ; i++) {
+    DeserializeEntity(stream, server_timestamp);
+  }
+  if(stream.status() != QDataStream::Ok) {
+    LOG(WARNING) << "Received invalid entity datagram, dropping remaining data.";
+  }
+}
+
+void NetworkWorker::DeserializeEntity(QDataStream& stream, quint32 timestamp) {
+  std::unique_ptr<Entity> entity = Deserializer::DeserializeEntity(stream);
+  if(entity.get() == nullptr || stream.status() != QDataStream::Ok) {
+    LOG(WARNING) << "Could not deserialize an entity";
+  }
+  ServerEntity server_entity(timestamp, std::move(entity));
+  VLOG(9) << "Received an entity / id = " << server_entity.GetEntity()->GetId() << " / server timestamp = " << server_entity.GetTimestamp();
+  emit EntityReceived(server_entity);
 }
 
 void NetworkWorker::UpdateRoundTripTime(quint32 send_timestamp) {

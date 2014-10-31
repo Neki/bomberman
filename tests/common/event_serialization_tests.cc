@@ -8,10 +8,10 @@
 using common::net::Deserializer;
 using common::net::EventId;
 
-class SerializationTest : public testing::Test {
+class EventSerializationTest : public testing::Test {
 
   public:
-    SerializationTest()
+    EventSerializationTest()
       :  testing::Test(),
          bomb_event_(common::net::BombEvent(QPoint(1,3), 20, 20)),
          move_event_(common::net::MoveEvent(QPoint(0,8), QPoint(0,9), Direction::LEFT, 20, 25)),
@@ -34,7 +34,7 @@ class SerializationTest : public testing::Test {
     std::map<EventId, common::net::Event*> event_id_map_;
 };
 
-TEST_F(SerializationTest, EventId) {
+TEST_F(EventSerializationTest, EventId) {
   QByteArray buffer;
   QDataStream in(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   QDataStream out(&buffer, QIODevice::OpenModeFlag::ReadOnly);
@@ -47,7 +47,7 @@ TEST_F(SerializationTest, EventId) {
   }
 }
 
-TEST_F(SerializationTest, Event) {
+TEST_F(EventSerializationTest, Event) {
   QByteArray buffer;
   QDataStream in(&buffer, QIODevice::OpenModeFlag::WriteOnly);
   QDataStream out(&buffer, QIODevice::OpenModeFlag::ReadOnly);
@@ -89,9 +89,9 @@ TEST(InGameSerializationTest, InGameEvent) {
   std::unique_ptr<common::net::InGameEvent> move_event(new common::net::MoveEvent(QPoint(5,5), QPoint(0,9), Direction::UP, 45, 42));
   std::unique_ptr<common::net::InGameEvent> left_event(new common::net::PlayerLeftEvent(common::net::QuitReason::LEFT_GAME, 45, 42));
   in << *bomb_event.get();
-  EXPECT_EQ(*bomb_event.get(), *Deserializer::DeserializeInGameEvent(out).get());
+  EXPECT_EQ(*static_cast<common::net::BombEvent*>(bomb_event.get()), *static_cast<common::net::BombEvent*>(Deserializer::DeserializeInGameEvent(out).get()));
   in << *move_event.get();
-  EXPECT_EQ(*move_event.get(), *Deserializer::DeserializeInGameEvent(out).get());
+  EXPECT_EQ(*static_cast<common::net::MoveEvent*>(move_event.get()), *static_cast<common::net::MoveEvent*>(Deserializer::DeserializeInGameEvent(out).get()));
   in << *left_event.get();
-  EXPECT_EQ(*left_event.get(), *Deserializer::DeserializeInGameEvent(out).get());
+  EXPECT_EQ(*static_cast<common::net::PlayerLeftEvent*>(left_event.get()), *static_cast<common::net::PlayerLeftEvent*>(Deserializer::DeserializeInGameEvent(out).get()));
 }

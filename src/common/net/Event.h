@@ -40,7 +40,6 @@ class Event {
 
     virtual void Serialize(QDataStream& stream) const = 0;
 
-    bool operator==(const Event& event) const;
 
   private:
     quint32 id_;
@@ -53,6 +52,7 @@ class Event {
      * implementation of Serialize.
      */
     void SerializeBaseEvent(QDataStream& stream) const;
+    bool operator==(const Event& event) const;
 
 };
 

@@ -14,18 +14,22 @@ namespace entity {
 class Fire : public Entity{
 
   public:
-    Fire(QPoint position);
+    Fire(QPoint position, quint32 set_time);
 
-    QTime GetSetTime() const;
-    QTime GetDisappearingTime() const;
+    quint32 GetSetTime() const;
+    quint32 GetDisappearingTime() const;
 
     virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
+    bool operator==(const Fire& other) const;
+
+    void Serialize(QDataStream& stream) const override;
+
   private:
-    QTime set_time_;
-    QTime disappearing_time_;
+    quint32 set_time_;
+    quint32 disappearing_time_;
 
 };
 
