@@ -45,8 +45,8 @@ class GameNetworkWorker : public QObject {
     std::map<int, Client> clients_;
     QUdpSocket socket_;
     quint32 last_packet_id_;
-    std::map<quint8, std::map<quint32, std::unique_ptr<BaseClientEvent>>> event_cache_;
-    std::map<quint8, quint32> last_event_ids_;
+    std::map<quint8, std::map<quint32, std::unique_ptr<BaseClientEvent>>> event_cache_; // for each client, map event ID -> event. Those are the events that are not yet sent to the application because there are missing events between them (not yet received).
+    std::map<quint8, quint32> last_event_ids_; // for each client, ID of the last event that has been ACKed
     std::weak_ptr<World> world_ptr_;
     QTimer send_entities_timer_;
 
@@ -67,7 +67,7 @@ class GameNetworkWorker : public QObject {
     void ProcessPingPacket(QDataStream& stream, const Client& client, quint32 packet_id);
     void ProcessEventPacket(QDataStream& stream, const Client& client, quint32 packet_id);
     void HandlePendingEvent(std::unique_ptr<BaseClientEvent> event);
-    void EmitReadyEvents(quint8 client_id);
+    void EmitReadyEvents(Client client);
     void SendPongPacket(const Client& client, quint32 packet_id);
 
     void BroadcastWorld();

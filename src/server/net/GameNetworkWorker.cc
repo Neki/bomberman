@@ -17,7 +17,7 @@ GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> ga
   socket_.bind( port_);
   for(Client client : clients) {
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
-    last_event_ids_[client.GetId()] = 1;
+    last_event_ids_[client.GetId()] = 0; // not event has been ACKed yet for this client (the first event ID will be 1)
   }
   QObject::connect(&send_entities_timer_, &QTimer::timeout, this, &GameNetworkWorker::BroadcastWorld);
   send_entities_timer_.start(100);
@@ -158,33 +158,37 @@ void GameNetworkWorker::ProcessEventPacket(QDataStream& stream, const Client& cl
       return;
     }
     VLOG(9) << "Deserialized event has ID " << event->GetId();
-    if(event->GetId() < last_event_ids_[client.GetId()]) {
+    if(event->GetId() <= last_event_ids_[client.GetId()]) {
       VLOG(8) << "The client has sent an event that has already been processed (according to its ID).";
-      return;
+      continue;
     }
     auto client_event = std::unique_ptr<BaseClientEvent>(new BaseClientEvent(std::move(event), client, game_timer_->GetTimestamp()));
     HandlePendingEvent(std::move(client_event));
   }
+  EmitReadyEvents(client);
 }
 
 // TODO: defends against a client attacking the server by sending bad events id
 void GameNetworkWorker::HandlePendingEvent(std::unique_ptr<BaseClientEvent> event) {
-  quint8 client_id = event->GetClient().GetId();
+  Client client = event->GetClient();
   auto pair = std::pair<const quint32, std::unique_ptr<BaseClientEvent>>(event->GetEvent()->GetId(), std::move(event));
-  event_cache_[client_id].insert(std::move(pair));
-  EmitReadyEvents(client_id);
+  event_cache_[client.GetId()].insert(std::move(pair));
 }
 
-void GameNetworkWorker::EmitReadyEvents(quint8 client_id) {
-  auto it = event_cache_[client_id].begin();
+void GameNetworkWorker::EmitReadyEvents(Client client) {
+  quint8 client_id = client.GetId();
+  // look if the next event from this client (ordered by id) has been received
+  auto it = event_cache_[client_id].find(last_event_ids_[client_id] + 1);
   while(it != event_cache_[client_id].end()) {
-    it = event_cache_[client_id].find(last_event_ids_[client_id]);
-    if(it != event_cache_[client_id].end()) {
-      EmitterVisitor visitor(this, it->second.get());
-      it->second->GetEvent()->Accept(visitor);
-      event_cache_.erase(it->first);
-      last_event_ids_[client_id]++;
-    }
+    // if yes, send it to the application
+    EmitterVisitor visitor(this, it->second.get());
+    it->second->GetEvent()->Accept(visitor);
+    event_cache_[client_id].erase(it);
+    // this event will be ACKed
+    last_event_ids_[client_id]++;
+    send_ack = true;
+    // update iterator
+    it = event_cache_[client_id].find(last_event_ids_[client_id] + 1);
   }
 }
 
