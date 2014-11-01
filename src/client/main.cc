@@ -1,13 +1,19 @@
 #include <QtWidgets/QApplication>
-#include "MainWindow.h"
+#include "src/client/MainWindow.h"
+#include "logging.h"
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-	MainWindow w;
+    initialize_logger();
 
+    _START_EASYLOGGINGPP(argc, argv);
+    LOG(INFO) << "Started client";
+    
+    QApplication app(argc, argv);
+
+	MainWindow w;
 	w.setWindowTitle("Bomberman");
 	w.show();
 
-	return a.exec();
+    return app.exec();
 }
