@@ -5,12 +5,13 @@ namespace common {
 namespace entity {
 
 Entity::Entity(QPoint position, bool is_solid, bool stops_fire, QString texture_path)
-  : position_(position), 
+  : position_(position),
     is_solid_(is_solid),
     stops_fire_(stops_fire),
     should_be_removed_(false),
     texture_path_(texture_path),
-    id_(0) {
+    id_(0),
+    temp_id_(0) { // TODO generate an actual temp id
 
 }
 
@@ -60,6 +61,23 @@ QString Entity::GetTexturePath() const {
 
 int Entity::GetId() const {
   return id_;
+}
+
+void Entity::SerializeBaseEntity(QDataStream& stream, EntityId entity_id) const {
+  stream << (quint8) entity_id;
+  stream << id_;
+  stream << temp_id_;
+  stream << position_;
+}
+
+bool Entity::operator==(const Entity& other) const {
+  //FIXME : once the id will be properly handled, make the correct comparison
+  return is_solid_ == other.is_solid_ && stops_fire_ == other.stops_fire_ && position_ == other.position_;
+}
+
+QDataStream& operator<<(QDataStream& stream, const Entity& entity) {
+  entity.Serialize(stream);
+  return stream;
 }
 
 }

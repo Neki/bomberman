@@ -3,7 +3,9 @@
 
 #include <memory>
 #include <QPoint>
+#include <QDataStream>
 #include "src/common/GameEngine.h"
+#include "EntityId.h"
 
 namespace common {
 namespace entity {
@@ -25,10 +27,10 @@ class Entity {
 
     virtual bool IsSolid() const;
     /* Returns true if entity can not be walked through. Returns false otherwise. */
-    
+
     virtual bool StopsFire() const;
     /* Returns true if entity stops fire propagation. Returns false otherwise. */
-	
+
     virtual void IsWalkedOn(std::weak_ptr<GameEngine> game_engine, const std::weak_ptr<Character> character);
     /* Called when a character walk on the entity */
 
@@ -37,17 +39,27 @@ class Entity {
     bool GetShouldBeRemoved() const;
     virtual QString GetTexturePath() const;
     int GetId() const;
-	
+
+    virtual void Serialize(QDataStream& stream) const = 0;
+
+
   protected:
     QPoint position_; // Entity position in the world's grid
     bool is_solid_;
     bool stops_fire_;
     bool should_be_removed_; // true if the entity should be removed by the game engine by the end of the frame
 
+    bool operator==(const Entity& other) const;
+    void SerializeBaseEntity(QDataStream& stream, EntityId entity_id) const;
+
   private:
     QString texture_path_;
-    int id_;
+    quint32 id_;
+    quint16 temp_id_;
 };
+
+
+QDataStream& operator<<(QDataStream& stream, const Entity& entity);
 
 }
 }

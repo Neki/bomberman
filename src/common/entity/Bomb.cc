@@ -6,26 +6,18 @@
 namespace common {
 namespace entity {
 
-Bomb::Bomb(QPoint position, std::weak_ptr<Character> bomber)
+Bomb::Bomb(QPoint position, quint32 set_time, quint32 explosion_time, int power)
  :  Entity(position, true, false, "res/bomb.png"),
-    bomber_(bomber) {
-  set_time_ = QTime::currentTime(); // TODO : change to use the game clock
-  std::shared_ptr<Character> s_bomber(bomber_.lock());
-  if (s_bomber) {
-	explosion_time_ = set_time_.addMSecs(s_bomber->GetBombDelay());
-	power_ = s_bomber->GetPower(); // in tiles;
-  }
+    set_time_(set_time),
+    explosion_time_(explosion_time),
+    power_(power) {
 }
 
-std::weak_ptr<Character> Bomb::GetBomber() const {
-	return bomber_;
-}
-
-QTime Bomb::GetSetTime() const {
+quint32 Bomb::GetSetTime() const {
 	return set_time_;
 }
 
-QTime Bomb::GetExplosionTime() const {
+quint32 Bomb::GetExplosionTime() const {
 	return explosion_time_;
 }
 
@@ -53,9 +45,20 @@ void Bomb::Update(std::weak_ptr<GameEngine> game_engine, int t) {
 /* Method to be called at every frame.
    t : duration of the frame in ms */
   (void) t;
-  if (QTime::currentTime() >= this->GetExplosionTime()) {// TODO : change to use the game clock
+  if ((quint32) QTime::currentTime().msec() >= this->GetExplosionTime()) {// TODO : change to use the game clock
     this->explode(game_engine);
   }
+}
+
+bool Bomb::operator==(const Bomb& other) const {
+  return Entity::operator==(other)&& set_time_ == other.set_time_ && explosion_time_ == other.explosion_time_ && power_ == other.power_;
+}
+
+void Bomb::Serialize(QDataStream& stream) const {
+  SerializeBaseEntity(stream, EntityId::kBombId);
+  stream << set_time_;
+  stream << explosion_time_;
+  stream << (quint8) power_;
 }
 
 }

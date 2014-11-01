@@ -4,13 +4,10 @@
 #include <memory>
 #include <QPoint>
 #include <vector>
+#include "entity/Entity.h"
+#include "entity/Character.h"
 
 namespace common {
-namespace entity {
-class Entity;
-class Character;
-}
-class GameEngine;
 
 typedef std::vector<std::vector<std::vector<std::unique_ptr<entity::Entity> > > > grid_t;
 
@@ -31,7 +28,7 @@ class World {
     std::vector<std::unique_ptr<entity::Entity> >::const_iterator IteratorAtEnd(QPoint a);
     std::vector<std::unique_ptr<entity::Character> >::const_iterator CharacterIteratorBegin();
     std::vector<std::unique_ptr<entity::Character> >::const_iterator CharacterIteratorEnd();
-    
+
   private:
     const int width_; // Width of the world eg number of blocks
     const int height_;

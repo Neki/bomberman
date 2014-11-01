@@ -11,11 +11,13 @@
 #include <QByteArray>
 #include "src/common/net/Event.h"
 #include "src/common/GameTimer.h"
+#include "ServerEntity.h"
 
 #define LOG_PACKET_LEVEL 5
 
 using common::net::Event;
 using common::GameTimer;
+using namespace common::entity;
 
 namespace net {
 
@@ -57,7 +59,8 @@ class NetworkWorker : public QObject {
      * value).
      */
     void Latency(int latency);
-    //void WorldReceived();
+
+    void EntityReceived(ServerEntity& entity);
 
   private slots:
     void SendPendingEvents();
@@ -89,8 +92,9 @@ class NetworkWorker : public QObject {
 
     static const unsigned char kProtocolId = 0xBC;
     static const unsigned char kClientVersion = 0x01;
-    static const unsigned char kEventPacketId = 0x02;
     static const unsigned char kPingPacketId = 0x01;
+    static const unsigned char kEventPacketId = 0x02;
+    static const unsigned char kEntitiesPacketId = 0x03;
 
     quint32 GetNextEventId();
     quint32 GetNextPacketId();
@@ -100,7 +104,9 @@ class NetworkWorker : public QObject {
     quint32 GetPacketId(QDataStream& stream);
     quint8 GetPacketType(QDataStream& stream);
     void ProcessPingPacket(QDataStream& stream);
+    void ProcessEntitiesPacket(QDataStream& stream);
     void UpdateRoundTripTime(quint32 send_time);
+    void DeserializeEntity(QDataStream& stream, quint32 timestamp);
 
     bool CheckStreamStatus(const QDataStream& stream) const;
 

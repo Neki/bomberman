@@ -1,7 +1,5 @@
 
 #include "World.h"
-#include "src/common/entity/Entity.h"
-#include "src/common/entity/Character.h"
 #include <cassert>
 
 namespace common {
@@ -13,9 +11,9 @@ World::World(int width, int height)
     entities_(),
     characters_() {
   for (int x = 0; x < width_; x++) {
-    entities_[x] = std::vector<std::vector<std::unique_ptr<entity::Entity> > >();
+    entities_.push_back(std::vector<std::vector<std::unique_ptr<entity::Entity> > >());
     for (int y = 0; y < height_; y++) {
-      entities_[x][y] = std::vector<std::unique_ptr<entity::Entity> >();
+      entities_[x].push_back(std::vector<std::unique_ptr<entity::Entity> >());
     }
   }
   
