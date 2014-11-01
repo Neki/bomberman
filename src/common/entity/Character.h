@@ -15,7 +15,7 @@ namespace entity {
 class Character : public Entity {
 
   public:
-    Character(QPoint position, int power = 1, float speed = 0, unsigned int number_of_bombs = 1);
+    Character(QPoint position, int power = 1, float speed = 1.5f, unsigned int number_of_bombs = 1);
 
     unsigned int GetPower() const;
     QPointF GetCurrentSpeed() const;
