@@ -16,10 +16,6 @@ void PidLogger::CreatePidFile() {
     file.close();
 }
 
-void PidLogger::RemoveFile() {
-    remove(GetFileName().toStdString().c_str());
-}
-
 QString PidLogger::GetFileName() {
     return QCoreApplication::applicationDirPath() + "/server.pid";
 }

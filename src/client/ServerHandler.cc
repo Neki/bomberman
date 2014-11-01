@@ -3,6 +3,12 @@
 #include <QFile>
 #include <QtWidgets/QApplication>
 #include "easylogging++.h"
+#ifdef _WIN32
+    #include <tlhelp32.h>
+#else
+    #include <sys/types.h>  
+    #include <signal.h>
+#endif
 
 ServerHandler::ServerHandler() : QWidget(), server_process_(std::unique_ptr<QProcess>(new QProcess(this))), running_(false) {
 }
@@ -14,8 +20,9 @@ ServerHandler::~ServerHandler() {
 void ServerHandler::runServer() {
     LOG(INFO) << "Starting server...";
 
-    if (IsPidFileExisting()) {
-        LOG(WARNING) << "The server.pid file exists, please check if the server is not already open";
+    if (IsAlreadyRunning()) {
+        LOG(WARNING) << "The server is already running (cf server.pid file).";
+        return;
     }
     if (running_) {
         LOG(ERROR) << "Server is already live!";
@@ -41,7 +48,8 @@ void ServerHandler::startedServer() {
 void ServerHandler::terminateServer() {
     if (running_) {
         LOG(INFO) << "Terminating server...";
-        server_process_->terminate();
+        server_process_->kill();
+        server_process_->waitForFinished(1000);
     }
 }
 
@@ -57,14 +65,44 @@ void ServerHandler::errorServer(QProcess::ProcessError error) {
         LOG(ERROR) << "Server error: couldn't find '" << SERVER_EXE << "'.";
         break;
     case QProcess::ProcessError::Crashed:
-        LOG(ERROR) << "Server error: server crashed.";
         break;
     default:
         LOG(ERROR) << "Server error: error code " << error << ")";
     }
 }
 
-bool ServerHandler::IsPidFileExisting() {
-    std::ifstream pid_file((QCoreApplication::applicationDirPath() + "/server.pid").toStdString(), std::ios::binary);
-    return pid_file ? true : false;
+bool ServerHandler::IsAlreadyRunning() {
+    std::ifstream pid_file((QCoreApplication::applicationDirPath() + "/server.pid").toStdString());
+    if (pid_file.is_open()) {
+        std::string line;
+        getline(pid_file, line);
+        std::istringstream iss(line);
+        int pid_number;
+        iss >> pid_number;
+
+        LOG(INFO) << "pid:" << pid_number;
+
+        #ifdef _WIN32
+            HANDLE pss = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
+
+            PROCESSENTRY32 pe = { 0 };  
+            pe.dwSize = sizeof(pe);  
+
+            if (Process32First(pss, &pe)) {
+                do {
+                    if (pe.th32ProcessID == pid_number) {
+                        return true;
+                    }
+                } while (Process32Next(pss, &pe));
+            }
+
+            CloseHandle(pss);
+
+            return false;
+        #else
+            return 0 == kill(pid_number, 0); 
+        #endif
+    }
+
+    return false;
 }

@@ -8,13 +8,8 @@
 #include "PidLogger.h"
 #include <QtWidgets/QApplication>
 #include <QCommandLineParser>
-_INITIALIZE_EASYLOGGINGPP
 
-void onExit(int sig) {
-    PidLogger::RemoveFile();
-    el::Helpers::logCrashReason(sig);
-    el::Helpers::crashAbort(sig);
-}
+_INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char *argv[]) {
     initialize_logger();
@@ -35,8 +30,7 @@ int main(int argc, char *argv[]) {
         LOG(ERROR) << "You must specify a server port with the --port parameter";
         exit(0);
     }
-
-    el::Helpers::setCrashHandler(onExit);
+    
     PidLogger::CreatePidFile();
 
     net::Client client(1, QHostAddress("127.0.0.1"), 4568);

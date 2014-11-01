@@ -9,7 +9,6 @@
 class PidLogger {
 public:
       void static CreatePidFile();
-      void static RemoveFile();
 private:
     QString static GetFileName();
 };
