@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QDataStream>
+#include "EventId.h"
 
 namespace common {
 namespace net {
@@ -23,14 +24,14 @@ class Event {
      * @param timestamp in milliseconds since the beginning of the game, when
      * this action took place (in the point of view of the client)
      */
-    Event(quint32 id, quint64 timestamp);
+    Event(quint32 id, quint32 timestamp);
 
     /**
      * Creates a new Event with no ID (the ID will be set when the event is
      * sent)
      * @param timestamp in milliseconds since the beginning of the game.
      */
-    Event(quint64 timestamp);
+    Event(quint32 timestamp);
 
     virtual ~Event();
 
@@ -43,7 +44,7 @@ class Event {
 
   private:
     quint32 id_;
-    quint64 timestamp_;
+    quint32 timestamp_;
 
   protected:
     /**
@@ -51,7 +52,7 @@ class Event {
      * timestamp. Intended to be called by the derived classes in their
      * implementation of Serialize.
      */
-    void SerializeBaseEvent(QDataStream& stream) const;
+    void SerializeBaseEvent(QDataStream& stream, EventId id) const;
     bool operator==(const Event& event) const;
 
 };

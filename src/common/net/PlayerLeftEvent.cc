@@ -13,8 +13,7 @@ QuitReason PlayerLeftEvent::GetReason() const {
 }
 
 void PlayerLeftEvent::Serialize(QDataStream& stream) const {
-  stream << (quint32) EventId::kPlayerLeftEvent;
-  SerializeBaseEvent(stream);
+  SerializeBaseEvent(stream, EventId::kPlayerLeftEvent);
   stream << GetReason();
 }
 

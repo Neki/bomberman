@@ -143,9 +143,10 @@ void NetworkWorker::ProcessPingPacket(QDataStream& stream) {
 void NetworkWorker::ProcessEntitiesPacket(QDataStream& stream) {
   assert(stream.status() == QDataStream::Ok);
   quint32 server_timestamp;
-  quint32 entities_nb;
+  quint8 entities_nb;
   stream >> server_timestamp;
   stream >> entities_nb;
+  VLOG(9) << "Entities were computed at timestamp " << (int) server_timestamp << " / there are " << (int) entities_nb << " entities in this packet";
   for(quint32 i = 0; i < entities_nb && stream.status() == QDataStream::Ok ; i++) {
     DeserializeEntity(stream, server_timestamp);
   }
@@ -158,6 +159,7 @@ void NetworkWorker::DeserializeEntity(QDataStream& stream, quint32 timestamp) {
   std::unique_ptr<Entity> entity = Deserializer::DeserializeEntity(stream);
   if(entity.get() == nullptr || stream.status() != QDataStream::Ok) {
     LOG(WARNING) << "Could not deserialize an entity";
+    return;
   }
   ServerEntity server_entity(timestamp, std::move(entity));
   VLOG(9) << "Received an entity / id = " << server_entity.GetEntity()->GetId() << " / server timestamp = " << server_entity.GetTimestamp();

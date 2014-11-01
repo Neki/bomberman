@@ -8,8 +8,7 @@ SettingsEvent::SettingsEvent(quint32 id, quint64 timestamp)
   : Event(id, timestamp) {}
 
 void SettingsEvent::Serialize(QDataStream& stream) const {
-  stream << (quint32) EventId::kSettingsEvent;
-  SerializeBaseEvent(stream);
+  SerializeBaseEvent(stream, EventId::kSettingsEvent);
   // TODO when the settings event is completely defined
 }
 

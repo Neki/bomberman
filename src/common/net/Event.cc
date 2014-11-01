@@ -3,12 +3,12 @@
 namespace common {
 namespace net {
 
-Event::Event(quint32 id, quint64 timestamp) :
+Event::Event(quint32 id, quint32 timestamp) :
     id_(id),
     timestamp_(timestamp) {
 }
 
-Event::Event(quint64 timestamp) :
+Event::Event(quint32 timestamp) :
   Event(0, timestamp) {}
 
 Event::~Event() {}
@@ -25,7 +25,8 @@ quint32 Event::GetTimestamp() const {
   return timestamp_;
 }
 
-void Event::SerializeBaseEvent(QDataStream& stream) const {
+void Event::SerializeBaseEvent(QDataStream& stream, EventId id) const {
+  stream << (quint8) id;
   stream << GetId();
   stream << GetTimestamp();
 }

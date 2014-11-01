@@ -14,8 +14,7 @@ QString PlayerJoinedEvent::GetPlayerName() const {
 }
 
 void PlayerJoinedEvent::Serialize(QDataStream& stream) const {
-  stream << (quint32) EventId::kPlayerJoinedEvent;
-  SerializeBaseEvent(stream);
+  SerializeBaseEvent(stream, EventId::kPlayerJoinedEvent);
   stream << GetPlayerName();
 }
 

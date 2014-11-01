@@ -19,6 +19,7 @@ GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> ga
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
     last_event_ids_[client.GetId()] = 1;
   }
+  QObject::connect(&send_entities_timer_, &QTimer::timeout, this, &GameNetworkWorker::BroadcastWorld);
   send_entities_timer_.start(100);
   LOG(DEBUG) << "In game network worker initialized and ready on port " << port_;
 }
@@ -244,10 +245,13 @@ void GameNetworkWorker::BroadcastWorld() {
   for(int i = 0; i < world->GetWidth(); i++)  {
     for(int j = 0; j < world->GetHeight(); j++) {
       QPoint point(i, j);// TODO check indices
-      for(auto it = world->CharacterIteratorBegin(); it != world->CharacterIteratorEnd(); ++it) {
+      for(auto it = world->IteratorAtBegin(point); it != world->IteratorAtEnd(point); ++it) {
         to_send.push_back(it->get());
       }
     }
+  }
+  for(auto it = world->CharacterIteratorBegin(); it != world->CharacterIteratorEnd(); ++it) {
+    to_send.push_back(it->get());
   }
   auto it = to_send.begin();
   while(it != to_send.end()) {
