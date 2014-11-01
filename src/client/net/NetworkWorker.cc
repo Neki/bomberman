@@ -158,6 +158,7 @@ void NetworkWorker::DeserializeEntity(QDataStream& stream, quint32 timestamp) {
   std::unique_ptr<Entity> entity = Deserializer::DeserializeEntity(stream);
   if(entity.get() == nullptr || stream.status() != QDataStream::Ok) {
     LOG(WARNING) << "Could not deserialize an entity";
+    return;
   }
   ServerEntity server_entity(timestamp, std::move(entity));
   VLOG(9) << "Received an entity / id = " << server_entity.GetEntity()->GetId() << " / server timestamp = " << server_entity.GetTimestamp();
