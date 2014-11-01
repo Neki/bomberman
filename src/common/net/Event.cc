@@ -3,12 +3,12 @@
 namespace common {
 namespace net {
 
-Event::Event(quint32 id, quint64 timestamp) :
+Event::Event(quint32 id, quint32 timestamp) :
     id_(id),
     timestamp_(timestamp) {
 }
 
-Event::Event(quint64 timestamp) :
+Event::Event(quint32 timestamp) :
   Event(0, timestamp) {}
 
 Event::~Event() {}
