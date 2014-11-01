@@ -9,6 +9,8 @@
 #include "Values.h"
 #include "easylogging++.h"
 #include "src/common/World.h"
+#include "src/common/entity/Fire.h"
+#include "src/common/entity/Block.h"
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWindow),
     server_handler_(std::make_shared<ServerHandler>()),
@@ -16,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWind
 	ui->setupUi(this);
 
 	common::World world = common::World(100, 100);
+	world.AddItem(std::unique_ptr<Fire>(new Fire(QPoint(32, 32), 12345)));
+	world.AddItem(std::unique_ptr<Block>(new Block(QPoint(30, 30))));
 	Board *board = new Board(&world);
 	setCentralWidget(board);
 

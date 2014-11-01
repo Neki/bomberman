@@ -46,22 +46,22 @@ public:
         actionCreate->setObjectName(QStringLiteral("actionCreate"));
         actionCreate->setCheckable(false);
         QIcon icon;
-        icon.addFile(QStringLiteral(":/qt/Resources/create.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QStringLiteral(":/res/create.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionCreate->setIcon(icon);
         actionJoin = new QAction(MainWindow);
         actionJoin->setObjectName(QStringLiteral("actionJoin"));
         QIcon icon1;
-        icon1.addFile(QStringLiteral(":/qt/Resources/join.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QStringLiteral(":/res/join.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionJoin->setIcon(icon1);
         actionQuit = new QAction(MainWindow);
         actionQuit->setObjectName(QStringLiteral("actionQuit"));
         QIcon icon2;
-        icon2.addFile(QStringLiteral(":/qt/Resources/quit.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QStringLiteral(":/res/quit.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionQuit->setIcon(icon2);
         actionSettings = new QAction(MainWindow);
         actionSettings->setObjectName(QStringLiteral("actionSettings"));
         QIcon icon3;
-        icon3.addFile(QStringLiteral(":/qt/Resources/settings.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QStringLiteral(":/res/settings.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSettings->setIcon(icon3);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
@@ -95,7 +95,7 @@ public:
         toolBar->setObjectName(QStringLiteral("toolBar"));
         toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
-
+		toolBar->setMovable(false);
         toolBar->addAction(actionCreate);
         toolBar->addSeparator();
         toolBar->addAction(actionJoin);
