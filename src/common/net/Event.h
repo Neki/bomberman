@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QDataStream>
+#include "EventId.h"
 
 namespace common {
 namespace net {
@@ -51,7 +52,7 @@ class Event {
      * timestamp. Intended to be called by the derived classes in their
      * implementation of Serialize.
      */
-    void SerializeBaseEvent(QDataStream& stream) const;
+    void SerializeBaseEvent(QDataStream& stream, EventId id) const;
     bool operator==(const Event& event) const;
 
 };

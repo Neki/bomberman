@@ -25,7 +25,8 @@ quint32 Event::GetTimestamp() const {
   return timestamp_;
 }
 
-void Event::SerializeBaseEvent(QDataStream& stream) const {
+void Event::SerializeBaseEvent(QDataStream& stream, EventId id) const {
+  stream << (quint8) id;
   stream << GetId();
   stream << GetTimestamp();
 }

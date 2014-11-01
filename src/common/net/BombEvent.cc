@@ -15,8 +15,7 @@ QPoint BombEvent::GetPosition() const {
 }
 
 void BombEvent::Serialize(QDataStream& stream) const {
-  stream << (quint32) EventId::kBombEventId;
-  SerializeBaseEvent(stream);
+  SerializeBaseEvent(stream, EventId::kBombEventId);
   stream << this->GetPosition();
 }
 

@@ -4,7 +4,7 @@ namespace common {
 namespace net {
 
 EventId Deserializer::GetNextEventId(QDataStream &stream) {
-  quint32 id;
+  quint8 id;
   stream >> id;
   switch(id) {
     case EventId::kBombEventId:
