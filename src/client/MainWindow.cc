@@ -1,19 +1,22 @@
 #include "MainWindow.h"
 #include <QTimer>
 #include <QDebug>
+#include <memory>
 #include <QKeyEvent>
 #include <QtWidgets/QMainWindow>
 #include <QWidget>
 #include <QPainter>
 #include "Values.h"
 #include "easylogging++.h"
+#include "src/common/World.h"
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWindow),
     server_handler_(std::make_shared<ServerHandler>()),
     timer_(std::make_shared<common::GameTimer>()) {
 	ui->setupUi(this);
 
-	Board *board = new Board;
+	common::World world = common::World(100, 100);
+	Board *board = new Board(&world);
 	setCentralWidget(board);
 
     timer_->StartGame();
