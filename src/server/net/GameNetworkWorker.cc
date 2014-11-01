@@ -154,7 +154,7 @@ void GameNetworkWorker::ProcessEventPacket(QDataStream& stream, const Client& cl
       LOG(WARNING) << "Stream is in an invalid state after having deserialized the event. Continuing anyway.";
     }
     if(event.get() == nullptr) {
-      LOG(WARNING) << "Could not deserialize the received event. Dropping it.";
+      LOG(WARNING) << "Could not deserialize the received event. Dropping remaining data.";
       return;
     }
     VLOG(9) << "Deserialized event has ID " << event->GetId();
