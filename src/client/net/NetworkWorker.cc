@@ -146,6 +146,7 @@ void NetworkWorker::ProcessEntitiesPacket(QDataStream& stream) {
   quint8 entities_nb;
   stream >> server_timestamp;
   stream >> entities_nb;
+  VLOG(9) << "Entities were computed at timestamp " << (int) server_timestamp << " / there are " << (int) entities_nb << " entities in this packet";
   for(quint32 i = 0; i < entities_nb && stream.status() == QDataStream::Ok ; i++) {
     DeserializeEntity(stream, server_timestamp);
   }
