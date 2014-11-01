@@ -143,7 +143,7 @@ void NetworkWorker::ProcessPingPacket(QDataStream& stream) {
 void NetworkWorker::ProcessEntitiesPacket(QDataStream& stream) {
   assert(stream.status() == QDataStream::Ok);
   quint32 server_timestamp;
-  quint32 entities_nb;
+  quint8 entities_nb;
   stream >> server_timestamp;
   stream >> entities_nb;
   for(quint32 i = 0; i < entities_nb && stream.status() == QDataStream::Ok ; i++) {
