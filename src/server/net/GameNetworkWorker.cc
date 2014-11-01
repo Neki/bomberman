@@ -245,10 +245,13 @@ void GameNetworkWorker::BroadcastWorld() {
   for(int i = 0; i < world->GetWidth(); i++)  {
     for(int j = 0; j < world->GetHeight(); j++) {
       QPoint point(i, j);// TODO check indices
-      for(auto it = world->CharacterIteratorBegin(); it != world->CharacterIteratorEnd(); ++it) {
+      for(auto it = world->IteratorAtBegin(point); it != world->IteratorAtEnd(point); ++it) {
         to_send.push_back(it->get());
       }
     }
+  }
+  for(auto it = world->CharacterIteratorBegin(); it != world->CharacterIteratorEnd(); ++it) {
+    to_send.push_back(it->get());
   }
   auto it = to_send.begin();
   while(it != to_send.end()) {
