@@ -179,6 +179,7 @@ void GameNetworkWorker::EmitReadyEvents(Client client) {
   quint8 client_id = client.GetId();
   // look if the next event from this client (ordered by id) has been received
   auto it = event_cache_[client_id].find(last_event_ids_[client_id] + 1);
+  bool send_ack = false;
   while(it != event_cache_[client_id].end()) {
     // if yes, send it to the application
     EmitterVisitor visitor(this, it->second.get());
@@ -190,6 +191,19 @@ void GameNetworkWorker::EmitReadyEvents(Client client) {
     // update iterator
     it = event_cache_[client_id].find(last_event_ids_[client_id] + 1);
   }
+  if(send_ack) {
+    SendAckPacket(client, last_event_ids_[client_id]);
+  }
+}
+
+void GameNetworkWorker::SendAckPacket(const Client& client, quint32 event_id) {
+  QByteArray buffer;
+  QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
+  PrepareHeader(stream, kEventAckPacketId);
+  stream << event_id;
+  assert(stream.status() == QDataStream::Ok);
+  socket_.writeDatagram(buffer, client.GetAddress(), client.GetPort());
+  VLOG(9) << "Sent ACK packet for ids <= " << (int) event_id << " to client ID " << (int) client.GetId();
 }
 
 void GameNetworkWorker::SendPongPacket(const Client& client, quint32 packet_id) {

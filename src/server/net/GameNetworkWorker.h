@@ -55,6 +55,7 @@ class GameNetworkWorker : public QObject {
     static const unsigned char kPingPacketId = 0x01;
     static const unsigned char kEventPacketId = 0x02;
     static const unsigned char kEntitiesPacketId = 0x03;
+    static const unsigned char kEventAckPacketId = 0x04;
 
     quint32 GetNextPacketId();
 
@@ -69,6 +70,7 @@ class GameNetworkWorker : public QObject {
     void HandlePendingEvent(std::unique_ptr<BaseClientEvent> event);
     void EmitReadyEvents(Client client);
     void SendPongPacket(const Client& client, quint32 packet_id);
+    void SendAckPacket(const Client& client, quint32 event_id);
 
     void BroadcastWorld();
 
