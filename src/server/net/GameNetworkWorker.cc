@@ -19,6 +19,7 @@ GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> ga
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
     last_event_ids_[client.GetId()] = 1;
   }
+  QObject::connect(&send_entities_timer_, &QTimer::timeout, this, &GameNetworkWorker::BroadcastWorld);
   send_entities_timer_.start(100);
   LOG(DEBUG) << "In game network worker initialized and ready on port " << port_;
 }
