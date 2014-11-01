@@ -2,7 +2,6 @@
 #include "easylogging++.h"
 #include "src/common/net/EventId.h"
 #include "src/common/net/Deserializer.h"
-#include "src/server/PidLogger.h"
 #include <cassert>
 
 namespace net {
