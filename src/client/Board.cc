@@ -27,8 +27,9 @@ void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPoin
 
 void Board::PaintEvent(QPaintEvent *event)
 {
+	qDebug() << Q_FUNC_INFO;
 	QPainter painter(this);
-	painter.setWindow(0, 0, WIDTH_BOARD, HEIGHT_BOARD);
+	painter.setWindow(0, 0, world_->GetHeight(), world_->GetHeight());
 	painter.setViewport(0, 0, width(), height());
 	painter.setClipRect(event->rect());
 
@@ -47,6 +48,7 @@ void Board::PaintEvent(QPaintEvent *event)
 			}			
 		}
 	}
+	painter.end();
 }
 
 bool Board::IsKeyPressEvent(QKeyEvent *event)

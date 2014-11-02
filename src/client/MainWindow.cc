@@ -18,10 +18,11 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWind
 	ui->setupUi(this);
 
 	common::World world = common::World(100, 100);
-	world.AddItem(std::unique_ptr<Fire>(new Fire(QPoint(32, 32), 12345)));
-	world.AddItem(std::unique_ptr<Block>(new Block(QPoint(30, 30))));
+	world.AddItem(std::unique_ptr<Fire>(new Fire(QPoint(32, 32), 12345))); // changed into .png for tests
+	world.AddItem(std::unique_ptr<Block>(new Block(QPoint(30, 30)))); // still .svg
 	Board *board = new Board(&world);
 	setCentralWidget(board);
+	show();
 
     timer_->StartGame();
 
