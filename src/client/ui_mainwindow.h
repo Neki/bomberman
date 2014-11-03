@@ -19,6 +19,8 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include <easylogging++.h>
+#include <QDir>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,6 +39,12 @@ public:
     QLabel *scoreLabel;
     QToolBar *toolBar;
 
+	QPixmap getPixmap(QString fileName){
+		QPixmap pix(QCoreApplication::applicationDirPath() + QDir::separator() + QString("res") + QDir::separator() + QString(fileName));
+		LOG(WARNING) << pix.isNull();
+		return pix;
+	}
+
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
@@ -46,23 +54,23 @@ public:
         actionCreate->setObjectName(QStringLiteral("actionCreate"));
         actionCreate->setCheckable(false);
         QIcon icon;
-        icon.addFile(QCoreApplication::applicationDirPath() + "/res/create.png", QSize(), QIcon::Normal, QIcon::Off);
+		icon.addPixmap(getPixmap("create.png"));
         actionCreate->setIcon(icon);
         actionJoin = new QAction(MainWindow);
         actionJoin->setObjectName(QStringLiteral("actionJoin"));
         QIcon icon1;
-        icon1.addFile(QCoreApplication::applicationDirPath() + "/res/join.png", QSize(), QIcon::Normal, QIcon::Off);
-        actionJoin->setIcon(icon1);
+		icon1.addPixmap(getPixmap("join.png"));
+		actionJoin->setIcon(icon1);
         actionQuit = new QAction(MainWindow);
         actionQuit->setObjectName(QStringLiteral("actionQuit"));
         QIcon icon2;
-        icon2.addFile(QCoreApplication::applicationDirPath() + "/res/quit.png", QSize(), QIcon::Normal, QIcon::Off);
-        actionQuit->setIcon(icon2);
+		icon2.addPixmap(getPixmap("quit.png"));
+		actionQuit->setIcon(icon2);
         actionSettings = new QAction(MainWindow);
         actionSettings->setObjectName(QStringLiteral("actionSettings"));
         QIcon icon3;
-        icon3.addFile(QCoreApplication::applicationDirPath() + "/res/settings.png", QSize(), QIcon::Normal, QIcon::Off);
-        actionSettings->setIcon(icon3);
+		icon3.addPixmap(getPixmap("settings.png"));
+		actionSettings->setIcon(icon3);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         centralwidget->setMinimumSize(QSize(800, 549));
@@ -114,19 +122,19 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         actionCreate->setText(QApplication::translate("MainWindow", "Create", 0));
 #ifndef QT_NO_TOOLTIP
-        actionCreate->setToolTip(QApplication::translate("MainWindow", "Create game", 0));
+        actionCreate->setToolTip(QApplication::translate("MainWindow", "create game", 0));
 #endif // QT_NO_TOOLTIP
         actionJoin->setText(QApplication::translate("MainWindow", "Join", 0));
 #ifndef QT_NO_TOOLTIP
-        actionJoin->setToolTip(QApplication::translate("MainWindow", "Join an existing game", 0));
+        actionJoin->setToolTip(QApplication::translate("MainWindow", "join an existing game", 0));
 #endif // QT_NO_TOOLTIP
         actionQuit->setText(QApplication::translate("MainWindow", "Quit", 0));
 #ifndef QT_NO_TOOLTIP
-        actionQuit->setToolTip(QApplication::translate("MainWindow", "Close game", 0));
+        actionQuit->setToolTip(QApplication::translate("MainWindow", "close game", 0));
 #endif // QT_NO_TOOLTIP
         actionSettings->setText(QApplication::translate("MainWindow", "Settings", 0));
 #ifndef QT_NO_TOOLTIP
-        actionSettings->setToolTip(QApplication::translate("MainWindow", "Settings of the player", 0));
+        actionSettings->setToolTip(QApplication::translate("MainWindow", "settings of the player", 0));
 #endif // QT_NO_TOOLTIP
         killsLabel->setText(QApplication::translate("MainWindow", "Number of kills : ", 0));
         deathsLabel->setText(QApplication::translate("MainWindow", "Number of deaths : ", 0));
