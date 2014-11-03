@@ -22,12 +22,33 @@ TEST(World, CheckCoord) {
   EXPECT_EQ(world.CheckCoord(QPoint(14, 10)), false);
 }
 
-TEST(World, AddItem) {
-  common::World world(30,10);
-  QPoint pos(4, 4);
-  world.AddItem(std::unique_ptr<common::entity::Wall>( new common::entity::Wall(pos)));
-  EXPECT_EQ(world.IsWalkable(pos), false);
-  EXPECT_EQ(world.StopsFire(pos), true);
-  EXPECT_EQ(world.IsWalkable(QPoint(3, 3)), true);
-  EXPECT_EQ(world.StopsFire(QPoint(3, 3)), false);
+TEST(World, Check_map_generation) {
+  common::World world(21, 11);
+
+  EXPECT_EQ(world.IsWalkable(QPoint(0, 0)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(1, 0)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(0, 1)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(20, 10)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(19, 10)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(20, 9)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(0, 10)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(0, 9)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(1, 10)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(20, 0)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(20, 1)), true);
+  EXPECT_EQ(world.IsWalkable(QPoint(19, 0)), true);
+
+  EXPECT_EQ(world.IsWalkable(QPoint(-1, 0)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(1, 1)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(2, 1)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(1, 2)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(0, 6)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(10, 0)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(10, 1)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(21, 11)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(6, 6)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(20, 11)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(2, 10)), false);
+  EXPECT_EQ(world.IsWalkable(QPoint(20, 2)), false);
+
 }
