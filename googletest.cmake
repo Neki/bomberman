@@ -7,15 +7,23 @@ if(NOT ${Threads_FOUND})
 endif()
 
 set(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/gtest")
-ExternalProject_Add(googletest
-    SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk
-    SVN_REVISION -r692
-    TIMEOUT 10
-    PREFIX "${GTEST_PREFIX}"
-    INSTALL_COMMAND ""
-    LOG_DOWNLOAD ON
-    LOG_CONFIGURE ON
-    LOG_BUILD ON)
+if(NOT no_download)
+  ExternalProject_Add(googletest
+      SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk
+      SVN_REVISION -r692
+      TIMEOUT 10
+      PREFIX "${GTEST_PREFIX}"
+      INSTALL_COMMAND ""
+      LOG_DOWNLOAD ON
+      LOG_CONFIGURE ON
+      LOG_BUILD ON)
+else()
+  ExternalProject_Add(googletest
+      PREFIX "${GTEST_PREFIX}"
+      INSTALL_COMMAND ""
+      LOG_CONFIGURE ON
+      LOG_BUILD ON)
+endif()
 
 set(LIBPREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}")
 set(LIBSUFFIX "${CMAKE_STATIC_LIBRARY_SUFFIX}")
