@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QRectF>
 #include <QSize>
+#include <QDir>
 #include "src/common/World.h"
 #include <QPointF>
 #include <QtSvg/QSvgRenderer>
@@ -11,7 +12,7 @@
 #include "easylogging++.h"
 _INITIALIZE_EASYLOGGINGPP
 
-Board::Board(common::World *world, QWidget *parent) :QWidget(parent), world_(world)
+Board::Board(common::World *world, QWidget *parent) : QWidget(parent), world_(world)
 {
 	
 }
@@ -21,12 +22,13 @@ void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPoin
 	QString path = entity.GetTexturePath();
 	//x.setX(); bc top left
 	QRectF rectF(x, size);
-	QSvgRenderer *renderer = new QSvgRenderer(path);
+    QSvgRenderer *renderer = new QSvgRenderer(QCoreApplication::applicationDirPath() + QDir::separator() + path);
 	renderer->render(&painter, rectF);
 }
 
-void Board::PaintEvent(QPaintEvent *event)
+void Board::paintEvent(QPaintEvent *event)
 {
+    LOG(DEBUG) << "painting";
 	qDebug() << Q_FUNC_INFO;
 	QPainter painter(this);
 	painter.setWindow(0, 0, world_->GetHeight(), world_->GetHeight());
