@@ -11,7 +11,8 @@ namespace net {
 class BombEvent : public InGameEvent {
 
   public:
-    BombEvent(QPoint position, quint32 id, quint64 timestamp);
+    BombEvent(QPoint position, quint32 id, quint32 timestamp);
+    BombEvent(QPoint position, quint32 timestamp);
     QPoint GetPosition() const;
 
     void Serialize(QDataStream& stream) const;

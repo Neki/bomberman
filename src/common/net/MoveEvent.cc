@@ -4,8 +4,15 @@
 namespace common {
 namespace net {
 
-MoveEvent::MoveEvent(QPoint position, QPoint destination, Direction direction, quint32 id, quint64 timestamp) :
+MoveEvent::MoveEvent(QPoint position, QPoint destination, Direction direction, quint32 id, quint32 timestamp) :
     InGameEvent(id, timestamp),
+    position_(position),
+    direction_(direction),
+    destination_(destination) {
+}
+
+MoveEvent::MoveEvent(QPoint position, QPoint destination, Direction direction, quint32 timestamp) :
+    InGameEvent(timestamp),
     position_(position),
     direction_(direction),
     destination_(destination) {

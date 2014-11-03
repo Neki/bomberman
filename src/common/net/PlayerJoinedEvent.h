@@ -11,7 +11,8 @@ namespace net {
 class PlayerJoinedEvent : public Event {
 
   public:
-    PlayerJoinedEvent(QString player_name, quint32 id, quint64 timestamp);
+    PlayerJoinedEvent(QString player_name, quint32 id, quint32 timestamp);
+    PlayerJoinedEvent(QString player_name, quint32 timestamp);
     QString GetPlayerName() const;
 
     void Serialize(QDataStream& stream) const;

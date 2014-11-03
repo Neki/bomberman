@@ -4,10 +4,14 @@
 namespace common {
 namespace net {
 
-BombEvent::BombEvent(QPoint position, quint32 id, quint64 timestamp)
+BombEvent::BombEvent(QPoint position, quint32 id, quint32 timestamp)
     : InGameEvent(id, timestamp),
       position_(position) {
+}
 
+BombEvent::BombEvent(QPoint position, quint32 timestamp)
+    : InGameEvent(timestamp),
+      position_(position) {
 }
 
 QPoint BombEvent::GetPosition() const {
