@@ -1,3 +1,4 @@
+#define NOMINMAX // Required for Windows to avoid QTime errors
 #include "MainWindow.h"
 #include <QTimer>
 #include <QDebug>

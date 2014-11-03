@@ -1,3 +1,4 @@
+#define NOMINMAX // Required for Windows to avoid QTime errors
 #include <QtWidgets/QApplication>
 #include "src/client/MainWindow.h"
 #include "logging.h"
