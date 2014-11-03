@@ -46,22 +46,22 @@ public:
         actionCreate->setObjectName(QStringLiteral("actionCreate"));
         actionCreate->setCheckable(false);
         QIcon icon;
-        icon.addFile(QStringLiteral(":/res/create.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QCoreApplication::applicationDirPath() + "/res/create.png", QSize(), QIcon::Normal, QIcon::Off);
         actionCreate->setIcon(icon);
         actionJoin = new QAction(MainWindow);
         actionJoin->setObjectName(QStringLiteral("actionJoin"));
         QIcon icon1;
-        icon1.addFile(QStringLiteral(":/res/join.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QCoreApplication::applicationDirPath() + "/res/join.png", QSize(), QIcon::Normal, QIcon::Off);
         actionJoin->setIcon(icon1);
         actionQuit = new QAction(MainWindow);
         actionQuit->setObjectName(QStringLiteral("actionQuit"));
         QIcon icon2;
-        icon2.addFile(QStringLiteral(":/res/quit.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QCoreApplication::applicationDirPath() + "/res/quit.png", QSize(), QIcon::Normal, QIcon::Off);
         actionQuit->setIcon(icon2);
         actionSettings = new QAction(MainWindow);
         actionSettings->setObjectName(QStringLiteral("actionSettings"));
         QIcon icon3;
-        icon3.addFile(QStringLiteral(":/res/settings.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QCoreApplication::applicationDirPath() + "/res/settings.png", QSize(), QIcon::Normal, QIcon::Off);
         actionSettings->setIcon(icon3);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
@@ -114,19 +114,19 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         actionCreate->setText(QApplication::translate("MainWindow", "Create", 0));
 #ifndef QT_NO_TOOLTIP
-        actionCreate->setToolTip(QApplication::translate("MainWindow", "create game", 0));
+        actionCreate->setToolTip(QApplication::translate("MainWindow", "Create game", 0));
 #endif // QT_NO_TOOLTIP
         actionJoin->setText(QApplication::translate("MainWindow", "Join", 0));
 #ifndef QT_NO_TOOLTIP
-        actionJoin->setToolTip(QApplication::translate("MainWindow", "join an existing game", 0));
+        actionJoin->setToolTip(QApplication::translate("MainWindow", "Join an existing game", 0));
 #endif // QT_NO_TOOLTIP
         actionQuit->setText(QApplication::translate("MainWindow", "Quit", 0));
 #ifndef QT_NO_TOOLTIP
-        actionQuit->setToolTip(QApplication::translate("MainWindow", "close game", 0));
+        actionQuit->setToolTip(QApplication::translate("MainWindow", "Close game", 0));
 #endif // QT_NO_TOOLTIP
         actionSettings->setText(QApplication::translate("MainWindow", "Settings", 0));
 #ifndef QT_NO_TOOLTIP
-        actionSettings->setToolTip(QApplication::translate("MainWindow", "settings of the player", 0));
+        actionSettings->setToolTip(QApplication::translate("MainWindow", "Settings of the player", 0));
 #endif // QT_NO_TOOLTIP
         killsLabel->setText(QApplication::translate("MainWindow", "Number of kills : ", 0));
         deathsLabel->setText(QApplication::translate("MainWindow", "Number of deaths : ", 0));

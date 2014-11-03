@@ -75,7 +75,7 @@ void MainWindow::on_actionCreate_triggered() {
 }
 
 void MainWindow::on_actionJoin_triggered() {
-	
+    network_worker_ = std::unique_ptr<net::NetworkWorker>(new net::NetworkWorker(1, QHostAddress("127.0.0.1"), 4567, 4568, timer_));
 }
 
 void MainWindow::on_actionQuit_triggered() {
