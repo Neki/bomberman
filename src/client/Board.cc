@@ -2,38 +2,53 @@
 #include "Values.h"
 #include <QKeyEvent>
 #include <QWidget>
+#include <QRectF>
+#include <QSize>
+#include "src/common/World.h"
+#include <QPointF>
+#include <QtSvg/QSvgRenderer>
+#include "src/common/entity/Entity.h"
 #include "easylogging++.h"
 _INITIALIZE_EASYLOGGINGPP
 
-Board::Board(QWidget *parent):QWidget(parent)
+Board::Board(common::World *world, QWidget *parent) :QWidget(parent), world_(world)
 {
 	
 }
 
+void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPointF x, QSizeF size)
+{
+	QString path = entity.GetTexturePath();
+	//x.setX(); bc top left
+	QRectF rectF(x, size);
+	QSvgRenderer *renderer = new QSvgRenderer(path);
+	renderer->render(&painter, rectF);
+}
+
 void Board::PaintEvent(QPaintEvent *event)
 {
+	qDebug() << Q_FUNC_INFO;
 	QPainter painter(this);
-	painter.setWindow(0, 0, WIDTH_BOARD, HEIGHT_BOARD); 
+	painter.setWindow(0, 0, world_->GetHeight(), world_->GetHeight());
 	painter.setViewport(0, 0, width(), height());
 	painter.setClipRect(event->rect());
 
-	for (int i = 0; i<SQUARES_HEIGHT; i++)
+	QSize qsize(SIDE_SQUARE, SIDE_SQUARE);
+	QSizeF qsizef(qsize);
+
+	for (int i = 0; i<world_->GetHeight(); ++i)
 	{
-		for (int j = 0; j<SQUARES_WIDTH; j++)
+		for (int j = 0; j<world_->GetWidth(); ++j)
 		{
-			painter.setPen(Qt::NoPen);
-			QRect rect(RectSquare(j, i));
-			QPixmap *pixmap;
-			pixmap = new QPixmap(":/res/block.png");
-			painter.drawPixmap(rect, *pixmap);
-			//paintEntity(painter, entities[i,j], int i, int j);
+			QPointF x(SIDE_SQUARE*i - SIDE_SQUARE / 2, SIDE_SQUARE*j - SIDE_SQUARE / 2);
+			QPoint a(i, j);
+			for (auto k = world_->IteratorAtBegin(a); k != world_->IteratorAtEnd(a); ++k)
+			{
+				PaintEntity(painter, **k , x, qsizef);
+			}			
 		}
 	}
-}
-
-QRect Board::RectSquare(int x, int y)
-{
-	return QRect(x*SIDE_SQUARE, y*SIDE_SQUARE, SIDE_SQUARE, SIDE_SQUARE);
+	painter.end();
 }
 
 bool Board::IsKeyPressEvent(QKeyEvent *event)
@@ -100,10 +115,3 @@ void Board::NewGame(int nbPlayers){
 
 
 //// TODO Board destructor
-//void Board::PaintEntity(QPainter &painter, Entity entity, int i, int j)
-//{
-//	// entity.getImage() -> afficher ça en (i,j)
-//	painter.setPen(Qt::NoPen);
-//	QRect rect(RectSquare(j, i));
-//	//painter.drawPixmap(rect, image);
-//}

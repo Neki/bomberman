@@ -1,20 +1,28 @@
 #include "MainWindow.h"
 #include <QTimer>
 #include <QDebug>
+#include <memory>
 #include <QKeyEvent>
 #include <QtWidgets/QMainWindow>
 #include <QWidget>
 #include <QPainter>
 #include "Values.h"
 #include "easylogging++.h"
+#include "src/common/World.h"
+#include "src/common/entity/Fire.h"
+#include "src/common/entity/Block.h"
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWindow),
     server_handler_(std::make_shared<ServerHandler>()),
     timer_(std::make_shared<common::GameTimer>()) {
 	ui->setupUi(this);
 
-	Board *board = new Board;
+	common::World world = common::World(100, 100);
+	world.AddItem(std::unique_ptr<Fire>(new Fire(QPoint(32, 32), 12345))); // changed into .png for tests
+	world.AddItem(std::unique_ptr<Block>(new Block(QPoint(30, 30)))); // still .svg
+	Board *board = new Board(&world);
 	setCentralWidget(board);
+	show();
 
     timer_->StartGame();
 
