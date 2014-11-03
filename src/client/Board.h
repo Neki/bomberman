@@ -1,29 +1,31 @@
-#ifndef GUI_BOARD_H
-#define GUI_BOARD_H
+#ifndef SRC_CLIENT_BOARD_H
+#define SRC_CLIENT_BOARD_H
 
 #include <QtGui>
 #include <QWidget>
 #include <memory>
 #include "Values.h"
-//#include "Character.h"
+//#include "src/common/entity/Character.h"
+#include "src/common/entity/Entity.h"
+#include "src/common/World.h"
 
 class Board : public QWidget
 {
 	Q_OBJECT
 public:
-	Board(QWidget* parent = 0);
+	Board(common::World* world, QWidget* parent = 0);
 	//~Board();
 
 private:
+	common::World *world_;
 	/*std::unique_ptr<QPixmap> pixmapFire;
 	std::unique_ptr<QPixmap> pixmapBlock;
 	std::unique_ptr<QPixmap> pixmapWall;*/
 
 protected:
+	void PaintEntity(QPainter &painter, common::entity::Entity &entity, QPointF x, QSizeF size);
 	void PaintEvent(QPaintEvent *event);
-	//void PaintEntity(QPainter &painter, Entity entity, int i, int j);
-	QRect RectSquare(int x, int y);
-	//void InitGame(int nbPlayers);
+	void InitGame(int nbPlayers);
 	void NewGame(int nbPlayers);
 	bool IsKeyPressEvent(QKeyEvent *);
 	bool IsKeyReleaseEvent(QKeyEvent *);
@@ -33,4 +35,4 @@ signals:
 	public slots :
 };
 
-#endif // GUI_BOARD_H
+#endif // SRC_CLIENT_BOARD_H
