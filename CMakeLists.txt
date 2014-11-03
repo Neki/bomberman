@@ -13,6 +13,7 @@ find_package(Qt5Svg REQUIRED)
 
 # Build options
 option(enable_tests "Build tests" ON)
+option(no_download "Prevent any download during the build process" OFF)
 set(CMAKE_BUILD_TYPE Debug)
 
 # Compiler options
