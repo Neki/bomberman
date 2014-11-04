@@ -5,7 +5,7 @@ namespace common {
 namespace entity {
 
 Wall::Wall(QPoint position) :
-  Entity(position, true, true, "res/wall.png")
+  Entity(position, true, true, "res/wall.svg")
 {
 
 }

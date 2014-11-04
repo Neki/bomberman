@@ -13,9 +13,12 @@
 #include <QPalette>
 _INITIALIZE_EASYLOGGINGPP
 
-Board::Board(std::shared_ptr<common::World> world, QWidget *parent) : QWidget(parent), world_(world)
+Board::Board(std::shared_ptr<common::World> world, QWidget *parent) :
+    QWidget(parent),
+    world_(world),
+    side_square_(500 / world->GetWidth())
 {
-    setGeometry(0, 50, 550, 550);
+    setGeometry(0, 50, 500, 550);
     QPalette Pal(palette());
     Pal.setColor(QPalette::Background, Qt::black);
     setAutoFillBackground(true);
@@ -36,12 +39,12 @@ void Board::paintEvent(QPaintEvent *event)
     painter.setViewport(0, 0, width(), height());
     painter.setClipRect(event->rect());
 
-	QSize qsize(SIDE_SQUARE, SIDE_SQUARE);
+    QSize qsize(side_square_, side_square_);
 	QSizeF qsizef(qsize);
 
     for (int i = 0; i < world_->GetWidth(); ++i) {
 		for (int j = 0; j < world_->GetHeight(); ++j) {
-			QPointF x(SIDE_SQUARE * i, SIDE_SQUARE * j);
+            QPointF x(side_square_ * i, side_square_ * j);
 			QPoint a(i, j);
 			for (auto k = world_->IteratorAtBegin(a); k != world_->IteratorAtEnd(a); ++k) {
 				PaintEntity(painter, **k , x, qsizef);
