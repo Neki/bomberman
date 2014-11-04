@@ -44,6 +44,7 @@ private:
 	std::unique_ptr<Board> board;
     std::shared_ptr<ServerHandler> server_handler_;
     std::shared_ptr<common::GameTimer> timer_;
+    std::shared_ptr<common::World> world_;
     std::unique_ptr<net::NetworkWorker> network_worker_;
 };
 

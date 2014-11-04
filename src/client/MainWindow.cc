@@ -13,17 +13,20 @@
 #include "src/common/entity/Fire.h"
 #include "src/common/entity/Block.h"
 
-MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWindow),
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),
     server_handler_(std::make_shared<ServerHandler>()),
-    timer_(std::make_shared<common::GameTimer>()) {
+    timer_(std::make_shared<common::GameTimer>()),
+    world_(std::make_shared<common::World>(50, 50)) {
 	ui->setupUi(this);
 
-	common::World world = common::World(100, 100);
-	world.AddItem(std::unique_ptr<Fire>(new Fire(QPoint(32, 32), 12345))); // changed into .png for tests
-	world.AddItem(std::unique_ptr<Block>(new Block(QPoint(30, 30)))); // still .svg
-	Board *board = new Board(&world);
-	setCentralWidget(board);
-	show();
+	//world_->AddItem(std::unique_ptr<Fire>(new Fire(QPoint(32, 32), 12345))); // changed into .png for tests
+	world_->AddItem(std::unique_ptr<Block>(new Block(QPoint(30, 30)))); // still .svg
+    world_->AddItem(std::unique_ptr<Block>(new Block(QPoint(2, 1))));
+    world_->AddItem(std::unique_ptr<Block>(new Block(QPoint(3, 1))));
+    world_->AddItem(std::unique_ptr<Block>(new Block(QPoint(4, 1))));
+
+	Board *board = new Board(world_, this);
+    show();
 
     timer_->StartGame();
 

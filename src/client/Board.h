@@ -13,11 +13,11 @@ class Board : public QWidget
 {
 	Q_OBJECT
 public:
-	Board(common::World* world, QWidget* parent = 0);
+    Board(std::shared_ptr<common::World> world, QWidget* parent);
 	//~Board();
 
 private:
-	common::World *world_;
+	std::shared_ptr<common::World> world_;
 	/*std::unique_ptr<QPixmap> pixmapFire;
 	std::unique_ptr<QPixmap> pixmapBlock;
 	std::unique_ptr<QPixmap> pixmapWall;*/

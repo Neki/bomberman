@@ -1,4 +1,3 @@
-
 #include "World.h"
 #include "entity/Wall.h"
 #include "entity/Block.h"
