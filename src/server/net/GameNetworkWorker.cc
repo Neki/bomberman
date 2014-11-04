@@ -244,7 +244,7 @@ void GameNetworkWorker::BroadcastWorld() {
   // being cut by the network layer
   for(int i = 0; i < world->GetWidth(); i++)  {
     for(int j = 0; j < world->GetHeight(); j++) {
-      QPoint point(i, j);// TODO check indices
+      QPoint point(i, j);
       for(auto it = world->IteratorAtBegin(point); it != world->IteratorAtEnd(point); ++it) {
         to_send.push_back(it->get());
       }
