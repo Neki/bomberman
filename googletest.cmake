@@ -29,6 +29,7 @@ if(NOT no_download)
       SVN_REVISION -r692
       TIMEOUT 10
       PREFIX "${GTEST_PREFIX}"
+      CMAKE_ARGS -Dgtest_force_shared_crt=ON
       INSTALL_COMMAND ""
       LOG_DOWNLOAD ON
       LOG_CONFIGURE ON
