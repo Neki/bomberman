@@ -16,12 +16,11 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),
     server_handler_(std::make_shared<ServerHandler>()),
     timer_(std::make_shared<common::GameTimer>()),
-    world_(std::make_shared<common::World>(21, 21)) {
+    world_(std::make_shared<common::World>(21, 21))
+{
 	ui->setupUi(this);
-
-	Board *board = new Board(world_, this);
+    board_ = std::unique_ptr<Board>(new Board(world_, this));
     show();
-
     timer_->StartGame();
 
 	SetScore(-5593);

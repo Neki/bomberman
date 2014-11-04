@@ -18,6 +18,7 @@ Board::Board(std::shared_ptr<common::World> world, QWidget *parent) :
     world_(world),
     side_square_(500 / world->GetWidth())
 {
+    LOG(DEBUG) << "init board";
     setGeometry(0, 50, 500, 550);
     QPalette Pal(palette());
     Pal.setColor(QPalette::Background, Qt::black);
@@ -35,6 +36,7 @@ void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPoin
 
 void Board::paintEvent(QPaintEvent *event)
 {
+    LOG(DEBUG) << "paint board";
     QPainter painter(this);
     painter.setViewport(0, 0, width(), height());
     painter.setClipRect(event->rect());

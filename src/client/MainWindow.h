@@ -41,7 +41,7 @@ private:
 	QLabel scoreLabel;
 	QLabel deathsLabel;
 	QLabel killsLabel;
-	std::unique_ptr<Board> board;
+	std::unique_ptr<Board> board_;
     std::shared_ptr<ServerHandler> server_handler_;
     std::shared_ptr<common::GameTimer> timer_;
     std::shared_ptr<common::World> world_;
