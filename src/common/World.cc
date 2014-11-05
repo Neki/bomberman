@@ -28,7 +28,7 @@ World::World(int width, int height)
         entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
       } else if (x == width_ - 1 && width_ % 2 == 1) { // if width_ is odd
         entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
-      } else if (x == height_ - 1 && height_ % 2 == 1) { // if height_ is odd
+      } else if (y == height_ - 1 && height_ % 2 == 1) { // if height_ is odd
         entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
       } else  {
         entities_[x][y].emplace_back(std::unique_ptr<entity::Block>(new entity::Block(pos)));
@@ -130,6 +130,15 @@ void World::removeEntities() {
     }
   }
 
+}
+
+entity::Character* World::GetCharacter(int id) {
+  for (auto it = CharacterIteratorBegin(); it != CharacterIteratorEnd(); ++it) {
+    if (it->get()->GetId() == id) {
+      return it->get();
+    }
+  }
+  return nullptr;
 }
 
 }
