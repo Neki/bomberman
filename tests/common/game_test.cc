@@ -15,7 +15,7 @@ TEST(Game, GetPlayer) {
     int player_id = game.AddPlayer(player);
 
     common::Player *new_player = game.GetPlayer(player_id);
-    EXPECT_EQ(new_player->name(), player.name());
+    EXPECT_EQ(new_player->GetName(), player.GetName());
 
     EXPECT_THROW(game.GetPlayer(40), std::exception);
 }
