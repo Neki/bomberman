@@ -1,4 +1,4 @@
-
+#include "src/common/GameEngine.h"
 #include "Character.h"
 #include <cmath>
 #include <QPointF>
