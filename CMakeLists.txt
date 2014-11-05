@@ -21,8 +21,8 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" ST
   set(CMAKE_CXX_FLAGS_DEBUG "-Wnon-virtual-dtor -Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic -fPIE -std=c++11")
   set(CMAKE_CXX_FLAGS_RELEASE "-Wnon-virtual-dtor -Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic -fPIE -std=c++11")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-  set(CMAKE_CXX_FLAGS_DEBUG "/W4 /Od /DNOMINMAX")
-  set(CMAKE_CXX_FLAGS_RELEASE "/W4 /O2 /DNOMINMAX")
+  set(CMAKE_CXX_FLAGS_DEBUG "/W3 /Od /DNOMINMAX")
+  set(CMAKE_CXX_FLAGS_RELEASE "/W3 /O2 /DNOMINMAX")
 endif()
 
 # Gather source files
