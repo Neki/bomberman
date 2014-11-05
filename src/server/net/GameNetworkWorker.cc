@@ -11,16 +11,20 @@ GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> ga
     game_timer_(game_timer),
     last_packet_id_(1),
     world_ptr_(world),
-    send_entities_timer_() {
+    send_entities_timer_(),
+    detect_disconnect_timer_() {
   QObject::connect(&socket_, SIGNAL(readyRead()), this, SLOT(ReadPendingDatagrams()));
   QObject::connect(&socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(SocketError(QAbstractSocket::SocketError)));
   socket_.bind( port_);
   for(Client client : clients) {
     clients_.insert(std::pair<int, Client>(client.GetId(), client));
     last_event_ids_[client.GetId()] = 0; // not event has been ACKed yet for this client (the first event ID will be 1)
+    last_received_pings_[client.GetId()] = game_timer_->GetTimestamp();
   }
   QObject::connect(&send_entities_timer_, &QTimer::timeout, this, &GameNetworkWorker::BroadcastWorld);
   send_entities_timer_.start(100);
+  QObject::connect(&detect_disconnect_timer_, &QTimer::timeout, this, &GameNetworkWorker::DetectConnectionLost);
+  detect_disconnect_timer_.start(10000);
   LOG(DEBUG) << "In game network worker initialized and ready on port " << port_;
 }
 
@@ -59,6 +63,9 @@ void GameNetworkWorker::ProcessDatagram(const QByteArray& datagram) {
     return;
   }
   Client client = it->second;
+  if(!client.IsConnected()) {
+    LOG(WARNING) << "Received a datagram from a previously disconnected client. This server does not support client reconnection ; dropping the datagram";
+  }
   VLOG(5) << "Datagram comes from client " << client.GetId();
   quint32 packet_id = GetPacketId(stream);
   if(!CheckStreamStatus(stream)) {
@@ -134,6 +141,7 @@ quint8 GameNetworkWorker::GetClientId(QDataStream& stream) {
 
 void GameNetworkWorker::ProcessPingPacket(QDataStream& stream, const Client& client, quint32 packet_id) {
   (void) stream; // unused for now, the ping content does not matter
+  last_received_pings_[client.GetId()] = game_timer_->GetTimestamp();
   SendPongPacket(client, packet_id);
 }
 
@@ -290,6 +298,20 @@ void GameNetworkWorker::BroadcastWorld() {
       socket_.writeDatagram(buffer, buffer.size(), p.second.GetAddress(), p.second.GetPort());
     }
     VLOG(9) << "Sent the entities packet with ID: " << packet_id << " to all the clients";
+  }
+}
+
+void GameNetworkWorker::DetectConnectionLost() {
+  for(auto it = last_received_pings_.begin(); it != last_received_pings_.end(); ++it) {
+    if(game_timer_->GetTimestamp() > it->second + kDisconnectTimeout) {
+      auto itt = clients_.find(it->first);
+      assert(itt != clients_.end());
+      Client client = itt->second;
+      client.SetConnected(false);
+      LOG(INFO) << "The client " << (int) client.GetId() << " did not send a ping for at least 10 seconds ; marking it as disconnected.";
+      emit ConnectionLost(client);
+      last_received_pings_.erase(it);
+    }
   }
 }
 
