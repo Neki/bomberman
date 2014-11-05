@@ -95,6 +95,7 @@ class NetworkWorker : public QObject {
     static const unsigned char kPingPacketId = 0x01;
     static const unsigned char kEventPacketId = 0x02;
     static const unsigned char kEntitiesPacketId = 0x03;
+    static const unsigned char kEventAckPacketId = 0x04;
 
     quint32 GetNextEventId();
     quint32 GetNextPacketId();
@@ -107,6 +108,7 @@ class NetworkWorker : public QObject {
     void ProcessEntitiesPacket(QDataStream& stream);
     void UpdateRoundTripTime(quint32 send_time);
     void DeserializeEntity(QDataStream& stream, quint32 timestamp);
+    void ProcessEventAck(QDataStream& stream);
 
     bool CheckStreamStatus(const QDataStream& stream) const;
 

@@ -90,6 +90,10 @@ void NetworkWorker::ProcessDatagram(const QByteArray& datagram) {
       VLOG(LOG_PACKET_LEVEL) << "The datagram is an entities packet.";
       ProcessEntitiesPacket(stream);
       break;
+    case kEventAckPacketId:
+      VLOG(LOG_PACKET_LEVEL) << "The datagram is an event ack.";
+      ProcessEventAck(stream);
+      break;
     default:
       LOG(WARNING) << "Received unknown packet type " << packet_type << ", dropping datagram.";
       break;
@@ -231,6 +235,19 @@ void NetworkWorker::SendPendingEvents() {
       VLOG(9) << "Packet event with id " << packet_id << " sent";
     }
     VLOG(9) << "All pending events sent";
+}
+
+void NetworkWorker::ProcessEventAck(QDataStream& stream) {
+  quint32 event_id;
+  stream >> event_id;
+  VLOG(9) << "Received ack for all events with id <= " << event_id;
+  QMutexLocker lock(&pending_events_mutex_);
+  for(auto it = pending_.begin(); it != pending_.end(); ++it) {
+    if(it->first <= event_id) {
+      pending_.erase(it);
+    }
+  }
+
 }
 
 void NetworkWorker::AddEvent(std::unique_ptr<Event> event) {

@@ -7,6 +7,7 @@
 
 using common::net::Deserializer;
 using common::net::EventId;
+using common::Direction;
 
 class EventSerializationTest : public testing::Test {
 
