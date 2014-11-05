@@ -18,11 +18,11 @@ class Entity {
     Entity(QPoint position, bool is_solid, bool stops_fire, QString texture_path = "");
     virtual ~Entity();
 
-    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t) = 0;
+    virtual void Update(GameEngine* game_engine, int t) = 0;
     /* Method called at every frame.
 	   t : duration of the frame in ms */
 
-    virtual void HitByFire(std::weak_ptr<GameEngine> game_engine);
+    virtual void HitByFire(GameEngine* game_engine);
     /* Called when entity is hit by fire */
 
     virtual bool IsSolid() const;
@@ -31,7 +31,7 @@ class Entity {
     virtual bool StopsFire() const;
     /* Returns true if entity stops fire propagation. Returns false otherwise. */
 
-    virtual void IsWalkedOn(std::weak_ptr<GameEngine> game_engine, const std::weak_ptr<Character> character);
+    virtual void IsWalkedOn(GameEngine* game_engine, const std::weak_ptr<Character> character);
     /* Called when a character walk on the entity */
 
     virtual QPoint GetPosition() const;

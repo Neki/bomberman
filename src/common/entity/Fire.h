@@ -19,7 +19,7 @@ class Fire : public Entity{
     quint32 GetSetTime() const;
     quint32 GetDisappearingTime() const;
 
-    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
+    virtual void Update(GameEngine* game_engine, int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 

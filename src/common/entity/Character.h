@@ -22,14 +22,14 @@ class Character : public Entity {
     unsigned int GetNumberOfBombs() const;
     int GetBombDelay() const;
 
-    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
+    virtual void Update(GameEngine* game_engine, int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
-    void HitByFire(std::weak_ptr<GameEngine> game_engine);
+    void HitByFire(GameEngine* game_engine);
     /* Called when entity is hit by fire. */
     
-    bool MoveTo(std::weak_ptr<GameEngine> game_engine, QPoint target);
+    bool MoveTo(GameEngine* game_engine, QPoint target);
 
     bool operator==(const Character& other) const;
 
