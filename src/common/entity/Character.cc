@@ -12,7 +12,7 @@ Character::Character(QPoint position, int power, float speed, unsigned int numbe
     current_speed_(), // in tiles per second. might be temporary superior to the nominal speed
     speed_(speed), // nominal speed
     exact_position_(position),
-    number_of_bombs_(1),
+    number_of_bombs_(number_of_bombs),
     bomb_delay_(300), // TODO: correct
     moving_(false),
     target_time_() {
