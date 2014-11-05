@@ -144,4 +144,13 @@ void World::removeEntities() {
 
 }
 
+entity::Character* World::GetCharacter(int id) {
+  for (auto it = CharacterIteratorBegin(); it != CharacterIteratorEnd(); ++it) {
+    if (it->get()->GetId() == id) {
+      return it->get();
+    }
+  }
+  return nullptr;
+}
+
 }
