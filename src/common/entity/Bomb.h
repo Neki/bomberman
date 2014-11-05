@@ -22,10 +22,10 @@ class Bomb : public Entity{
     quint32 GetSetTime() const;
     quint32 GetExplosionTime() const;
 
-    virtual void HitByFire(std::weak_ptr<GameEngine> game_engine);
+    virtual void HitByFire(GameEngine* game_engine);
     /* Called when entity is hit by fire. */
 
-    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
+    virtual void Update(GameEngine* game_engine, int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
@@ -34,7 +34,7 @@ class Bomb : public Entity{
     void Serialize(QDataStream& stream) const override;
 
   private:
-    void explode(std::weak_ptr<GameEngine> game_engine);
+    void explode(GameEngine* game_engine);
 
     quint32 set_time_;
     quint32 explosion_time_;

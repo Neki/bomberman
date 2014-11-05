@@ -21,27 +21,22 @@ quint32 Bomb::GetExplosionTime() const {
 	return explosion_time_;
 }
 
-void Bomb::HitByFire(std::weak_ptr<GameEngine> game_engine) {
+void Bomb::HitByFire(GameEngine* game_engine) {
   /* Called when entity is hit by fire. */
   explode(game_engine);
 }
 
-void Bomb::explode(std::weak_ptr<GameEngine> game_engine) {
-	std::shared_ptr<GameEngine> s_game_engine(game_engine.lock());
-	if (s_game_engine) {
-	  s_game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(0, -power_));
-	  s_game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(power_, 0));
-	  s_game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(0, power_));
-	  s_game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(-power_, 0));
-	} else {
-	  // TODO: Log errors
-	}
+void Bomb::explode(GameEngine* game_engine) {
+	game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(0, -power_));
+	game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(power_, 0));
+	game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(0, power_));
+	game_engine->AddFireFromAtoB(GetPosition(), GetPosition() + QPoint(-power_, 0));
 
   // remove the bomb
   should_be_removed_ = true;
 }
 
-void Bomb::Update(std::weak_ptr<GameEngine> game_engine, int t) {
+void Bomb::Update(GameEngine* game_engine, int t) {
 /* Method to be called at every frame.
    t : duration of the frame in ms */
   (void) t;

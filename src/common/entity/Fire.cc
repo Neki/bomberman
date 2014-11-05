@@ -21,7 +21,7 @@ quint32 Fire::GetDisappearingTime() const
   return disappearing_time_;
 }
 
-void Fire::Update(std::weak_ptr<GameEngine> game_engine, int t)
+void Fire::Update(GameEngine* game_engine, int t)
 /* Method to be called at every frame.
    t : duration of the frame in ms */
 {

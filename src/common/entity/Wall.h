@@ -13,7 +13,7 @@ class Wall : public Entity{
 
   public:
     Wall(QPoint position);
-    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
+    virtual void Update(GameEngine* game_engine, int t);
 
     bool operator==(const Wall& other) const;
 
