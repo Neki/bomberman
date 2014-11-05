@@ -4,8 +4,13 @@
 namespace common {
 namespace net {
 
-PlayerJoinedEvent::PlayerJoinedEvent(QString player_name, quint32 id, quint64 timestamp) :
+PlayerJoinedEvent::PlayerJoinedEvent(QString player_name, quint32 id, quint32 timestamp) :
   Event(id, timestamp),
+  player_name_(player_name) {
+}
+
+PlayerJoinedEvent::PlayerJoinedEvent(QString player_name, quint32 timestamp) :
+  Event(timestamp),
   player_name_(player_name) {
 }
 

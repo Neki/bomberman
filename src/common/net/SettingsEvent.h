@@ -9,7 +9,8 @@ namespace net {
 class SettingsEvent : public Event {
 
   public:
-    SettingsEvent(quint32 id, quint64 timestamp);
+    SettingsEvent(quint32 id, quint32 timestamp);
+    SettingsEvent(quint32 timestamp);
 
     void Serialize(QDataStream& stream) const;
 

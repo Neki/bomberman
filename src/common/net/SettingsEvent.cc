@@ -4,8 +4,11 @@
 namespace common {
 namespace net {
 
-SettingsEvent::SettingsEvent(quint32 id, quint64 timestamp)
+SettingsEvent::SettingsEvent(quint32 id, quint32 timestamp)
   : Event(id, timestamp) {}
+
+SettingsEvent::SettingsEvent(quint32 timestamp)
+  : Event(timestamp) {}
 
 void SettingsEvent::Serialize(QDataStream& stream) const {
   SerializeBaseEvent(stream, EventId::kSettingsEvent);

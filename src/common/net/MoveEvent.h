@@ -13,7 +13,9 @@ namespace net {
 class MoveEvent : public InGameEvent {
 
   public:
-    MoveEvent(QPoint position, QPoint destination, Direction direction, quint32 id, quint64 timestamp);
+    MoveEvent(QPoint position, QPoint destination, Direction direction, quint32 id, quint32 timestamp);
+    MoveEvent(QPoint position, QPoint destination, Direction direction, quint32 timestamp);
+
     Direction GetDirection() const;
     QPoint GetDestination() const;
     QPoint GetPosition() const;

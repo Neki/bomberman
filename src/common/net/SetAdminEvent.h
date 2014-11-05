@@ -9,7 +9,8 @@ namespace net {
 class SetAdminEvent : public Event {
 
   public:
-    SetAdminEvent(quint32 id, quint64 timestamp);
+    SetAdminEvent(quint32 id, quint32 timestamp);
+    SetAdminEvent(quint32 timestamp);
 
     void Serialize(QDataStream& stream) const;
 

@@ -3,7 +3,7 @@
 namespace common {
 namespace net {
 
-InGameEvent::InGameEvent(quint32 id, quint64 timestamp)
+InGameEvent::InGameEvent(quint32 id, quint32 timestamp)
   : Event(id, timestamp) {
 }
 

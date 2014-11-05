@@ -9,7 +9,7 @@ namespace net {
 
 class InGameEvent : public Event {
   public:
-    InGameEvent(quint32 id, quint64 timestamp);
+    InGameEvent(quint32 id, quint32 timestamp);
     InGameEvent(quint64 timestamp);
     virtual ~InGameEvent();
 

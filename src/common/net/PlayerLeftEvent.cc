@@ -4,8 +4,13 @@
 namespace common {
 namespace net {
 
-PlayerLeftEvent::PlayerLeftEvent(QuitReason reason, quint32 id, quint64 timestamp)
+PlayerLeftEvent::PlayerLeftEvent(QuitReason reason, quint32 id, quint32 timestamp)
   : InGameEvent(id, timestamp),
+    reason_(reason) {}
+
+
+PlayerLeftEvent::PlayerLeftEvent(QuitReason reason, quint32 timestamp)
+  : InGameEvent(timestamp),
     reason_(reason) {}
 
 QuitReason PlayerLeftEvent::GetReason() const {
