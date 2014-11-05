@@ -4,10 +4,10 @@
 #include <memory>
 #include <QPoint>
 #include <QDataStream>
-#include "src/common/GameEngine.h"
 #include "EntityId.h"
 
 namespace common {
+class GameEngine;
 namespace entity {
 
 class Character;
