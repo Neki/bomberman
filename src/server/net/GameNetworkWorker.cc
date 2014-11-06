@@ -24,7 +24,7 @@ GameNetworkWorker::GameNetworkWorker(quint16 port, std::shared_ptr<GameTimer> ga
   QObject::connect(&send_entities_timer_, &QTimer::timeout, this, &GameNetworkWorker::BroadcastWorld);
   send_entities_timer_.start(100);
   QObject::connect(&detect_disconnect_timer_, &QTimer::timeout, this, &GameNetworkWorker::DetectConnectionLost);
-  detect_disconnect_timer_.start(10000);
+  detect_disconnect_timer_.start(kDisconnectTimeout / 3);
   LOG(DEBUG) << "In game network worker initialized and ready on port " << port_;
 }
 
