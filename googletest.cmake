@@ -53,6 +53,7 @@ set_target_properties(GTestMain PROPERTIES
   "${GTEST_LIBRARY};${CMAKE_THREAD_LIBS_INIT}")
 
 add_dependencies(GTest googletest)
+add_dependencies(GTestMain googletest)
 
 ExternalProject_Get_Property(googletest source_dir)
 include_directories(${source_dir}/include)
