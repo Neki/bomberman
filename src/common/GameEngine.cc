@@ -167,6 +167,7 @@ void GameEngine::Visit(net::BombEvent& event) {
 
 void GameEngine::Visit(net::PlayerLeftEvent& event) {
   (void) event;
+  // TODO
 }
 
 
