@@ -2,7 +2,9 @@
 
 namespace common {
 
-Strategy::Strategy() {
+Strategy::Strategy(int id)
+  : character_id_(id) {
+
 }
 
 

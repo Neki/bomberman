@@ -6,8 +6,11 @@ namespace common {
 class Strategy
 {
   public:
-    Strategy();
+    Strategy(int id);
     virtual ~Strategy();
+
+  private:
+    int const character_id_; // Id of the character that is controlled by this Strategy
 };
 
 }
