@@ -55,6 +55,8 @@ namespace common {
 
     GameTimer game_timer_;
     std::unique_ptr<QTimer> new_frame_timer_;
+
+    bool is_running_;
 };
 
 }
