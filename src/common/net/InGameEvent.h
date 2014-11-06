@@ -14,6 +14,8 @@ class InGameEvent : public Event {
     InGameEvent(quint8 character_id, quint64 timestamp);
     virtual ~InGameEvent();
 
+    quint8 GetCharacterId() const;
+
     virtual void Accept(GameEventVisitor& visitor) = 0;
 
   protected:
