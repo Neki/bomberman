@@ -176,6 +176,8 @@ void GameEngine::MoveCharacter(int player_id, QPoint target) {
     entity::Character* character = GetWorld()->GetCharacter(player_id);
     if (character) {
       character->MoveTo(this, target);
+    } else {
+      // TODO: add warning message.
     }
   }
 }
