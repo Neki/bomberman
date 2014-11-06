@@ -38,6 +38,8 @@ namespace common {
     void Update(int t); // t in ms. t is the duration of the frame
 
   private:
+    bool AddFire(QPoint a); // return false if the case blocks fire
+
     void ChallengeStrategies();
     void Simulate(int t); // t in ms. t is the duration of the frame
     

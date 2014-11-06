@@ -58,48 +58,46 @@ quint32 GameEngine::GetTimestamp() const {
   return game_timer_.GetTimestamp();
 }
 
+bool GameEngine::AddFire(QPoint a) {
+  // TODO : call the method IsTouchByFire on the case entities.
+  if (world_->StopsFire(a)) {
+    return false;
+  } else {
+    quint32 currentTime = GetTimestamp();
+    AddEntity(std::unique_ptr<entity::Fire>(new entity::Fire(a, currentTime)));
+    return true;
+  }
+}
+
 void GameEngine::AddFireFromAtoB(QPoint a, QPoint b) {
   assert(a.x() == b.x() || a.y() == b.y());
-  quint32 currentTime = GetTimestamp();
+  
   if (a.x() == b.x()) {
     if (a.y() <= b.y()) {
       for (int y = a.y(); y <= b.y(); y++) {
-        QPoint c(a.x(), y);
-        if (world_->StopsFire(c)) {
+        if (!AddFire(QPoint(a.x(), y))) {
           return;
-        } else {
-          AddEntity(std::unique_ptr<entity::Fire>(new entity::Fire(c, currentTime)));
         }
       }
     }
     else {
       for (int y = a.y(); y >= b.y(); y--) {
-        QPoint c(a.x(), y);
-        if (world_->StopsFire(c)) {
+        if (!AddFire(QPoint(a.x(), y))) {
           return;
-        }
-        else {
-          AddEntity(std::unique_ptr<entity::Fire>(new entity::Fire(c, currentTime)));
         }
       }
     }
   } else if (a.y() == b.y()) {
     if (a.x() <= b.x()) {
       for (int x = a.x(); x <= b.x(); x++) {
-        QPoint c(x, a.y());
-        if (world_->StopsFire(c)) {
+        if (!AddFire(QPoint(x, a.y()))) {
           return;
-        } else {
-          AddEntity(std::unique_ptr<entity::Fire>(new entity::Fire(c, currentTime)));
         }
       }
     } else {
       for (int x = a.x(); x >= b.x(); x--) {
-        QPoint c(x, a.y());
-        if (world_->StopsFire(c)) {
+        if (!AddFire(QPoint(x, a.y()))) {
           return;
-        } else {
-          AddEntity(std::unique_ptr<entity::Fire>(new entity::Fire(c, currentTime)));
         }
       }
     }
