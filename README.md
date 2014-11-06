@@ -27,33 +27,34 @@ The project can be built using CMake (version 3.0.2 minimum). You need to have t
 #### Install tools and dependencies
 
 * Install Microsoft Visual Studio
-* Install CMake (version 3.0.2 or superior) http://www.cmake.org/download/
-* Install Qt http://www.qt.io/download/
+* Install CMake (version 3.0.2 or greater) http://www.cmake.org/download/
+* Install Qt (version 5.2 or greater) http://www.qt.io/download/
 * Install tortoisesvn http://tortoisesvn.net/ (tick the command tools during the install)
 
 #### Generate the Visual Studio project with CMake
 
-Launch C:\Program Files (x86)\CMake 3.0\bin\cmake-gui.exe
+Launch `C:\Program Files (x86)\CMake 3.0\bin\cmake-gui.exe`
 
-Type in the source code path
+Type in the source code path.
 
-Type in the target directory path
+Type in the target directory path.
 
-Add the following entries:
+Add the following entry:
 * Name: `CMAKE_PREFIX_PATH`; Type: `path`; Value: `C:/Qt/5.3/msvc2013_64/lib/cmake`
 
-Click on 'Configure' => Choose your version of Visual Studio and leave the others parameters
+You can also set other options to configure your build (see the section `Useful CMake options`).
+
+Click on 'Configure' => Choose your version of Visual Studio and do not change the others parameters.
 
 Click on 'Generate'.
 
 You now have a `.sln` file that can be used in Visual Studio. Use Visual Studio to build the projects (no further configuration *should* be needed).
 
-After building the solution, you'll have 3 executables in your bin/Debug or bin/Release folder. If some QT DLLs are missing when you execute these .exe files, you should modify your PATH environment variable and add this path to the others: `C:\Qt\5.3\msvc2013_64\bin`. Then the executables should work
+After building the solution, you'll have 3 executables in your `bin/Debug` or `bin/Release` folder. If some QT DLLs are missing when you execute these .exe files, you should modify your PATH environment variable and add this path to the others: `C:\Qt\5.3\msvc2013_64\bin`. Then the executables should work.
 
 #### Run the tests
 
-Not solved yet for Windows.
-
+You will find the test executables in the `bin/Debug`or `bin/Release` folder.
 
 ### Ubuntu
 
