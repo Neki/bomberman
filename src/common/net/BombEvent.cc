@@ -4,13 +4,13 @@
 namespace common {
 namespace net {
 
-BombEvent::BombEvent(QPoint position, quint32 id, quint32 timestamp)
-    : InGameEvent(id, timestamp),
+BombEvent::BombEvent(QPoint position, quint8 character_id, quint32 id, quint32 timestamp)
+    : InGameEvent(character_id, id, timestamp),
       position_(position) {
 }
 
-BombEvent::BombEvent(QPoint position, quint32 timestamp)
-    : InGameEvent(timestamp),
+BombEvent::BombEvent(QPoint position, quint8 character_id, quint32 timestamp)
+    : InGameEvent(character_id, timestamp),
       position_(position) {
 }
 
@@ -19,7 +19,7 @@ QPoint BombEvent::GetPosition() const {
 }
 
 void BombEvent::Serialize(QDataStream& stream) const {
-  SerializeBaseEvent(stream, EventId::kBombEventId);
+  SerializeBaseInGameEvent(stream, EventId::kBombEventId);
   stream << this->GetPosition();
 }
 
@@ -28,7 +28,7 @@ void BombEvent::Accept(GameEventVisitor& visitor) {
 }
 
 bool BombEvent::operator==(const BombEvent& event) const {
-  return Event::operator==(event) && position_ == event.position_;
+  return InGameEvent::operator==(event) && position_ == event.position_;
 }
 
 }
