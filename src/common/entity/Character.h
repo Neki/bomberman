@@ -36,7 +36,7 @@ class Character : public Entity {
     void Serialize(QDataStream& stream) const override;
 
   private:
-    float DistanceBetween(QPointF a, QPointF b);
+    static float DistanceBetween(QPointF a, QPointF b);
   
     unsigned int power_; // bomb power in tiles
     QPointF current_speed_; // in tiles per second. might be temporary superior to the nominal speed
