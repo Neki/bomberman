@@ -17,7 +17,7 @@ This project is composed of
 
 The project can be built using CMake (version 3.0.2 minimum). You need to have the Qt5 libraries installed on your system. Detailed instructions by operating system follow.
 
-# Useful CMake options
+### Useful CMake options
 
 * `cmake -Denable_tests=OFF` : disable tests (the unit tests will not be compiled nor run)
 * `cmake -Dno_download=ON` : disable fetching external dependencies (easyloggingcpp and Google Test) from the Internet during compilation. You will need to have downloaded these dependencies into the appropriate folders (`build/gtest/src/googletest` and `build/easylogging/src/easyloggingcpp`) before starting the build.
