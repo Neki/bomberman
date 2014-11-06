@@ -2,6 +2,7 @@
 #include "entity/Fire.h"
 #include "entity/Character.h"
 #include "entity/Bomb.h"
+#include <cassert>
 
 namespace common {
 
@@ -52,6 +53,7 @@ quint32 GameEngine::GetTimestamp() const {
 }
 
 void GameEngine::AddFireFromAtoB(QPoint a, QPoint b) {
+  assert(a.x() == b.x() || a.y() == b.y());
   quint32 currentTime = GetTimestamp();
   if (a.x() == b.x()) {
     if (a.y() <= b.y()) {
