@@ -151,11 +151,11 @@ void GameEngine::SendGameState() {
 
 void GameEngine::Visit(net::MoveEvent& event) {
   // TODO : Check if value is ok
-  MoveCharacter(event.GetId(), event.GetDestination());
+  MoveCharacter(event.GetCharacterId(), event.GetDestination());
 }
 
 void GameEngine::Visit(net::BombEvent& event) {
-  int id = event.GetId();
+  int id = event.GetCharacterId();
   // TODO : Check if value is ok
   QPoint position(event.GetPosition());
   quint32 current_time = game_timer_.GetTimestamp();
