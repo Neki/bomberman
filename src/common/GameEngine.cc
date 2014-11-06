@@ -129,7 +129,7 @@ void GameEngine::Simulate(int t) {
   }
   
   for (int x = 0; x < world_->GetWidth() ; x++) {
-    for (int y = 0; y < world_->GetWidth() ; y++) {
+    for (int y = 0; y < world_->GetHeight() ; y++) {
       QPoint a(x, y);
       for (auto it = world_->IteratorAtBegin(a) ; it != world_->IteratorAtEnd(a) ; ++it) {
         it->get()->Update(this, t);
