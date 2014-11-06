@@ -4,7 +4,7 @@ namespace common {
 
 Strategy::Strategy(int id)
   : character_id_(id) {
-
+  (void) character_id_;
 }
 
 
