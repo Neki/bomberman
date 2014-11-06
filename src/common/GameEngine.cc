@@ -9,7 +9,7 @@ namespace common {
 GameEngine::GameEngine()
   : QObject(),
     net::GameEventVisitor(),
-    maxDuration(10*60*1000), // 10 minutes
+    max_duration_(10 * 60 * 1000), // 10 minutes
     players_(),
     world_(new World(79, 49)),
     game_timer_(),

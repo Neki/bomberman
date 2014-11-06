@@ -48,7 +48,7 @@ namespace common {
     void Visit(net::PlayerLeftEvent& event);
     void MoveCharacter(int player_id, QPoint target);
     
-    quint32 maxDuration; // in milliseconds
+    quint32 max_duration_; // in milliseconds
 
     std::vector<std::unique_ptr<Player> > players_;
     std::unique_ptr<World> world_;
