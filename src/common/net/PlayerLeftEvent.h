@@ -11,8 +11,8 @@ namespace net {
 class PlayerLeftEvent : public InGameEvent {
 
   public:
-    PlayerLeftEvent(QuitReason reason, quint32 id, quint32 timestamp);
-    PlayerLeftEvent(QuitReason reason, quint32 timestamp);
+    PlayerLeftEvent(QuitReason reason, quint8 character_id, quint32 id, quint32 timestamp);
+    PlayerLeftEvent(QuitReason reason, quint8 character_id, quint32 timestamp);
     QuitReason GetReason() const;
 
     void Serialize(QDataStream& stream) const;

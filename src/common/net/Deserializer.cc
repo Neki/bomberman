@@ -49,15 +49,21 @@ BaseEventData Deserializer::DeserializeBaseEvent(QDataStream& stream) {
   return data;
 }
 
-BombEvent Deserializer::DeserializeBombEvent(QDataStream& stream) {
+BaseEventData Deserializer::DeserializeBaseInGameEvent(QDataStream& stream) {
   BaseEventData data = DeserializeBaseEvent(stream);
+  stream >> data.character_id;
+  return data;
+}
+
+BombEvent Deserializer::DeserializeBombEvent(QDataStream& stream) {
+  BaseEventData data = DeserializeBaseInGameEvent(stream);
   QPoint position;
   stream >> position;
-  return BombEvent(position, data.id, data.timestamp);
+  return BombEvent(position, data.character_id, data.id, data.timestamp);
 }
 
 MoveEvent Deserializer::DeserializeMoveEvent(QDataStream& stream) {
-  BaseEventData data = DeserializeBaseEvent(stream);
+  BaseEventData data = DeserializeBaseInGameEvent(stream);
   QPoint position;
   QPoint destination;
   Direction direction;
@@ -83,7 +89,7 @@ MoveEvent Deserializer::DeserializeMoveEvent(QDataStream& stream) {
       // TODO ERROR
        break;
   }
-  return MoveEvent(position, destination, direction, data.id, data.timestamp);
+  return MoveEvent(position, destination, direction, data.character_id, data.id, data.timestamp);
 }
 
 PlayerJoinedEvent Deserializer::DeserializePlayerJoinedEvent(QDataStream& stream) {
@@ -94,7 +100,7 @@ PlayerJoinedEvent Deserializer::DeserializePlayerJoinedEvent(QDataStream& stream
 }
 
 PlayerLeftEvent Deserializer::DeserializePlayerLeftEvent(QDataStream& stream) {
-  BaseEventData data = DeserializeBaseEvent(stream);
+  BaseEventData data = DeserializeBaseInGameEvent(stream);
   int reason_int;
   QuitReason reason;
   stream >> reason_int;
@@ -109,7 +115,7 @@ PlayerLeftEvent Deserializer::DeserializePlayerLeftEvent(QDataStream& stream) {
       reason = QuitReason::TIMEOUT;
       break;
   }
-  return PlayerLeftEvent(reason, data.id, data.timestamp);
+  return PlayerLeftEvent(reason, data.character_id, data.id, data.timestamp);
 }
 
 SetAdminEvent Deserializer::DeserializeSetAdminEvent(QDataStream& stream) {

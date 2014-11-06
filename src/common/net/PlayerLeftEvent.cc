@@ -4,13 +4,13 @@
 namespace common {
 namespace net {
 
-PlayerLeftEvent::PlayerLeftEvent(QuitReason reason, quint32 id, quint32 timestamp)
-  : InGameEvent(id, timestamp),
+PlayerLeftEvent::PlayerLeftEvent(QuitReason reason, quint8 character_id, quint32 id, quint32 timestamp)
+  : InGameEvent(character_id, id, timestamp),
     reason_(reason) {}
 
 
-PlayerLeftEvent::PlayerLeftEvent(QuitReason reason, quint32 timestamp)
-  : InGameEvent(timestamp),
+PlayerLeftEvent::PlayerLeftEvent(QuitReason reason, quint8 character_id, quint32 timestamp)
+  : InGameEvent(character_id, timestamp),
     reason_(reason) {}
 
 QuitReason PlayerLeftEvent::GetReason() const {
@@ -18,7 +18,7 @@ QuitReason PlayerLeftEvent::GetReason() const {
 }
 
 void PlayerLeftEvent::Serialize(QDataStream& stream) const {
-  SerializeBaseEvent(stream, EventId::kPlayerLeftEvent);
+  SerializeBaseInGameEvent(stream, EventId::kPlayerLeftEvent);
   stream << GetReason();
 }
 
@@ -27,7 +27,7 @@ void PlayerLeftEvent::Accept(GameEventVisitor& visitor) {
 }
 
 bool PlayerLeftEvent::operator==(const PlayerLeftEvent& event) const {
-  return reason_ == event.reason_;
+  return InGameEvent::operator==(event) && reason_ == event.reason_;
 }
 }
 }

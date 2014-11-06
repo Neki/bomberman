@@ -32,6 +32,7 @@ namespace net {
 struct BaseEventData {
   quint32 id;
   quint32 timestamp;
+  quint8 character_id;
 };
 
 /**
@@ -90,6 +91,7 @@ class Deserializer {
 
   private:
     static BaseEventData DeserializeBaseEvent(QDataStream& stream);
+    static BaseEventData DeserializeBaseInGameEvent(QDataStream& stream);
     static BaseEntityData DeserializeBaseEntity(QDataStream& stream);
 
 };
