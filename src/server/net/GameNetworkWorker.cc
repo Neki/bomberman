@@ -308,7 +308,7 @@ void GameNetworkWorker::DetectConnectionLost() {
       assert(itt != clients_.end());
       Client client = itt->second;
       client.SetConnected(false);
-      LOG(INFO) << "The client " << (int) client.GetId() << " did not send a ping for at least 10 seconds ; marking it as disconnected.";
+      LOG(INFO) << "The client " << (int) client.GetId() << " did not send a ping for at least " << (int) kDisconnectTimeout << " seconds ; marking it as disconnected.";
       emit ConnectionLost(client);
       last_received_pings_.erase(it);
     }
