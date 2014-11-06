@@ -6,14 +6,15 @@
 
 namespace common {
 
-GameEngine::GameEngine()
-  : QObject(),
+  GameEngine::GameEngine()
+    : QObject(),
     net::GameEventVisitor(),
     max_duration_(10 * 60 * 1000), // 10 minutes
     players_(),
     world_(new World(79, 49)),
     game_timer_(),
-    new_frame_timer_(new QTimer()) {
+    new_frame_timer_(new QTimer()),
+    is_running_(false) {
 
 }
 
@@ -27,9 +28,14 @@ void GameEngine::AddPlayer(std::unique_ptr<Player> player) {
   world_->AddCharacter(std::unique_ptr<entity::Character>());
 }
 
-void GameEngine::StartGame() {  
-  game_timer_.StartGame();
+void GameEngine::StartGame() {
+  assert(!is_running_);
+  if (is_running_) {
+    return;
+  }
+  is_running_ = true;
 
+  game_timer_.StartGame();
   connect(new_frame_timer_.get(), SIGNAL(timeout()), this, SLOT(Update(50)));
   new_frame_timer_->start(50);
 }
