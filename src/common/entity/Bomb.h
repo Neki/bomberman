@@ -12,7 +12,7 @@
 namespace common {
 namespace entity {
 
-class Bomb : public DerivedEntity<Bomb> {
+class Bomb : public Entity{
 
   public:
 

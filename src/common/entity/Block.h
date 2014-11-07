@@ -9,7 +9,7 @@
 namespace common {
 namespace entity {
 
-class Block : public DerivedEntity<Block> {
+class Block : public Entity{
 
   public:
     Block(QPoint position);

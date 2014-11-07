@@ -11,7 +11,7 @@
 namespace common {
 namespace entity {
 
-class Fire : public DerivedEntity<Fire> {
+class Fire : public Entity{
 
   public:
     Fire(QPoint position, quint32 set_time);
