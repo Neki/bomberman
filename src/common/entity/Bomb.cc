@@ -7,7 +7,7 @@ namespace common {
 namespace entity {
 
 Bomb::Bomb(QPoint position, quint32 set_time, quint32 explosion_time, int power)
- :  DerivedEntity(position, true, false, "res/bomb.png"),
+ :  Entity(position, true, false, "res/bomb.png"),
     set_time_(set_time),
     explosion_time_(explosion_time),
     power_(power) {

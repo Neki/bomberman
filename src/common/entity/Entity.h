@@ -1,11 +1,9 @@
 #ifndef SRC_COMMON_ENTITY_ENTITY_H_
 #define SRC_COMMON_ENTITY_ENTITY_H_
+
 #include <memory>
 #include <QPoint>
-#include <QString>
 #include <QDataStream>
-#include <QtSvg/QSvgRenderer>
-#include <QCoreApplication>
 #include "src/common/GameEngine.h"
 #include "EntityId.h"
 
@@ -43,7 +41,7 @@ class Entity {
     int GetId() const;
 
     virtual void Serialize(QDataStream& stream) const = 0;
-    virtual std::shared_ptr<QSvgRenderer> GetSvgRenderer() = 0;
+
 
   protected:
     QPoint position_; // Entity position in the world's grid
@@ -56,31 +54,11 @@ class Entity {
     void SerializeBaseEntity(QDataStream& stream, EntityId entity_id) const;
 
   private:
+    QString texture_path_;
     quint32 id_;
     quint16 temp_id_;
-
 };
 
-template<class T>
-class DerivedEntity : public Entity {
-public:
-    DerivedEntity(QPoint position, bool is_solid, bool stops_fire, QString texture_path = "") :
-        Entity(position, is_solid, stops_fire, texture_path) {}
-
-    std::shared_ptr<QSvgRenderer> GetSvgRenderer() {
-        if (!DerivedEntity::svg_renderer_) {
-            DerivedEntity::svg_renderer_ = std::make_shared<QSvgRenderer>(QCoreApplication::applicationDirPath() + "/" + texture_path_);
-        }
-
-        return DerivedEntity::svg_renderer_;
-    }
-
-private:
-    static std::shared_ptr<QSvgRenderer> svg_renderer_;
-};
-
-template<class T>
-std::shared_ptr<QSvgRenderer> DerivedEntity<T>::svg_renderer_ = nullptr;
 
 QDataStream& operator<<(QDataStream& stream, const Entity& entity);
 

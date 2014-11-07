@@ -5,7 +5,7 @@ namespace common {
 namespace entity {
 
 Wall::Wall(QPoint position) :
-  DerivedEntity(position, true, true, "res/wall.svg")
+  Entity(position, true, true, "res/wall.svg")
 {
 
 }
