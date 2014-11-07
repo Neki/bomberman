@@ -12,7 +12,6 @@ Entity::Entity(QPoint position, bool is_solid, bool stops_fire, QString texture_
     texture_path_(texture_path),
     id_(0),
     temp_id_(0) { // TODO generate an actual temp id
-
 }
 
 Entity::~Entity() {

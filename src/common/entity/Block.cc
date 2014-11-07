@@ -5,7 +5,7 @@ namespace common {
 namespace entity {
 
 Block::Block(QPoint position) :
-  Entity(position, true, true, "res/block.svg") {
+  DerivedEntity(position, true, true, "res/block.svg") {
 
 }
 

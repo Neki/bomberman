@@ -12,7 +12,7 @@
 namespace common {
 namespace entity {
 
-class Character : public Entity {
+class Character : public DerivedEntity<Character> {
 
   public:
     Character(QPoint position, int power = 1, float speed = 1.5f, unsigned int number_of_bombs = 1);

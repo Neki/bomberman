@@ -9,7 +9,7 @@
 namespace common {
 namespace entity {
 
-class Wall : public Entity{
+class Wall : public DerivedEntity<Wall> {
 
   public:
     Wall(QPoint position);

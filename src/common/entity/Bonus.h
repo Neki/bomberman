@@ -8,7 +8,7 @@
 namespace common {
 namespace entity {
 
-class Bonus : public Entity {
+class Bonus : public DerivedEntity<Bonus> {
 
   public:
     Bonus(QPoint position, QString texture_path = "");
