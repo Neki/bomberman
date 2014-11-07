@@ -17,8 +17,8 @@ _INITIALIZE_EASYLOGGINGPP
 Board::Board(std::shared_ptr<common::World> world, QWidget *parent) :
     QWidget(parent),
     world_(world),
-    side_square_(500 / world->GetWidth()),
-    svg_manager_(new SvgManager())
+    svg_manager_(new SvgManager()),
+    side_square_(500 / world->GetWidth())
 {
     setGeometry(0, 50, 500, 550);
 }
