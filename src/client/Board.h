@@ -8,6 +8,7 @@
 //#include "src/common/entity/Character.h"
 #include "src/common/entity/Entity.h"
 #include "src/common/World.h"
+#include "SvgManager.h"
 
 class Board : public QWidget
 {
@@ -17,6 +18,7 @@ public:
 
 private:
 	std::shared_ptr<common::World> world_;
+    std::unique_ptr<SvgManager> svg_manager_;
     float side_square_;
 
 protected:

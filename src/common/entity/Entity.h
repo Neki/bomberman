@@ -54,7 +54,6 @@ class Entity {
     void SerializeBaseEntity(QDataStream& stream, EntityId entity_id) const;
 
   private:
-    QString texture_path_;
     quint32 id_;
     quint16 temp_id_;
 };
