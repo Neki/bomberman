@@ -18,7 +18,7 @@ Character::Character(QPoint position, int power, float speed, unsigned int numbe
 
 unsigned int Character::GetPower() const {
 	return power_;
-}
+} 
 
 QPointF Character::GetCurrentSpeed() const {
 	return current_speed_;
