@@ -37,10 +37,10 @@ int main(int argc, char *argv[]) {
     std::vector<net::Client> clients;
     clients.push_back(client);
     auto timer = std::make_shared<common::GameTimer>();
-    auto world = std::weak_ptr<World>();
+    auto world = std::make_shared<World>(50, 50);
     timer->StartGame();
     LOG(DEBUG) << "Listening on port " << port;
-    net::GameNetworkWorker worker(port, timer, world, clients);
+    net::GameNetworkWorker worker(port, timer, std::weak_ptr<World>(world), clients);
 
     return app.exec();
 }

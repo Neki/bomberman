@@ -8,23 +8,22 @@
 //#include "src/common/entity/Character.h"
 #include "src/common/entity/Entity.h"
 #include "src/common/World.h"
+#include "SvgManager.h"
 
 class Board : public QWidget
 {
 	Q_OBJECT
 public:
-	Board(common::World* world, QWidget* parent = 0);
-	//~Board();
+    Board(std::shared_ptr<common::World> world, QWidget* parent);
 
 private:
-	common::World *world_;
-	/*std::unique_ptr<QPixmap> pixmapFire;
-	std::unique_ptr<QPixmap> pixmapBlock;
-	std::unique_ptr<QPixmap> pixmapWall;*/
+	std::shared_ptr<common::World> world_;
+    std::unique_ptr<SvgManager> svg_manager_;
+    float side_square_;
 
 protected:
 	void PaintEntity(QPainter &painter, common::entity::Entity &entity, QPointF x, QSizeF size);
-	void PaintEvent(QPaintEvent *event);
+	void paintEvent(QPaintEvent *event) override;
 	void InitGame(int nbPlayers);
 	void NewGame(int nbPlayers);
 	bool IsKeyPressEvent(QKeyEvent *);

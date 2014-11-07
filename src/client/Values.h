@@ -1,14 +1,7 @@
 #ifndef VALUES
 #define VALUES
 
-#define SQUARES_HEIGHT (5*2+1)
-#define SQUARES_WIDTH   (10*2+1)
-#define SIDE_SQUARE       1
-#define HEIGHT_SQUARE    SIDE_SQUARE
-#define WIDTH_SQUARE    SIDE_SQUARE
-#define WIDTH_BOARD SQUARES_WIDTH*WIDTH_SQUARE
-#define HEIGHT_BOARD SQUARES_HEIGHT*HEIGHT_SQUARE
-
+#define SIDE_SQUARE     10
 #define FIRE_TIME       300
 
 enum direction  { UP, DOWN, LEFT, RIGHT, NONE};

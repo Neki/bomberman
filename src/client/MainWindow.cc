@@ -1,3 +1,4 @@
+#define NOMINMAX // Required for Windows to avoid QTime errors
 #include "MainWindow.h"
 #include <QTimer>
 #include <QDebug>
@@ -12,18 +13,14 @@
 #include "src/common/entity/Fire.h"
 #include "src/common/entity/Block.h"
 
-MainWindow::MainWindow(QWidget *parent):QMainWindow(parent), ui(new Ui::MainWindow),
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),
     server_handler_(std::make_shared<ServerHandler>()),
-    timer_(std::make_shared<common::GameTimer>()) {
+    timer_(std::make_shared<common::GameTimer>()),
+    world_(std::make_shared<common::World>(21, 21))
+{
 	ui->setupUi(this);
-
-	common::World world = common::World(100, 100);
-	world.AddItem(std::unique_ptr<Fire>(new Fire(QPoint(32, 32), 12345))); // changed into .png for tests
-	world.AddItem(std::unique_ptr<Block>(new Block(QPoint(30, 30)))); // still .svg
-	Board *board = new Board(&world);
-	setCentralWidget(board);
-	show();
-
+    board_ = std::unique_ptr<Board>(new Board(world_, this));
+    show();
     timer_->StartGame();
 
 	SetScore(-5593);
@@ -75,7 +72,7 @@ void MainWindow::on_actionCreate_triggered() {
 }
 
 void MainWindow::on_actionJoin_triggered() {
-	
+    network_worker_ = std::unique_ptr<net::NetworkWorker>(new net::NetworkWorker(1, QHostAddress("127.0.0.1"), 4567, 4568, timer_));
 }
 
 void MainWindow::on_actionQuit_triggered() {

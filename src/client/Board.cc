@@ -4,51 +4,54 @@
 #include <QWidget>
 #include <QRectF>
 #include <QSize>
+#include <QDir>
 #include "src/common/World.h"
 #include <QPointF>
 #include <QtSvg/QSvgRenderer>
 #include "src/common/entity/Entity.h"
 #include "easylogging++.h"
+#include <QPalette>
 _INITIALIZE_EASYLOGGINGPP
 
-Board::Board(common::World *world, QWidget *parent) :QWidget(parent), world_(world)
+Board::Board(std::shared_ptr<common::World> world, QWidget *parent) :
+    QWidget(parent),
+    world_(world),
+    svg_manager_(new SvgManager()),
+    side_square_(500 / world->GetWidth())
 {
-	
+    setGeometry(0, 50, 500, 550);
+    QPalette Pal(palette());
+    Pal.setColor(QPalette::Background, Qt::black);
+    setAutoFillBackground(true);
+    setPalette(Pal);
 }
 
 void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPointF x, QSizeF size)
 {
 	QString path = entity.GetTexturePath();
-	//x.setX(); bc top left
 	QRectF rectF(x, size);
-	QSvgRenderer *renderer = new QSvgRenderer(path);
+    auto renderer = svg_manager_->GetSvgRenderer(path);
 	renderer->render(&painter, rectF);
 }
 
-void Board::PaintEvent(QPaintEvent *event)
+void Board::paintEvent(QPaintEvent *event)
 {
-	qDebug() << Q_FUNC_INFO;
-	QPainter painter(this);
-	painter.setWindow(0, 0, world_->GetHeight(), world_->GetHeight());
-	painter.setViewport(0, 0, width(), height());
-	painter.setClipRect(event->rect());
+    QPainter painter(this);
+    painter.setViewport(0, 0, width(), height());
+    painter.setClipRect(event->rect());
 
-	QSize qsize(SIDE_SQUARE, SIDE_SQUARE);
+    QSize qsize(side_square_, side_square_);
 	QSizeF qsizef(qsize);
 
-	for (int i = 0; i<world_->GetHeight(); ++i)
-	{
-		for (int j = 0; j<world_->GetWidth(); ++j)
-		{
-			QPointF x(SIDE_SQUARE*i - SIDE_SQUARE / 2, SIDE_SQUARE*j - SIDE_SQUARE / 2);
+    for (int i = 0; i < world_->GetWidth(); ++i) {
+		for (int j = 0; j < world_->GetHeight(); ++j) {
+            QPointF x(side_square_ * i, side_square_ * j);
 			QPoint a(i, j);
-			for (auto k = world_->IteratorAtBegin(a); k != world_->IteratorAtEnd(a); ++k)
-			{
+			for (auto k = world_->IteratorAtBegin(a); k != world_->IteratorAtEnd(a); ++k) {
 				PaintEntity(painter, **k , x, qsizef);
 			}			
 		}
 	}
-	painter.end();
 }
 
 bool Board::IsKeyPressEvent(QKeyEvent *event)
