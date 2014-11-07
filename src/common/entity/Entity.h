@@ -45,10 +45,10 @@ class Entity {
 
   protected:
     QPoint position_; // Entity position in the world's grid
+    QString texture_path_;
     bool is_solid_;
     bool stops_fire_;
     bool should_be_removed_; // true if the entity should be removed by the game engine by the end of the frame
-    QString texture_path_;
 
     bool operator==(const Entity& other) const;
     void SerializeBaseEntity(QDataStream& stream, EntityId entity_id) const;
