@@ -18,8 +18,8 @@ set(CMAKE_BUILD_TYPE Debug)
 
 # Compiler options
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  set(CMAKE_CXX_FLAGS_DEBUG "-Wnon-virtual-dtor -Wall -Werror -Wextra -g -O0 -Wfloat-equal -pedantic -fPIE -std=c++11")
-  set(CMAKE_CXX_FLAGS_RELEASE "-Wnon-virtual-dtor -Wall -Werror -Wextra -O3 -Wfloat-equal -pedantic -fPIE -std=c++11")
+  set(CMAKE_CXX_FLAGS_DEBUG "-Wnon-virtual-dtor -Wall -Werror -Wextra -Wno-reorder -g -O0 -Wfloat-equal -pedantic -fPIE -std=c++11")
+  set(CMAKE_CXX_FLAGS_RELEASE "-Wnon-virtual-dtor -Wall -Werror -Wextra -Wno-reorder -O3 -Wfloat-equal -pedantic -fPIE -std=c++11")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set(CMAKE_CXX_FLAGS_DEBUG "/W3 /Od /DNOMINMAX /MTd")
   set(CMAKE_CXX_FLAGS_RELEASE "/W3 /O2 /DNOMINMAX /MT")
