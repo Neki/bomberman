@@ -9,13 +9,13 @@
 #include <QHostAddress>
 #include <QTimer>
 #include <QByteArray>
-#include "src/common/net/Event.h"
+#include "src/common/net/InGameEvent.h"
 #include "src/common/GameTimer.h"
 #include "ServerEntity.h"
 
 #define LOG_PACKET_LEVEL 5
 
-using common::net::Event;
+using common::net::InGameEvent;
 using common::GameTimer;
 using namespace common::entity;
 
@@ -49,7 +49,7 @@ class NetworkWorker : public QObject {
      * Is not a slot, as inter-thread communication with slots would require a
      * copy of the event.
      */
-    void AddEvent(std::unique_ptr<Event> event);
+    void AddEvent(std::unique_ptr<InGameEvent> event);
 
   signals:
     /**
@@ -76,7 +76,7 @@ class NetworkWorker : public QObject {
     void SocketError(QAbstractSocket::SocketError);
 
   private:
-    std::map<quint32, std::unique_ptr<Event>> pending_; // can be accessed from two threads
+    std::map<quint32, std::unique_ptr<InGameEvent>> pending_; // can be accessed from two threads
     std::map<quint32, quint32> ping_timestamps_; // packet id -> timestamp
     QUdpSocket socket_;
     QUdpSocket receive_socket_;

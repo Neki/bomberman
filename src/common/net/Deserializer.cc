@@ -11,14 +11,8 @@ EventId Deserializer::GetNextEventId(QDataStream &stream) {
       return EventId::kBombEventId;
     case EventId::kMoveEventId:
       return EventId::kMoveEventId;
-    case EventId::kPlayerJoinedEvent:
-      return EventId::kPlayerJoinedEvent;
     case EventId::kPlayerLeftEvent:
       return EventId::kPlayerLeftEvent;
-    case EventId::kSetAdminEvent:
-      return EventId::kSetAdminEvent;
-    case EventId::kSettingsEvent:
-      return EventId::kSettingsEvent;
     default:
       // TODO(faucon_b) gracefull error handling
       return EventId::kUnknownEventId;
@@ -42,15 +36,10 @@ std::unique_ptr<InGameEvent> Deserializer::DeserializeInGameEvent(QDataStream& s
   }
 }
 
-BaseEventData Deserializer::DeserializeBaseEvent(QDataStream& stream) {
+BaseEventData Deserializer::DeserializeBaseInGameEvent(QDataStream& stream) {
   BaseEventData data;
   stream >> data.id;
   stream >> data.timestamp;
-  return data;
-}
-
-BaseEventData Deserializer::DeserializeBaseInGameEvent(QDataStream& stream) {
-  BaseEventData data = DeserializeBaseEvent(stream);
   stream >> data.character_id;
   return data;
 }
@@ -92,13 +81,6 @@ MoveEvent Deserializer::DeserializeMoveEvent(QDataStream& stream) {
   return MoveEvent(position, destination, direction, data.character_id, data.id, data.timestamp);
 }
 
-PlayerJoinedEvent Deserializer::DeserializePlayerJoinedEvent(QDataStream& stream) {
-  BaseEventData data = DeserializeBaseEvent(stream);
-  QString player_name;
-  stream >> player_name;
-  return PlayerJoinedEvent(player_name, data.id, data.timestamp);
-}
-
 PlayerLeftEvent Deserializer::DeserializePlayerLeftEvent(QDataStream& stream) {
   BaseEventData data = DeserializeBaseInGameEvent(stream);
   int reason_int;
@@ -118,16 +100,6 @@ PlayerLeftEvent Deserializer::DeserializePlayerLeftEvent(QDataStream& stream) {
   return PlayerLeftEvent(reason, data.character_id, data.id, data.timestamp);
 }
 
-SetAdminEvent Deserializer::DeserializeSetAdminEvent(QDataStream& stream) {
-  BaseEventData data = DeserializeBaseEvent(stream);
-  return SetAdminEvent(data.id, data.timestamp);
-}
-
-SettingsEvent Deserializer::DeserializeSettingsEvent(QDataStream& stream) {
-  BaseEventData data = DeserializeBaseEvent(stream);
-  return SettingsEvent(data.id, data.timestamp);
-}
-
 EntityId Deserializer::GetNextEntityId(QDataStream& stream) {
   quint8 type;
   stream >> type;
@@ -144,7 +116,7 @@ EntityId Deserializer::GetNextEntityId(QDataStream& stream) {
       return kFireId;
     case EntityId::kCharacterId:
       return kCharacterId;
-    case EntityId::kUnknownEntity: /* fall-throuf */
+    case EntityId::kUnknownEntity: /* fall-through */
     default: // TODO error
      return kUnknownEntity;
  }

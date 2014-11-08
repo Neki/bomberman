@@ -208,7 +208,7 @@ void NetworkWorker::SendPingPacket() {
 void NetworkWorker::SendPendingEvents() {
     // we know the event won't be deleted until we leave this method
     // so using a pointer (instead of a shared_ptr) is fine
-    QVector<Event*> to_send;
+    QVector<InGameEvent*> to_send;
     QMutexLocker lock(&pending_events_mutex_);
     auto it = pending_.begin();
     int i = 0;
@@ -225,7 +225,7 @@ void NetworkWorker::SendPendingEvents() {
       QDataStream stream(&buffer, QIODevice::OpenModeFlag::WriteOnly);
       quint32 packet_id = PrepareHeader(stream, kEventPacketId);
       stream << (quint8) to_send.size();
-      for(Event* evt : to_send) {
+      for(InGameEvent* evt : to_send) {
         stream << *evt;
       }
       assert(stream.status() == QDataStream::Status::Ok);
@@ -250,7 +250,7 @@ void NetworkWorker::ProcessEventAck(QDataStream& stream) {
 
 }
 
-void NetworkWorker::AddEvent(std::unique_ptr<Event> event) {
+void NetworkWorker::AddEvent(std::unique_ptr<InGameEvent> event) {
   quint64 id = GetNextEventId();
   event->SetId(id);
   QMutexLocker lock(&pending_events_mutex_);
