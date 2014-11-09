@@ -7,7 +7,7 @@ namespace common {
 namespace entity {
 
 Character::Character(QPoint position, int power, float speed, unsigned int number_of_bombs)
-  : Entity(position, false, false, "res/default_character.png"),
+  : Entity(position, false, false, "res/right_blue.svg"),
     power_(power), // bomb power in tiles
     current_speed_(), // in tiles per second. might be temporary superior to the nominal speed
     speed_(speed), // nominal speed

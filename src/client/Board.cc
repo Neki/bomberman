@@ -74,28 +74,6 @@ bool Board::IsKeyReleaseEvent(QKeyEvent *event)
 		return false;
 }
 
-//void Board::InitGame(int nbPlayers){
-//	(void) nbPlayers;
-//
-//	if (pixmapFire.get() == nullptr)
-//	{
-//		pixmapFire.reset(new QPixmap(":/res/fire.png"));
-//	}
-//	if (pixmapBlock.get() == nullptr)
-//	{
-//		pixmapBlock.reset(new QPixmap(":/res/caisse.png"));
-//	}
-//	if (pixmapWall.get() == nullptr)
-//	{
-//		pixmapWall.reset(new QPixmap(":/res/mur.png"));
-//	}
-//}
-
-void Board::NewGame(int nbPlayers){
-	(void)nbPlayers;
-	//InitGame(nbPlayers);
-}
-
 //void Board::moveCharacter(Character *character, QKeyEvent *event){
 //	QPointF Character->GetExactPosition();
 //	if (IsKeyPressEvent(event)){
@@ -115,6 +93,3 @@ void Board::NewGame(int nbPlayers){
 //		}
 //	}
 //}
-
-
-//// TODO Board destructor
