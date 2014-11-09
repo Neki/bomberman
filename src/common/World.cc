@@ -17,20 +17,16 @@ World::World(int width, int height)
       entities_[x].push_back(std::vector<std::unique_ptr<entity::Entity> >());
       QPoint pos(x, y);
       if ((pos - QPoint(0, 0)).manhattanLength() <= 1 ) { // room for player
-        
+		  entities_[x][y].emplace_back(std::unique_ptr<entity::Character>(new entity::Character(pos)));
       } else if ((pos - QPoint(0, height_ - (height_%2))).manhattanLength() <= 1) { // room for player
-
+		  entities_[x][y].emplace_back(std::unique_ptr<entity::Character>(new entity::Character(pos)));
       } else if ((pos - QPoint(width_ - (width_%2), 0)).manhattanLength() <= 1) { // room for player
-
+		  entities_[x][y].emplace_back(std::unique_ptr<entity::Character>(new entity::Character(pos)));
       } else if ((pos - QPoint(width_ - (width_%2), height_ - (height_%2))).manhattanLength() <= 1) { // room for player
-
+		  entities_[x][y].emplace_back(std::unique_ptr<entity::Character>(new entity::Character(pos)));
       } else if (x % 2 == 1 && y % 2 == 1) {
         entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
-      } else if (x == width_ - 1 && width_ % 2 == 1) { // if width_ is odd
-        entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
-      } else if (x == height_ - 1 && height_ % 2 == 1) { // if height_ is odd
-        entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
-      } else  {
+	  } else  {
         entities_[x][y].emplace_back(std::unique_ptr<entity::Block>(new entity::Block(pos)));
       }
     }
