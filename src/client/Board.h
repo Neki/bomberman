@@ -25,7 +25,7 @@ protected:
 	void paintEvent(QPaintEvent *event) override;
 	bool IsKeyPressEvent(QKeyEvent *);
 	bool IsKeyReleaseEvent(QKeyEvent *);
-	//void moveCharacter(Character *character)
+	void moveCharacter(common::entity::Character *character, QKeyEvent *event);
 
 signals:
 	public slots :
