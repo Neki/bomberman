@@ -28,6 +28,7 @@ class World {
     std::vector<std::unique_ptr<entity::Entity> >::const_iterator IteratorAtEnd(QPoint a);
     std::vector<std::unique_ptr<entity::Character> >::const_iterator CharacterIteratorBegin();
     std::vector<std::unique_ptr<entity::Character> >::const_iterator CharacterIteratorEnd();
+	bool IsEntitiesEmpty(QPoint a);
 
   private:
     const int width_; // Width of the world eg number of blocks
