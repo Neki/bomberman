@@ -1,6 +1,7 @@
 #include "World.h"
 #include "entity/Wall.h"
 #include "entity/Block.h"
+#include "entity/Bonus.h"
 #include <cassert>
 
 namespace common {
@@ -33,6 +34,10 @@ World::World(int width, int height)
       } else  {
         entities_[x][y].emplace_back(std::unique_ptr<entity::Block>(new entity::Block(pos)));
       }
+	  if (x == 10 && y == 10){
+		  entities_[x][y].clear();
+		  entities_[x][y].emplace_back(std::unique_ptr<entity::Bonus>(new entity::Bonus(pos)));
+	  }
     }
   }
 
