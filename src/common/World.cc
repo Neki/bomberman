@@ -66,6 +66,12 @@ std::vector<std::unique_ptr<entity::Character> >::const_iterator World::Characte
   return characters_.cend();
 }
 
+bool World::IsEntitiesEmpty(QPoint a) {
+	assert(CheckCoord(a));
+	return entities_[a.x()][a.y()].empty();
+}
+
+
 int World::GetWidth() const {
   return width_;
 }

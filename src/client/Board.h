@@ -23,6 +23,7 @@ private:
 
 protected:
 	void PaintEntity(QPainter &painter, common::entity::Entity &entity, QPointF x, QSizeF size);
+	void PaintBkg(QPainter &painter, QPointF x, QSizeF size);
 	void paintEvent(QPaintEvent *event) override;
 	bool IsKeyPressEvent(QKeyEvent *);
 	bool IsKeyReleaseEvent(QKeyEvent *);
