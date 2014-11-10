@@ -1,5 +1,6 @@
 #include "World.h"
 #include "entity/Wall.h"
+#include "entity/Fire.h"
 #include "entity/Block.h"
 #include "entity/Bonus.h"
 #include <cassert>
@@ -37,6 +38,10 @@ World::World(int width, int height)
 	  if (x == 10 && y == 10){
 		  entities_[x][y].clear();
 		  entities_[x][y].emplace_back(std::unique_ptr<entity::Bonus>(new entity::Bonus(pos)));
+	  }
+	  quint32 q(21);
+	 if (x==18 && y>3 && y<10){
+		  entities_[x][y].emplace_back(std::unique_ptr<entity::Fire>(new entity::Fire(pos,q)));
 	  }
     }
   }
