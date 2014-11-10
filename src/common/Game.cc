@@ -1,17 +1,17 @@
 #include "Game.h"
-#include <QObject>
-#include <stdexcept>
 #include <cassert>
 
 namespace common {
 
 Game::Game()
   : players_(),
-    game_engine_(nullptr) {
+    game_engine_(nullptr),
+    started_(false) {
 
 }
 
 void Game::AddPlayer(std::shared_ptr<Player> player) {
+  assert(!started_);
   players_.push_back(std::shared_ptr<Player>(player));
 
   for (auto it = players_.cbegin(); it != players_.cend(); ++it) {
@@ -34,11 +34,19 @@ int Game::GetPlayersCount() {
 }
 
 void Game::Start() {
-  // start the game !
+  assert(!started_);
+  game_engine_ = std::unique_ptr<GameEngine>();
+  for (auto it = players_.cbegin(); it != players_.cend(); ++it) {
+    game_engine_->AddPlayer(*it);
+  }
+  started_ = true;
+  game_engine_->StartGame();
 }
 
 void Game::End() {
-  // end the game !
+  assert(started_);
+  started_ = false;
+  game_engine_.release();
 }
 
 }

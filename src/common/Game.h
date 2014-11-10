@@ -2,9 +2,9 @@
 #define SRC_COMMON_GAME_H_
 
 #include <vector>
+#include <memory>
 #include "Player.h"
 #include "GameEngine.h"
-#include <memory>
 
 namespace common {
 
@@ -20,6 +20,7 @@ class Game {
   private:
     std::vector<std::shared_ptr<Player> > players_;
     std::unique_ptr<GameEngine> game_engine_;
+    bool started_;
 
 };
 }
