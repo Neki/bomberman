@@ -6,7 +6,8 @@
 namespace common {
 
 Game::Game()
-  : players_() {
+  : players_(),
+    game_engine_(nullptr) {
 
 }
 

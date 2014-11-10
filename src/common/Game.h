@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Player.h"
+#include "GameEngine.h"
 #include <memory>
 
 namespace common {
@@ -14,10 +15,11 @@ class Game {
     int GetPlayersCount();
     void AddPlayer(std::shared_ptr<Player> player);
     /* Each player should have an unique ID ! */
-    virtual void Start() = 0;
-    virtual void End() = 0;
+    void Start();
+    void End();
   private:
     std::vector<std::shared_ptr<Player> > players_;
+    std::unique_ptr<GameEngine> game_engine_;
 
 };
 }
