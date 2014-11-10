@@ -2,13 +2,7 @@
 
 namespace common {
 
-Player::Player(int id) 
-  : id_(id),
-  score_(0),
-  strategy_()  {
-}
-
-Player::Player(QString name)
+Player::Player(int id, QString name)
   : name_(name),
     score_(0),
     strategy_() {

@@ -8,8 +8,7 @@
 namespace common {
     class Player {
     public:
-        Player(int id);
-        Player(QString name);
+        Player(int id, QString name);
         int GetId() const;
         QString GetName() const;
         int GetScore() const;
