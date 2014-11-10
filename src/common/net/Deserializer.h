@@ -4,14 +4,11 @@
 #include <QDataStream>
 #include <memory>
 
-#include "Event.h"
+#include "InGameEvent.h"
 #include "EventId.h"
 #include "BombEvent.h"
 #include "MoveEvent.h"
 #include "PlayerLeftEvent.h"
-#include "PlayerJoinedEvent.h"
-#include "SetAdminEvent.h"
-#include "SettingsEvent.h"
 
 #include "src/common/entity/EntityId.h"
 #include "src/common/entity/Block.h"
@@ -68,10 +65,7 @@ class Deserializer {
 
     static BombEvent DeserializeBombEvent(QDataStream& stream);
     static MoveEvent DeserializeMoveEvent(QDataStream& stream);
-    static PlayerJoinedEvent DeserializePlayerJoinedEvent(QDataStream& stream);
     static PlayerLeftEvent DeserializePlayerLeftEvent(QDataStream& stream);
-    static SetAdminEvent DeserializeSetAdminEvent(QDataStream& stream);
-    static SettingsEvent DeserializeSettingsEvent(QDataStream& stream);
 
     static EntityId GetNextEntityId(QDataStream& stream);
 
@@ -90,7 +84,6 @@ class Deserializer {
 
 
   private:
-    static BaseEventData DeserializeBaseEvent(QDataStream& stream);
     static BaseEventData DeserializeBaseInGameEvent(QDataStream& stream);
     static BaseEntityData DeserializeBaseEntity(QDataStream& stream);
 

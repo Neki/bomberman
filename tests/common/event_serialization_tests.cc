@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include <memory>
 
+#include "src/common/net/InGameEvent.h"
+#include "src/common/Direction.h"
 #include "src/common/net/Deserializer.h"
 #include "src/common/net/QuitReason.h"
 #include <QByteArray>
@@ -16,23 +18,17 @@ class EventSerializationTest : public testing::Test {
       :  testing::Test(),
          bomb_event_(common::net::BombEvent(QPoint(1,3), 1, 20, 20)),
          move_event_(common::net::MoveEvent(QPoint(0,8), QPoint(0,9), Direction::LEFT, 1, 20, 25)),
-         joined_event_(common::net::PlayerJoinedEvent(QString("The mad bomber"), 20, 25)),
-         left_event_(common::net::PlayerLeftEvent(common::net::QuitReason::TIMEOUT, 3, 15, 23)),
-         admin_event_(common::net::SetAdminEvent(15, 23)) {
+         left_event_(common::net::PlayerLeftEvent(common::net::QuitReason::TIMEOUT, 3, 15, 23)) {
         event_id_map_[EventId::kBombEventId] = &bomb_event_;
         event_id_map_[EventId::kMoveEventId] = &move_event_;
-        event_id_map_[EventId::kPlayerJoinedEvent] = &joined_event_;
         event_id_map_[EventId::kPlayerLeftEvent] = &left_event_;
-        event_id_map_[EventId::kSetAdminEvent] = &admin_event_;
       }
 
   protected:
     common::net::BombEvent bomb_event_;
     common::net::MoveEvent move_event_;
-    common::net::PlayerJoinedEvent joined_event_;
     common::net::PlayerLeftEvent left_event_;
-    common::net::SetAdminEvent admin_event_;
-    std::map<EventId, common::net::Event*> event_id_map_;
+    std::map<EventId, common::net::InGameEvent*> event_id_map_;
 };
 
 TEST_F(EventSerializationTest, EventId) {
@@ -63,17 +59,8 @@ TEST_F(EventSerializationTest, Event) {
       case EventId::kMoveEventId:
         EXPECT_EQ(*static_cast<common::net::MoveEvent*>(p.second), Deserializer::DeserializeMoveEvent(out));
         break;
-      case EventId::kPlayerJoinedEvent:
-        EXPECT_EQ(*static_cast<common::net::PlayerJoinedEvent*>(p.second), Deserializer::DeserializePlayerJoinedEvent(out));
-        break;
       case EventId::kPlayerLeftEvent:
         EXPECT_EQ(*static_cast<common::net::PlayerLeftEvent*>(p.second), Deserializer::DeserializePlayerLeftEvent(out));
-        break;
-      case EventId::kSetAdminEvent:
-        EXPECT_EQ(*static_cast<common::net::SetAdminEvent*>(p.second), Deserializer::DeserializeSetAdminEvent(out));
-        break;
-      case EventId::kSettingsEvent:
-        EXPECT_EQ(*static_cast<common::net::SettingsEvent*>(p.second), Deserializer::DeserializeSettingsEvent(out));
         break;
       case EventId::kUnknownEventId:
         FAIL() << "Unknown event deserialized";
