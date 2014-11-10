@@ -59,7 +59,6 @@ quint32 GameEngine::GetTimestamp() const {
 }
 
 bool GameEngine::AddFire(QPoint a) {
-  // TODO : call the method IsTouchByFire on the case entities.
   if (world_->StopsFire(a)) {
     return false;
   } else {

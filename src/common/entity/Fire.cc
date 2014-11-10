@@ -1,7 +1,5 @@
 #include "Fire.h"
 
-#include <QTime>
-
 namespace common {
 namespace entity {
 
@@ -25,11 +23,22 @@ void Fire::Update(GameEngine* game_engine, int t)
 /* Method to be called at every frame.
    t : duration of the frame in ms */
 {
-  (void)game_engine;
 	(void) t;
-  if ((quint32) QTime::currentTime().msec() >= disappearing_time_) {// TODO : change to use the game clock
+  if (game_engine->GetTimestamp() >= disappearing_time_) {
     should_be_removed_ = true;
+    return;
   }
+
+  for (auto it = game_engine->GetWorld()->CharacterIteratorBegin(); it != game_engine->GetWorld()->CharacterIteratorEnd(); ++it) {
+    if (((*it)->GetPositionF() - GetPositionF()).manhattanLength() < 0.8f) {
+      (*it)->HitByFire(game_engine);
+    }
+  }
+
+  for (auto it = game_engine->GetWorld()->IteratorAtBegin(position_); it != game_engine->GetWorld()->IteratorAtEnd(position_); ++it) {
+    (*it)->HitByFire(game_engine);
+  }
+
 }
 
 bool Fire::operator==(const Fire& other) const {
