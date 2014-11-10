@@ -6,6 +6,7 @@
 #include <QSize>
 #include <QDir>
 #include "src/common/World.h"
+#include "src/common/entity/Character.h"
 #include <QPointF>
 #include <QtSvg/QSvgRenderer>
 #include "src/common/entity/Entity.h"
@@ -20,10 +21,6 @@ Board::Board(std::shared_ptr<common::World> world, QWidget *parent) :
     side_square_(500 / world->GetWidth())
 {
     setGeometry(0, 50, 500, 550);
-    QPalette Pal(palette());
-    Pal.setColor(QPalette::Background, Qt::black);
-    setAutoFillBackground(true);
-    setPalette(Pal);
 }
 
 void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPointF x, QSizeF size)
@@ -31,6 +28,13 @@ void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPoin
 	QString path = entity.GetTexturePath();
 	QRectF rectF(x, size);
     auto renderer = svg_manager_->GetSvgRenderer(path);
+	renderer->render(&painter, rectF);
+}
+
+void Board::PaintBkg(QPainter &painter, QPointF x, QSizeF size){
+	QString path = "res/bkg.svg";
+	QRectF rectF(x, size);
+	QSvgRenderer *renderer = new QSvgRenderer(QCoreApplication::applicationDirPath() + "/" + path);
 	renderer->render(&painter, rectF);
 }
 
@@ -47,9 +51,15 @@ void Board::paintEvent(QPaintEvent *event)
 		for (int j = 0; j < world_->GetHeight(); ++j) {
             QPointF x(side_square_ * i, side_square_ * j);
 			QPoint a(i, j);
-			for (auto k = world_->IteratorAtBegin(a); k != world_->IteratorAtEnd(a); ++k) {
-				PaintEntity(painter, **k , x, qsizef);
-			}			
+			if (world_->IsEntitiesEmpty(a)){
+				PaintBkg(painter, x, qsizef);
+			}
+			else{
+				for (auto k = world_->IteratorAtBegin(a); k != world_->IteratorAtEnd(a); ++k)
+				{
+					PaintEntity(painter, **k, x, qsizef);
+				}
+			}
 		}
 	}
 }
@@ -74,47 +84,29 @@ bool Board::IsKeyReleaseEvent(QKeyEvent *event)
 		return false;
 }
 
-//void Board::InitGame(int nbPlayers){
-//	(void) nbPlayers;
-//
-//	if (pixmapFire.get() == nullptr)
-//	{
-//		pixmapFire.reset(new QPixmap(":/res/fire.png"));
-//	}
-//	if (pixmapBlock.get() == nullptr)
-//	{
-//		pixmapBlock.reset(new QPixmap(":/res/caisse.png"));
-//	}
-//	if (pixmapWall.get() == nullptr)
-//	{
-//		pixmapWall.reset(new QPixmap(":/res/mur.png"));
-//	}
-//}
+void Board::moveCharacter(common::entity::Character *character, QKeyEvent *event){
+	QPointF pos = character->GetPositionF();
+	int x = pos.x();
+	int y = pos.y();
 
-void Board::NewGame(int nbPlayers){
-	(void)nbPlayers;
-	//InitGame(nbPlayers);
+	if (IsKeyPressEvent(event)){
+		switch (event->key())
+		{
+		case Qt::Key_Left:
+			--x;
+			break;
+		case Qt::Key_Up:
+			++y;
+			break;
+		case Qt::Key_Right:
+			++x;
+			break;
+		case Qt::Key_Down:
+			--y;
+			break;
+		default:
+			break;
+		}
+	}
+	// TODO character -> SetPositionF(x,y) ??
 }
-
-//void Board::moveCharacter(Character *character, QKeyEvent *event){
-//	QPointF Character->GetExactPosition();
-//	if (IsKeyPressEvent(event)){
-//		switch (event->key())
-//		{
-//		case Qt::Key_Left:
-//			// TODO test if it is possible, then move player according to speed & change its position
-//			break;
-//		case Qt::Key_Up:
-//			break;
-//		case Qt::Key_Right:
-//			break;
-//		case Qt::Key_Down:
-//			break;
-//		default:
-//			break;
-//		}
-//	}
-//}
-
-
-//// TODO Board destructor

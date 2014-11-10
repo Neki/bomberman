@@ -11,7 +11,7 @@ namespace entity {
 class Bonus : public Entity {
 
   public:
-    Bonus(QPoint position, QString texture_path = "");
+    Bonus(QPoint position, QString texture_path = "res/bonus_invincibility.svg");
 
     virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
 
