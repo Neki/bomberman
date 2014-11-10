@@ -12,12 +12,10 @@ Game::Game()
 
 void Game::AddPlayer(std::shared_ptr<Player> player) {
   assert(!started_);
-  players_.push_back(std::shared_ptr<Player>(player));
-
   for (auto it = players_.cbegin(); it != players_.cend(); ++it) {
     assert((*it)->GetId() != player->GetId());
   }
-
+  players_.push_back(std::shared_ptr<Player>(player));
 }
 
 std::weak_ptr<Player> Game::GetPlayer(int id) {
