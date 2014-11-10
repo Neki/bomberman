@@ -1,22 +1,30 @@
 #include "Game.h"
 #include <QObject>
-#include <vector>
 #include <stdexcept>
 
 namespace common {
-int Game::AddPlayer(Player& player) {
-  int player_id = GetPlayersCount();
-  players_.insert(std::pair<int, Player*>(player_id, &player));
 
+Game::Game()
+  : players_(),
+    max_id_used(0) {
+
+}
+
+int Game::AddPlayer(std::shared_ptr<Player> player) {
+  max_id_used += 1;
+  int player_id = max_id_used;
+  players_.push_back(std::shared_ptr<Player>(player));
   return player_id;
 }
 
-Player* Game::GetPlayer(int id) {
-  if (!players_.count(id)) {
-    throw std::out_of_range("Unknown player id");
+std::weak_ptr<Player> Game::GetPlayer(int id) {
+  for (auto it = players_.cbegin(); it != players_.cend(); ++it) {
+    if ((*it)->GetId() == id) {
+      return std::weak_ptr<Player>(*it);
+    }
   }
 
-  return players_[id];
+  throw std::out_of_range("Unknown player id");
 }
 
 int Game::GetPlayersCount() {
@@ -30,4 +38,5 @@ void Game::Start() {
 void Game::End() {
   // end the game !
 }
+
 }
