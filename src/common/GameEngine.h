@@ -26,7 +26,7 @@ namespace common {
     ~GameEngine();
 
     void AddPlayer(std::unique_ptr<Player> player);
-    bool AddEntity(std::unique_ptr<entity::Entity> e);
+    bool AddEntity(std::unique_ptr<entity::Entity> e); // TODO: should be private?
     void StartGame();
     quint32 GetTimestamp() const;
     /* Returns the number of milliseconds that have elapsed since the last time StartGame() was called. */
