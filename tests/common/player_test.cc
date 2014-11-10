@@ -4,5 +4,5 @@
 TEST(Player, SubstractScore) {
     common::Player player("SpiderMan");
     player.SubstractScore(3);
-    EXPECT_EQ(player.score(), -3);
+    EXPECT_EQ(player.GetScore(), -3);
 }

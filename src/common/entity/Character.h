@@ -4,12 +4,10 @@
 #include <memory>
 #include <QPoint>
 #include "Entity.h"
-#include "src/common/GameEngine.h"
-
 #include <QPointF>
-#include <QTime>
 
 namespace common {
+class GameEngine;
 namespace entity {
 
 class Character : public Entity {
@@ -20,22 +18,26 @@ class Character : public Entity {
     unsigned int GetPower() const;
     QPointF GetCurrentSpeed() const;
     float GetSpeed() const;
-    QPointF GetPositionF() const; // in tile
+    QPointF GetPositionF() const override; // in tile
     unsigned int GetNumberOfBombs() const;
     int GetBombDelay() const;
 
-    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
+    virtual void Update(GameEngine* game_engine, int t);
     /* Method to be called at every frame.
 	   t : duration of the frame in ms */
 
-    void HitByFire(std::weak_ptr<GameEngine> game_engine);
+    void HitByFire(GameEngine* game_engine);
     /* Called when entity is hit by fire. */
+    
+    bool MoveTo(GameEngine* game_engine, QPoint target);
 
     bool operator==(const Character& other) const;
 
     void Serialize(QDataStream& stream) const override;
 
   private:
+    static float DistanceBetween(QPointF a, QPointF b);
+  
     unsigned int power_; // bomb power in tiles
     QPointF current_speed_; // in tiles per second. might be temporary superior to the nominal speed
     float speed_; // nominal speed
@@ -43,8 +45,8 @@ class Character : public Entity {
     unsigned int number_of_bombs_;
   	int bomb_delay_;
 
-    void moveTo(QPoint t, int speed);
-
+    bool moving_;
+    quint32 target_time_;
 };
 
 }

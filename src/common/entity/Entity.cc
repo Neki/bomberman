@@ -1,4 +1,4 @@
-
+#include "src/common/GameEngine.h"
 #include "Entity.h"
 
 namespace common {
@@ -19,17 +19,17 @@ Entity::~Entity() {
 
 }
 
-void Entity::Update(std::weak_ptr<GameEngine> game_engine, int t)
+void Entity::Update(GameEngine* game_engine, int t)
 {
   (void) game_engine;
   (void) t;
 }
 
-void Entity::HitByFire(std::weak_ptr<GameEngine> game_engine) {
+void Entity::HitByFire(GameEngine* game_engine) {
   (void) game_engine;
 }
 
-void Entity::IsWalkedOn(std::weak_ptr<GameEngine> game_engine, const std::weak_ptr<Character> character)
+void Entity::IsWalkedOn(GameEngine* game_engine, const std::weak_ptr<Character> character)
 {
   (void) game_engine;
   (void) character;

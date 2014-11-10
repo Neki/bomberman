@@ -10,7 +10,7 @@ Wall::Wall(QPoint position) :
 
 }
 
-void Wall::Update(std::weak_ptr<GameEngine> game_engine, int t) {
+void Wall::Update(GameEngine* game_engine, int t) {
   (void) game_engine;
   (void) t;
 }

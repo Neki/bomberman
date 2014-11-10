@@ -14,9 +14,9 @@ class Block : public Entity{
   public:
     Block(QPoint position);
 
-    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
+    virtual void Update(GameEngine* game_engine, int t);
 
-    void HitByFire(std::weak_ptr<GameEngine> game_engine);
+    void HitByFire(GameEngine* game_engine);
     /* Called when entity is hit by fire. */
 
     bool operator==(const Block& other) const;

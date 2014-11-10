@@ -24,6 +24,8 @@ class World {
     bool AddCharacter(std::unique_ptr<entity::Character> character); // Adds a character to characters_. Returns false if it fail.
     void removeEntities(); // Removes entities that should be removed
 
+    entity::Character* GetCharacter(int id);
+
     std::vector<std::unique_ptr<entity::Entity> >::const_iterator IteratorAtBegin(QPoint a);
     std::vector<std::unique_ptr<entity::Entity> >::const_iterator IteratorAtEnd(QPoint a);
     std::vector<std::unique_ptr<entity::Character> >::const_iterator CharacterIteratorBegin();

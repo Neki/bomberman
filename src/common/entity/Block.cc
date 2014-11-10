@@ -9,12 +9,12 @@ Block::Block(QPoint position) :
 
 }
 
-void Block::Update(std::weak_ptr<GameEngine> game_engine, int t) {
+void Block::Update(GameEngine* game_engine, int t) {
   (void) game_engine;
   (void) t;
 }
 
-void Block::HitByFire(std::weak_ptr<GameEngine> game_engine) {
+void Block::HitByFire(GameEngine* game_engine) {
   /* Called when entity is hit by fire. */
   // TODO : add bonus creation
   (void) game_engine;

@@ -1,6 +1,6 @@
-
+#include "src/common/GameEngine.h"
 #include "Character.h"
-
+#include <cmath>
 #include <QPointF>
 
 namespace common {
@@ -13,7 +13,10 @@ Character::Character(QPoint position, int power, float speed, unsigned int numbe
     speed_(speed), // nominal speed
     exact_position_(position),
     number_of_bombs_(number_of_bombs),
-    bomb_delay_(300) {// TODO: correct
+    bomb_delay_(300), // TODO: correct
+    moving_(false),
+    target_time_() {
+
 }
 
 unsigned int Character::GetPower() const {
@@ -40,23 +43,59 @@ int Character::GetBombDelay() const {
 	return bomb_delay_;
 }
 
-void Character::moveTo(QPoint t, int speed) {
-  (void) t;
-  (void) speed;
+bool Character::MoveTo(GameEngine* game_engine, QPoint target) {
+  if (moving_) {
+    return false;
+  } else {
+    moving_ = true;
+    position_ = target;
+    float remaining_distance = DistanceBetween(QPointF(position_), exact_position_);
+    target_time_ = game_engine->GetTimestamp() + remaining_distance * speed_;
+    return true;
+  }
 }
 
-void Character::HitByFire(std::weak_ptr<GameEngine> game_engine) {
+void Character::HitByFire(GameEngine* game_engine) {
   /* Called when entity is hit by fire. */
   (void) game_engine;
 	should_be_removed_ = true;
 }
 
-void Character::Update(std::weak_ptr<GameEngine> game_engine, int t) {
+float Character::DistanceBetween(QPointF a, QPointF b) {
+  float x2 = (a.x() - b.x()) * (a.x() - b.x());
+  float y2 = (a.y() - b.y()) * (a.y() - b.y());
+  return sqrt(x2 + y2);
+}
+
+void Character::Update(GameEngine* game_engine, int t) {
 /* Method to be called at every frame.
    t : duration of the frame in ms */
-  (void)game_engine;
+  (void) game_engine;
   (void) t;
-	// TODO : Update position
+
+  float const max_speed = 1.5f;
+  float remaining_distance = DistanceBetween(QPointF(position_), exact_position_);
+  float current_speed_norm = 0.0f;
+
+  quint32 current_time = game_engine->GetTimestamp();
+  if (current_time >= target_time_) {
+    current_speed_norm = speed_ * max_speed;
+  }
+  else {
+    current_speed_norm = fmax(speed_, fmin(speed_ * max_speed, remaining_distance / (current_time - target_time_)));
+  }
+
+  if (remaining_distance < current_speed_norm*t) {
+    exact_position_ = QPointF(position_);
+    current_speed_ = QPointF();
+    moving_ = false;
+  }
+  else {
+    current_speed_ = current_speed_norm * (position_ - exact_position_);
+    exact_position_ += current_speed_ * t;
+  }
+
+  
 }
 
 bool Character::operator==(const Character& other) const {

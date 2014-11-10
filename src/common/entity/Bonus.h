@@ -13,9 +13,9 @@ class Bonus : public Entity {
   public:
     Bonus(QPoint position, QString texture_path = "");
 
-    virtual void Update(std::weak_ptr<GameEngine> game_engine, int t);
+    virtual void Update(GameEngine* game_engine, int t);
 
-    void HitByFire(std::weak_ptr<GameEngine> game_engine);
+    void HitByFire(GameEngine* game_engine);
     /* Called when entity is hit by fire. */
 
     bool operator==(const Bonus& other) const;

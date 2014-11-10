@@ -17,7 +17,8 @@ class GameTimer {
   public:
     GameTimer();
     void StartGame();
-    quint32 GetTimestamp();
+    quint32 GetTimestamp() const;
+    /* Returns the number of milliseconds that have elapsed since the last time StartGame() was called. */
 
   private:
     QTime timer_;
