@@ -23,8 +23,8 @@ GameEngine::~GameEngine() {
   disconnect(new_frame_timer_.get(), 0, 0, 0);
 }
 
-void GameEngine::AddPlayer(std::unique_ptr<Player> player) {
-  players_.push_back(std::move(player));
+void GameEngine::AddPlayer(std::shared_ptr<Player> player) {
+  players_.push_back(player);
   world_->AddCharacter(std::unique_ptr<entity::Character>());
 }
 

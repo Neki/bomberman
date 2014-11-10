@@ -5,6 +5,7 @@
 #include <QPoint>
 #include <QTimer>
 #include <vector>
+#include <memory>
 
 #include "src/common/net/Event.h"
 #include "src/common/net/MoveEvent.h"
@@ -26,7 +27,7 @@ namespace common {
     GameEngine();
     ~GameEngine();
     
-    void AddPlayer(std::unique_ptr<Player> player);
+    void AddPlayer(std::shared_ptr<Player> player);
     bool AddEntity(std::unique_ptr<entity::Entity> e);
     void StartGame();
     quint32 GetTimestamp() const;
@@ -52,7 +53,7 @@ namespace common {
     
     quint32 max_duration_; // in milliseconds
 
-    std::vector<std::unique_ptr<Player> > players_;
+    std::vector<std::shared_ptr<Player> > players_;
     std::unique_ptr<World> world_;
 
     GameTimer game_timer_;
