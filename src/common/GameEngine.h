@@ -24,7 +24,7 @@ namespace common {
   public:
     GameEngine();
     ~GameEngine();
-    
+
     void AddPlayer(std::unique_ptr<Player> player);
     bool AddEntity(std::unique_ptr<entity::Entity> e);
     void StartGame();
@@ -32,7 +32,7 @@ namespace common {
     /* Returns the number of milliseconds that have elapsed since the last time StartGame() was called. */
     World* GetWorld() const;
     void AddFireFromAtoB(QPoint a, QPoint b);
-    
+
   private slots:
     void Update(int t); // t in ms. t is the duration of the frame
 
@@ -41,14 +41,14 @@ namespace common {
 
     void ChallengeStrategies();
     void Simulate(int t); // t in ms. t is the duration of the frame
-    
+
     void SendGameState();
-    
+
     void Visit(net::MoveEvent& event);
     void Visit(net::BombEvent& event);
     void Visit(net::PlayerLeftEvent& event);
     void MoveCharacter(int player_id, QPoint target);
-    
+
     quint32 max_duration_; // in milliseconds
 
     std::vector<std::unique_ptr<Player> > players_;
