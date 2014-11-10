@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <vector>
 
-#include "src/common/net/Event.h"
 #include "src/common/net/MoveEvent.h"
 #include "src/common/net/BombEvent.h"
 #include "src/common/net/MoveEvent.h"
