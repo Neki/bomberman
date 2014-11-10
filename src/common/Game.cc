@@ -1,20 +1,22 @@
 #include "Game.h"
 #include <QObject>
 #include <stdexcept>
+#include <cassert>
 
 namespace common {
 
 Game::Game()
-  : players_(),
-    max_id_used(0) {
+  : players_() {
 
 }
 
-int Game::AddPlayer(std::shared_ptr<Player> player) {
-  max_id_used += 1;
-  int player_id = max_id_used;
+void Game::AddPlayer(std::shared_ptr<Player> player) {
   players_.push_back(std::shared_ptr<Player>(player));
-  return player_id;
+
+  for (auto it = players_.cbegin(); it != players_.cend(); ++it) {
+    assert((*it)->GetId() != player->GetId());
+  }
+
 }
 
 std::weak_ptr<Player> Game::GetPlayer(int id) {
@@ -23,8 +25,7 @@ std::weak_ptr<Player> Game::GetPlayer(int id) {
       return std::weak_ptr<Player>(*it);
     }
   }
-
-  throw std::out_of_range("Unknown player id");
+  assert(false);
 }
 
 int Game::GetPlayersCount() {

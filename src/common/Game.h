@@ -11,13 +11,12 @@ class Game {
   public:
     std::weak_ptr<Player> GetPlayer(int id);
     int GetPlayersCount();
-    int AddPlayer(std::shared_ptr<Player> player);
+    void AddPlayer(std::shared_ptr<Player> player);
+    /* Each player should have an unique ID ! */
     void Start();
     void End();
   private:
     std::vector<std::shared_ptr<Player> > players_;
-    quint16 max_id_used;
-
 
 };
 }
