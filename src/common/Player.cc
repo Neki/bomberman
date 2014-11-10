@@ -3,7 +3,8 @@
 namespace common {
 
 Player::Player(int id, QString name)
-  : name_(name),
+  : id_(id),
+    name_(name),
     score_(0),
     strategy_() {
 }
