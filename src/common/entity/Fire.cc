@@ -6,7 +6,7 @@ namespace common {
 namespace entity {
 
 Fire::Fire(QPoint position, quint32 set_time)
-  : Entity(position, false, false, "res/fire.svg"),
+  : DerivedEntity(position, false, false, "res/fire.svg"),
     set_time_(set_time) {
   disappearing_time_ = set_time_ + 300;
 }

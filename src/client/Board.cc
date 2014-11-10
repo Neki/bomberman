@@ -19,7 +19,6 @@ Board::Board(std::shared_ptr<common::World> world, QWidget *parent) :
     world_(world),
     side_square_(500 / world->GetWidth())
 {
-    LOG(DEBUG) << "init board";
     setGeometry(0, 50, 500, 550);
 }
 
@@ -27,7 +26,7 @@ void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPoin
 {
 	QString path = entity.GetTexturePath();
 	QRectF rectF(x, size);
-    QSvgRenderer *renderer = new QSvgRenderer(QCoreApplication::applicationDirPath() + "/" + path);
+    std::shared_ptr<QSvgRenderer> renderer = entity.GetSvgRenderer();
 	renderer->render(&painter, rectF);
 }
 
@@ -40,7 +39,6 @@ void Board::PaintBkg(QPainter &painter, QPointF x, QSizeF size){
 
 void Board::paintEvent(QPaintEvent *event)
 {
-    LOG(DEBUG) << "paint board";
     QPainter painter(this);
     painter.setViewport(0, 0, width(), height());
     painter.setClipRect(event->rect());

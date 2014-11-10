@@ -4,7 +4,7 @@ namespace common {
 namespace entity {
 
 Bonus::Bonus(QPoint position, QString texture_path) :
-  Entity(position, false, false, texture_path) {
+  DerivedEntity(position, false, false, texture_path) {
 
 }
 
