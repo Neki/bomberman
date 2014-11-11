@@ -41,11 +41,15 @@ private:
 	QLabel scoreLabel;
 	QLabel deathsLabel;
 	QLabel killsLabel;
+	QHostAddress host_adress_;
+	quint8 client_id_;
+	quint16 server_port_;
+	quint16 local_port_;
 	std::unique_ptr<Board> board_;
     std::shared_ptr<ServerHandler> server_handler_;
     std::shared_ptr<common::GameTimer> timer_;
     std::shared_ptr<common::World> world_;
-    std::unique_ptr<net::NetworkWorker> network_worker_;
+    std::shared_ptr<net::NetworkWorker> network_worker_;
 };
 
 #endif // SRC_CLIENT_MAINWINDOW_H

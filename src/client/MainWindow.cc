@@ -16,7 +16,8 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),
     server_handler_(std::make_shared<ServerHandler>()),
     timer_(std::make_shared<common::GameTimer>()),
-    world_(std::make_shared<common::World>(21, 21))
+    world_(std::make_shared<common::World>(21, 21)),
+	network_worker_(std::make_shared<net::NetworkWorker>(client_id_, host_adress_, server_port_, local_port_, timer_))
 {
 	ui->setupUi(this);
 	QPoint pos(0, 0);
@@ -31,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 		pos.setY(y);
 		world_->AddItem(std::unique_ptr<common::entity::Fire>(new common::entity::Fire(pos, q)));
 	}
-    board_ = std::unique_ptr<Board>(new Board(world_, this));
+    board_ = std::unique_ptr<Board>(new Board(world_, network_worker_,this));
     show();
     timer_->StartGame();
 
