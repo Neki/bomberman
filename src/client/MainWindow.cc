@@ -16,8 +16,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),
     server_handler_(std::make_shared<ServerHandler>()),
     timer_(std::make_shared<common::GameTimer>()),
-    world_(std::make_shared<common::World>(21, 21)),
-	network_worker_(std::make_shared<net::NetworkWorker>(client_id_, host_adress_, server_port_, local_port_, timer_))
+    world_(std::make_shared<common::World>(21, 21))
 {
 	ui->setupUi(this);
 	QPoint pos(0, 0);
@@ -32,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 		pos.setY(y);
 		world_->AddItem(std::unique_ptr<common::entity::Fire>(new common::entity::Fire(pos, q)));
 	}
-    board_ = std::unique_ptr<Board>(new Board(world_, network_worker_,this));
+    board_ = std::unique_ptr<Board>(new Board(world_, this));
     show();
     timer_->StartGame();
 
@@ -64,9 +63,6 @@ void MainWindow::StartNewGame() {
 	
 }
 
-//int nbColumns = 15; // = background.width / block.size
-//int nbRows = 15; // = background.height / block.size
-
 void MainWindow::SetScore(float score) {
 	ui->scoreLabel->setText("Score : " + QString::number(score));
 }
@@ -90,4 +86,61 @@ void MainWindow::on_actionJoin_triggered() {
 
 void MainWindow::on_actionQuit_triggered() {
 	QApplication::quit();
+}
+
+void MainWindow::moveCharacter(common::entity::Character *character, QKeyEvent *event){
+	QPointF posf = character->GetPositionF();
+	QPoint pos(posf.x(), posf.y());
+	int x = pos.x();
+	int y = pos.y();
+	common::Direction dir;
+	if (IsKeyPressEvent(event)){
+		switch (event->key())
+		{
+		case Qt::Key_Left:
+			--x;
+			dir = common::Direction::LEFT;
+			break;
+		case Qt::Key_Up:
+			++y;
+			dir = common::Direction::UP;
+			break;
+		case Qt::Key_Right:
+			++x;
+			dir = common::Direction::RIGHT;
+			break;
+		case Qt::Key_Down:
+			--y;
+			dir = common::Direction::DOWN;
+			break;
+		default:
+			break;
+		}
+	}
+	QPoint target(x, y);
+	if (world_->IsWalkable(target)){
+		quint32 timestamp = QDateTime::currentDateTime().toTime_t();
+		quint8  id = (quint8)character->GetId();
+		network_worker_->AddEvent(std::unique_ptr<common::net::MoveEvent>(new common::net::MoveEvent(pos, target, dir, id, timestamp)));
+	}
+}
+
+bool MainWindow::IsKeyPressEvent(QKeyEvent *event)
+{
+	if (event->type() == QEvent::KeyPress)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+
+bool MainWindow::IsKeyReleaseEvent(QKeyEvent *event)
+{
+	if (event->type() == QEvent::KeyRelease)
+	{
+		return true;
+	}
+	else
+		return false;
 }

@@ -35,21 +35,20 @@ private slots:
 
 protected:
 	void keyPressEvent(QKeyEvent *evt);
+	bool IsKeyPressEvent(QKeyEvent *);
+	bool IsKeyReleaseEvent(QKeyEvent *);
 
 private:
 	Ui::MainWindow *ui;
 	QLabel scoreLabel;
 	QLabel deathsLabel;
 	QLabel killsLabel;
-	QHostAddress host_adress_;
-	quint8 client_id_;
-	quint16 server_port_;
-	quint16 local_port_;
 	std::unique_ptr<Board> board_;
     std::shared_ptr<ServerHandler> server_handler_;
     std::shared_ptr<common::GameTimer> timer_;
     std::shared_ptr<common::World> world_;
-    std::shared_ptr<net::NetworkWorker> network_worker_;
+    std::unique_ptr<net::NetworkWorker> network_worker_;
+	void moveCharacter(common::entity::Character *character, QKeyEvent *event);
 };
 
 #endif // SRC_CLIENT_MAINWINDOW_H

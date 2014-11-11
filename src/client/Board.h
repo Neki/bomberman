@@ -15,21 +15,17 @@ class Board : public QWidget
 {
 	Q_OBJECT
 public:
-	Board(std::shared_ptr<common::World> world, std::shared_ptr<net::NetworkWorker> network_worker, QWidget* parent);
+	Board(std::shared_ptr<common::World> world, QWidget* parent);
 
 private:
 	std::shared_ptr<common::World> world_;
     std::unique_ptr<SvgManager> svg_manager_;
-	std::shared_ptr<net::NetworkWorker> network_worker_;
     float side_square_;
 
 protected:
 	void PaintEntity(QPainter &painter, common::entity::Entity &entity, QPointF x, QSizeF size);
 	void PaintBkg(QPainter &painter, QPointF x, QSizeF size);
 	void paintEvent(QPaintEvent *event) override;
-	bool IsKeyPressEvent(QKeyEvent *);
-	bool IsKeyReleaseEvent(QKeyEvent *);
-	void moveCharacter(common::entity::Character *character, QKeyEvent *event);
 
 signals:
 	public slots :
