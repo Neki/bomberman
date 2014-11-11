@@ -11,7 +11,7 @@ namespace net {
 class InGameEvent {
   public:
     InGameEvent(quint8 character_id, quint32 id, quint32 timestamp);
-    InGameEvent(quint8 character_id, quint64 timestamp);
+    InGameEvent(quint8 character_id, quint32 timestamp);
     virtual ~InGameEvent();
 
     quint8 GetCharacterId() const;
