@@ -31,7 +31,7 @@ void ServerHandler::runServer() {
 
     QString program = SERVER_EXE;
     QStringList arguments;
-    arguments << "--port" << SERVER_PORT;
+    arguments << "--port" << SERVER_PORT << "-v";
 
     QObject::connect(server_process_.get(), SIGNAL(started()), this, SLOT(startedServer()));
     QObject::connect(server_process_.get(), SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finishedServer(int, QProcess::ExitStatus)));
@@ -79,8 +79,6 @@ bool ServerHandler::IsAlreadyRunning() {
         std::istringstream iss(line);
         int pid_number;
         iss >> pid_number;
-
-        LOG(INFO) << "pid:" << pid_number;
 
         #ifdef _WIN32
             HANDLE pss = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
