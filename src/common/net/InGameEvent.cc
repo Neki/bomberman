@@ -9,7 +9,7 @@ InGameEvent::InGameEvent(quint8 character_id, quint32 id, quint32 timestamp)
     character_id_(character_id) {
 }
 
-InGameEvent::InGameEvent(quint8 character_id, quint64 timestamp) :
+InGameEvent::InGameEvent(quint8 character_id, quint32 timestamp) :
   InGameEvent(character_id, 0, timestamp) {}
 
 InGameEvent::~InGameEvent() {}
