@@ -7,8 +7,8 @@ if(NOT ${Threads_FOUND})
 endif()
 
 set(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/gtest")
-set(LIBPREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}")
-set(LIBSUFFIX "${CMAKE_STATIC_LIBRARY_SUFFIX}")
+set(LIBPREFIX "${CMAKE_SHARED_LIBRARY_PREFIX}")
+set(LIBSUFFIX "${CMAKE_SHARED_LIBRARY_SUFFIX}")
 set(GTEST_LOCATION "${GTEST_PREFIX}/src/googletest-build")
 # And now, a ugly hack for your reading displeasure
 # On Windows, the compiled Google shared lib is by default in a Debug (or Release) subdirectory.
@@ -30,6 +30,7 @@ if(NOT no_download)
       TIMEOUT 10
       PREFIX "${GTEST_PREFIX}"
       INSTALL_COMMAND ""
+      CMAKE_ARGS -DBUILD_SHARED_LIBS=ON
       LOG_DOWNLOAD ON
       LOG_CONFIGURE ON
       LOG_BUILD ON)
@@ -37,16 +38,17 @@ else()
   ExternalProject_Add(googletest
       PREFIX "${GTEST_PREFIX}"
       INSTALL_COMMAND ""
+      CMAKE_ARGS -DBUILD_SHARED_LIBS=ON
       LOG_CONFIGURE ON
       LOG_BUILD ON)
 endif()
 
-add_library(GTest IMPORTED STATIC GLOBAL)
+add_library(GTest IMPORTED SHARED GLOBAL)
 set_target_properties(GTest PROPERTIES
   "IMPORTED_LOCATION" "${GTEST_LIBRARY}"
   "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}")
 
-add_library(GTestMain IMPORTED STATIC GLOBAL)
+add_library(GTestMain IMPORTED SHARED GLOBAL)
 set_target_properties(GTestMain PROPERTIES
   "IMPORTED_LOCATION" "${GTEST_MAINLIB}"
   "IMPORTED_LINK_INTERFACE_LIBRARIES"
