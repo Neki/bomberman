@@ -6,9 +6,9 @@
 #include <QTimer>
 #include <vector>
 
+#include "src/common/net/PlayerLeftEvent.h"
 #include "src/common/net/MoveEvent.h"
 #include "src/common/net/BombEvent.h"
-#include "src/common/net/MoveEvent.h"
 #include "src/common/net/GameEventVisitor.h"
 #include "World.h"
 #include "Player.h"

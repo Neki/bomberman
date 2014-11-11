@@ -1,4 +1,3 @@
-#define NOMINMAX // Required for Windows to avoid QTime errors
 #include <iostream>
 #include "logging.h"
 #include <memory.h>
