@@ -34,7 +34,7 @@ void Board::PaintEntity(QPainter &painter, common::entity::Entity &entity, QPoin
 void Board::PaintBkg(QPainter &painter, QPointF x, QSizeF size){
 	QString path = "res/bkg.svg";
 	QRectF rectF(x, size);
-	QSvgRenderer *renderer = new QSvgRenderer(QCoreApplication::applicationDirPath() + "/" + path);
+	auto renderer = svg_manager_->GetSvgRenderer(path);
 	renderer->render(&painter, rectF);
 }
 
@@ -45,20 +45,16 @@ void Board::paintEvent(QPaintEvent *event)
     painter.setClipRect(event->rect());
 
     QSize qsize(side_square_, side_square_);
-  QSizeF qsizef(qsize);
+	QSizeF qsizef(qsize);
 
     for (int i = 0; i < world_->GetWidth(); ++i) {
     for (int j = 0; j < world_->GetHeight(); ++j) {
             QPointF x(side_square_ * i, side_square_ * j);
 			QPoint a(i, j);
-			if (world_->IsEntitiesEmpty(a) ){
-				PaintBkg(painter, x, qsizef);
-			}
-			else {
-				for (auto k = world_->IteratorAtBegin(a); k != world_->IteratorAtEnd(a); ++k)
-				{
+			PaintBkg(painter, x, qsizef);
+			for (auto k = world_->IteratorAtBegin(a); k != world_->IteratorAtEnd(a); ++k)
+			{
 					PaintEntity(painter, **k, x, qsizef);
-				}
 			}
 		}
 	}
