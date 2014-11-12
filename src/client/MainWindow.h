@@ -35,6 +35,8 @@ private slots:
 
 protected:
 	void keyPressEvent(QKeyEvent *evt);
+	bool IsKeyPressEvent(QKeyEvent *);
+	bool IsKeyReleaseEvent(QKeyEvent *);
 
 private:
 	Ui::MainWindow *ui;
@@ -46,6 +48,7 @@ private:
     std::shared_ptr<common::GameTimer> timer_;
     std::shared_ptr<common::World> world_;
     std::unique_ptr<net::NetworkWorker> network_worker_;
+	void moveCharacter(const common::entity::Character& character, QKeyEvent *event);
 };
 
 #endif // SRC_CLIENT_MAINWINDOW_H

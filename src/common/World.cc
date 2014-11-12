@@ -1,6 +1,8 @@
 #include "World.h"
 #include "entity/Wall.h"
+#include "entity/Fire.h"
 #include "entity/Block.h"
+#include "entity/Bonus.h"
 #include <cassert>
 
 namespace common {
@@ -17,7 +19,7 @@ World::World(int width, int height)
       entities_[x].push_back(std::vector<std::unique_ptr<entity::Entity> >());
       QPoint pos(x, y);
       if ((pos - QPoint(0, 0)).manhattanLength() <= 1 ) { // room for player
-        
+
       } else if ((pos - QPoint(0, height_ - (height_%2))).manhattanLength() <= 1) { // room for player
 
       } else if ((pos - QPoint(width_ - (width_%2), 0)).manhattanLength() <= 1) { // room for player
@@ -26,16 +28,12 @@ World::World(int width, int height)
 
       } else if (x % 2 == 1 && y % 2 == 1) {
         entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
-      } else if (x == width_ - 1 && width_ % 2 == 1) { // if width_ is odd
-        entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
-      } else if (y == height_ - 1 && height_ % 2 == 1) { // if height_ is odd
-        entities_[x][y].emplace_back(std::unique_ptr<entity::Wall>(new entity::Wall(pos)));
       } else  {
         entities_[x][y].emplace_back(std::unique_ptr<entity::Block>(new entity::Block(pos)));
       }
     }
   }
-  
+
 }
 
 std::vector<std::unique_ptr<entity::Entity> >::const_iterator World::IteratorAtBegin(QPoint a) {
@@ -55,6 +53,12 @@ std::vector<std::unique_ptr<entity::Character> >::const_iterator World::Characte
 std::vector<std::unique_ptr<entity::Character> >::const_iterator World::CharacterIteratorEnd() {
   return characters_.cend();
 }
+
+bool World::IsEntitiesEmpty(QPoint a) {
+	assert(CheckCoord(a));
+	return entities_[a.x()][a.y()].empty();
+}
+
 
 int World::GetWidth() const {
   return width_;
