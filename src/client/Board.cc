@@ -15,7 +15,6 @@
 #include "easylogging++.h"
 #include "src/common/Direction.h"
 #include <QPalette>
-_INITIALIZE_EASYLOGGINGPP
 
 Board::Board(std::shared_ptr<common::World> world, QWidget *parent) :
     QWidget(parent),

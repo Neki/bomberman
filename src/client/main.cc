@@ -1,6 +1,7 @@
 #include <QtWidgets/QApplication>
 #include "src/client/MainWindow.h"
 #include "logging.h"
+_INITIALIZE_EASYLOGGINGPP
 
 int main(int argc, char *argv[])
 {

@@ -88,8 +88,8 @@ void MainWindow::on_actionQuit_triggered() {
 	QApplication::quit();
 }
 
-void MainWindow::moveCharacter(common::entity::Character *character, QKeyEvent *event){
-	QPointF posf = character->GetPositionF();
+void MainWindow::moveCharacter(const common::entity::Character& character, QKeyEvent *event){
+	QPointF posf = character.GetPositionF();
 	QPoint pos(posf.x(), posf.y());
 	int x = pos.x();
 	int y = pos.y();
@@ -119,28 +119,17 @@ void MainWindow::moveCharacter(common::entity::Character *character, QKeyEvent *
 	}
 	QPoint target(x, y);
 	if (world_->IsWalkable(target)){
-		quint32 timestamp = QDateTime::currentDateTime().toTime_t();
-		quint8  id = (quint8)character->GetId();
-		network_worker_->AddEvent(std::unique_ptr<common::net::MoveEvent>(new common::net::MoveEvent(pos, target, dir, id, timestamp)));
+		quint8  id = (quint8)character.GetId();
+		network_worker_->AddEvent(std::unique_ptr<common::net::MoveEvent>(new common::net::MoveEvent(pos, target, dir, id, timer_->GetTimestamp())));
 	}
 }
 
 bool MainWindow::IsKeyPressEvent(QKeyEvent *event)
 {
-	if (event->type() == QEvent::KeyPress)
-	{
-		return true;
-	}
-	else
-		return false;
+	return event->type() == QEvent::KeyPress;
 }
 
 bool MainWindow::IsKeyReleaseEvent(QKeyEvent *event)
 {
-	if (event->type() == QEvent::KeyRelease)
-	{
-		return true;
-	}
-	else
-		return false;
+	return event->type() == QEvent::KeyRelease;
 }
