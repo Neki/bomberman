@@ -30,7 +30,7 @@ namespace common {
     void StartGame();
     quint32 GetTimestamp() const;
     /* Returns the number of milliseconds that have elapsed since the last time StartGame() was called. */
-    World* GetWorld() const;
+    std::shared_ptr<World> GetWorld() const;
     void AddFireFromAtoB(QPoint a, QPoint b);
 
   private slots:
@@ -52,7 +52,7 @@ namespace common {
     quint32 max_duration_; // in milliseconds
 
     std::vector<std::unique_ptr<Player> > players_;
-    std::unique_ptr<World> world_;
+    std::shared_ptr<World> world_;
 
     GameTimer game_timer_;
     std::unique_ptr<QTimer> new_frame_timer_;

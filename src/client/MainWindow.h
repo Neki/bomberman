@@ -10,7 +10,11 @@
 #include "Board.h"
 #include "ServerHandler.h"
 #include "src/common/GameTimer.h"
+#include "src/common/GameEngine.h"
 #include "net/NetworkWorker.h"
+#include "net/ServerEntity.h"
+
+using net::ServerEntity;
 
 class MainWindow : public QMainWindow
 {
@@ -19,6 +23,7 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
+    void InstanciateNetworkWorker(QString address, int port);
 	void Start();
 
 public slots:
@@ -27,6 +32,8 @@ public slots:
 	void SetScore(float score);
 	void SetKills(int kills);
 	void SetDeaths(int deaths);
+    void DisplayLatency(int latency);
+    void ProcessServerEntity(ServerEntity& server_entity);
 
 private slots:
 	void on_actionCreate_triggered();
@@ -38,14 +45,12 @@ protected:
 
 private:
 	Ui::MainWindow *ui;
-	QLabel scoreLabel;
-	QLabel deathsLabel;
-	QLabel killsLabel;
 	std::unique_ptr<Board> board_;
     std::shared_ptr<ServerHandler> server_handler_;
     std::shared_ptr<common::GameTimer> timer_;
     std::shared_ptr<common::World> world_;
     std::unique_ptr<net::NetworkWorker> network_worker_;
+    std::unique_ptr<common::GameEngine> game_engine_;
 };
 
 #endif // SRC_CLIENT_MAINWINDOW_H

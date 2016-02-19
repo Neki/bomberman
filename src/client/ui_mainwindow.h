@@ -37,6 +37,7 @@ public:
     QLabel *killsLabel;
     QLabel *deathsLabel;
     QLabel *scoreLabel;
+    QLabel *latencyLabel;
     QToolBar *toolBar;
 
 	QPixmap getPixmap(QString fileName) {
@@ -81,7 +82,7 @@ public:
         centralwidget->move(0, 51);
         widget = new QWidget(centralwidget);
         widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(600, 10, 98, 59));
+        widget->setGeometry(QRect(600, 10, 98, 90));
         verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -101,6 +102,11 @@ public:
         scoreLabel->setObjectName(QStringLiteral("scoreLabel"));
         scoreLabel->setMinimumSize(QSize(37, 16));
         verticalLayout->addWidget(scoreLabel);
+
+        latencyLabel = new QLabel(widget);
+        latencyLabel->setObjectName(QStringLiteral("latencyLabel"));
+        latencyLabel->setMinimumSize(QSize(60, 16));
+        verticalLayout->addWidget(latencyLabel);
 
         // Toolbar
         toolBar = new QToolBar(MainWindow);
@@ -145,6 +151,7 @@ public:
         killsLabel->setText(QApplication::translate("MainWindow", "Number of kills : ", 0));
         deathsLabel->setText(QApplication::translate("MainWindow", "Number of deaths : ", 0));
         scoreLabel->setText(QApplication::translate("MainWindow", "Score : ", 0));
+        latencyLabel->setText(QApplication::translate("MainWindow", "Latence : ?", 0));
         toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0));
     } // retranslateUi
 

@@ -3,15 +3,16 @@
 #include "entity/Character.h"
 #include "entity/Bomb.h"
 #include <cassert>
+#include "easylogging++.h"
 
 namespace common {
 
-  GameEngine::GameEngine()
+GameEngine::GameEngine()
     : QObject(),
     net::GameEventVisitor(),
     max_duration_(10 * 60 * 1000), // 10 minutes
     players_(),
-    world_(new World(79, 49)),
+    world_(new World(21, 21)),
     game_timer_(),
     new_frame_timer_(new QTimer()),
     is_running_(false) {
@@ -41,17 +42,19 @@ void GameEngine::StartGame() {
 }
 
 bool GameEngine::AddEntity(std::unique_ptr<entity::Entity> e) {
-  if ( !world_->CheckCoord(e->GetPosition()) ) {
+  if (!world_->CheckCoord(e->GetPosition()) ) {
     return false;
   }
-  if ( e->IsSolid() && !world_->IsWalkable(e->GetPosition())) {
+
+  if (e->IsSolid() && !world_->IsWalkable(e->GetPosition())) {
     return false;
   }
+
   return world_->AddItem(std::move(e));
 }
 
-World* GameEngine::GetWorld() const {
-  return world_.get();
+std::shared_ptr<World> GameEngine::GetWorld() const {
+  return world_;
 }
 
 quint32 GameEngine::GetTimestamp() const {
